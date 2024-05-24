@@ -56,7 +56,7 @@ const Header = () => {
                 Home
               </Nav.Link>
               <Nav.Link as={Link} to="#">
-                Fashion
+                Products
               </Nav.Link>
               <NavDropdown title="All Category" id="basic-nav-dropdown">
                 <NavDropdown.Item as={Link} to="#">
