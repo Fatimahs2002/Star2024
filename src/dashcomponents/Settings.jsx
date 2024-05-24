@@ -1,8 +1,11 @@
+import Products from "./Products"
 
 
 const Settings = () => {
   return (
-    <>Settings</>
+    <>
+    <Products/>
+    </>
   )
 }
 

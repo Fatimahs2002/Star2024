@@ -39,11 +39,11 @@ const Sidebar = () => {
                 <div className="list-group list-group-flush">
                     <div className="list-group-item list-group-item-action bg-light" onClick={() => setActiveComponent('home')}>
                         <FontAwesomeIcon icon={faHome} />
-                        {isVisible && <span className="ml-2">Home</span>}
+                        {isVisible && <span className="ml-2">Category</span>}
                     </div>
                     <div className="list-group-item list-group-item-action bg-light" onClick={() => setActiveComponent('profile')}>
                         <FontAwesomeIcon icon={faUser} />
-                        {isVisible && <span className="ml-2">Profile</span>}
+                        {isVisible && <span className="ml-2">Products</span>}
                     </div>
                     <div className="list-group-item list-group-item-action bg-light" onClick={() => setActiveComponent('settings')}>
                         <FontAwesomeIcon icon={faCog} />
@@ -53,10 +53,6 @@ const Sidebar = () => {
                         <FontAwesomeIcon icon={faChartLine} />
                         {isVisible && <span className="ml-2">Reports</span>}
                     </div>
-                    <div className="list-group-item list-group-item-action bg-light" onClick={() => setActiveComponent('logout')}>
-                        <FontAwesomeIcon icon={faSignOutAlt} />
-                        {isVisible && <span className="ml-2">Logout</span>}
-                    </div>
                 </div>
             </div>
 
@@ -65,7 +61,10 @@ const Sidebar = () => {
                     <Button variant="outline-primary" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon={isVisible ? faChevronLeft : faChevronRight} />
                     </Button>
-                    
+                    <div className="" onClick={() => setActiveComponent('logout')}>
+                        <FontAwesomeIcon icon={faSignOutAlt} />
+                        {isVisible && <span className="ml-2">Logout</span>}
+                    </div>
                 </nav>
                 <div className="container-fluid">
                     <h1>Dashbaord</h1>
