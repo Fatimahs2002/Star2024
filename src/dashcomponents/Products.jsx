@@ -64,8 +64,8 @@ const Products = () => {
         </div>
       </div>,
       {
-        position: "top-center",
-        autoClose: false,
+        position: 'top-center',
+        autoClose: true,
         closeOnClick: false,
         draggable: false,
         closeButton: false,
@@ -75,7 +75,8 @@ const Products = () => {
 
   const confirmDelete = (id) => {
     setProducts(products.filter((product) => product.id !== id));
-    toast.dismiss();
+    toast.success('Product deleted successfully!');
+    
   };
 
   const handleEdit = (product) => {
@@ -123,11 +124,11 @@ const Products = () => {
   };
 
   const handleAddImage = (id) => {
-    alert(`Add image for product ${id}`);
+    toast.warning(`Add image for product ${id}`);
   };
 
   const handleRemoveImage = (id) => {
-    alert(`Remove image for product ${id}`);
+    toast.warning(`Remove image for product ${id}`);
   };
 
   const resetForm = () => {

@@ -1,5 +1,5 @@
 import Table from 'react-bootstrap/Table';
-const Customers = () => {
+const Users = () => {
   // Example data
   const customers = [
     { id: 1, name: 'John Doe', email: 'john@example.com', phoneNumber: '123-456-7890', order: 'Order #1' },
@@ -9,7 +9,7 @@ const Customers = () => {
 
   return (
     <>
-    <h1>Customers</h1>
+    <h1>Users</h1>
     <Table responsive>
       <thead>
         <tr>
@@ -17,7 +17,6 @@ const Customers = () => {
           <th>Name</th>
           <th>Email</th>
           <th>Phone Number</th>
-          <th>Order</th>
         </tr>
       </thead>
       <tbody>
@@ -27,7 +26,6 @@ const Customers = () => {
             <td>{customer.name}</td>
             <td>{customer.email}</td>
             <td>{customer.phoneNumber}</td>
-            <td>{customer.order}</td>
           </tr>
         ))}
       </tbody>
@@ -37,4 +35,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default Users;
