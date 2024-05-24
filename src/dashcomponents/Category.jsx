@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Table, Button, Form, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,30 +8,54 @@ import {
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Category = () => {
   const [categories, setCategories] = useState([
-    { id: 1, name: "T-Shirt", category: "Men", description: "Best T-Shirt" },
-    { id: 2, name: "Dress", category: "Women", description: "Elegant Dress" },
+    { id: 1, name: "T-Shirt", category: "Men" },
+    { id: 2, name: "Dress", category: "Women" },
     {
       id: 3,
       name: "Shoes",
       category: "Children",
-      description: "Comfortable Shoes",
     },
   ]);
   const [editingCategory, setEditingCategory] = useState(null);
   const [newCategory, setNewCategory] = useState({
     name: "",
     category: "",
-    description: "",
   });
   const [filter, setFilter] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
   const handleDelete = (id) => {
-    setCategories(categories.filter((category) => category.id !== id));
+    const confirmDelete = () => {
+      setCategories(categories.filter((category) => category.id !== id));
+      toast.success("Category deleted successfully!");
+    };
+
+    toast(
+      <div>
+        Are you sure?
+        <div className="mt-2 d-flex gap-3 align-center">
+          <Button variant="danger" onClick={confirmDelete}>
+            Yes
+          </Button>
+          <Button variant="secondary" onClick={() => toast.dismiss()}>
+            No
+          </Button>
+        </div>
+      </div>,
+      {
+        position: "top-center",
+        autoClose: true,
+        closeOnClick: false,
+        draggable: false,
+        closeButton:true,
+      }
+    );
   };
 
   const handleEdit = (category) => {
@@ -39,7 +63,6 @@ const Category = () => {
     setNewCategory({
       name: category.name,
       category: category.category,
-      description: category.description,
     });
     setShowEditModal(true);
   };
@@ -52,7 +75,8 @@ const Category = () => {
     );
     setEditingCategory(null);
     setShowEditModal(false);
-    setNewCategory({ name: "", category: "", description: "" });
+    setNewCategory({ name: "", category: "" });
+    toast.success("Category updated successfully!");
   };
 
   const handleAdd = () => {
@@ -61,7 +85,8 @@ const Category = () => {
       { id: categories.length + 1, ...newCategory },
     ]);
     setShowAddModal(false);
-    setNewCategory({ name: "", category: "", description: "" });
+    setNewCategory({ name: "", category: "" });
+    toast.success("Category added successfully!");
   };
 
   const filteredCategories = filter
@@ -71,6 +96,7 @@ const Category = () => {
   return (
     <>
       <h1>Category</h1>
+      <ToastContainer />
       <div className="d-flex align-items-center justify-content-between mb-3 w-100">
         <div className="d-flex align-items-center">
           <Form.Select size="xl" onChange={(e) => setFilter(e.target.value)}>
@@ -84,7 +110,7 @@ const Category = () => {
             onClick={() => setShowAddModal(true)}
             className="ms-2 w-100"
           >
-            <FontAwesomeIcon icon={faPlus} /> Add Category
+            <FontAwesomeIcon icon={faPlus} />
           </Button>
         </div>
       </div>
@@ -95,7 +121,6 @@ const Category = () => {
             <th>#</th>
             <th>Name</th>
             <th>Category</th>
-            <th>Description</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -105,8 +130,7 @@ const Category = () => {
               <td>{category.id}</td>
               <td>{category.name}</td>
               <td>{category.category}</td>
-              <td>{category.description}</td>
-              <td>
+              <td className="d-flex align-items-center gap-3">
                 <Button variant="warning" onClick={() => handleEdit(category)}>
                   <FontAwesomeIcon icon={faEdit} />
                 </Button>
@@ -155,20 +179,6 @@ const Category = () => {
                 <option value="Children">Children</option>
               </Form.Control>
             </Form.Group>
-            <Form.Group controlId="formDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={newCategory.description}
-                onChange={(e) =>
-                  setNewCategory({
-                    ...newCategory,
-                    description: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -211,20 +221,6 @@ const Category = () => {
                 <option value="Women">Women</option>
                 <option value="Children">Children</option>
               </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="formEditDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={newCategory.description}
-                onChange={(e) =>
-                  setNewCategory({
-                    ...newCategory,
-                    description: e.target.value,
-                  })
-                }
-              />
             </Form.Group>
           </Form>
         </Modal.Body>
