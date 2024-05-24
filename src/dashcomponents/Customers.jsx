@@ -8,6 +8,8 @@ const Customers = () => {
   ];
 
   return (
+    <>
+    <h1>Customers</h1>
     <Table responsive>
       <thead>
         <tr>
@@ -31,6 +33,7 @@ const Customers = () => {
       </tbody>
      
     </Table>
+    </>
   );
 };
 
