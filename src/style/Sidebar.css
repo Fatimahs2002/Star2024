@@ -39,3 +39,8 @@
 .list-group-item {
   cursor: pointer;
 }
+
+
+.icon{
+  width: 50px;
+}

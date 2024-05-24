@@ -2,25 +2,59 @@ import React, { useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEdit,
+  faTrash,
+  faPlus,
+  faTimes,
+  faSave,
+  faImage,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Products = () => {
   const [products, setProducts] = useState([
-    { id: 1, name: "sabon", weight: "2" },
-    { id: 2, name: "pril", weight: "1.5" },
-    { id: 3, name: "shampoo", weight: "0.5" },
+    {
+      id: 1,
+      name: "t-shirt",
+      description: "the best",
+      characteristic: { size: "L", price: 20, weight: "200g" },
+      image: "image1",
+    },
+    {
+      id: 2,
+      name: "bantalon",
+      description: "the best",
+      characteristic: { size: "XL", price: 30, weight: "500g" },
+      image: "image2",
+    },
+    {
+      id: 3,
+      name: "shoes",
+      description: "the best",
+      characteristic: { size: "Small", price: 50, weight: "1kg" },
+      image: "image3",
+    },
   ]);
 
   const [editingProduct, setEditingProduct] = useState(null);
-  const [newProductName, setNewProductName] = useState("");
-  const [newProductWeight, setNewProductWeight] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newSize, setNewSize] = useState("");
+  const [newPrice, setNewPrice] = useState("");
+  const [newWeight, setNewWeight] = useState("");
+  const [newImage, setNewImage] = useState("");
 
   const handleDelete = (id) => {
     toast(
       <div>
-        Are you sure you want to delete this product?
-        <div className="mt-2 d-flex gap-3 aline-center">
+        Are you sure?
+        <div className="mt-2 d-flex gap-3 align-center">
           <Button variant="danger" onClick={() => confirmDelete(id)}>
             Yes
           </Button>
@@ -46,32 +80,91 @@ const Products = () => {
 
   const handleEdit = (product) => {
     setEditingProduct(product.id);
-    setNewProductName(product.name);
-    setNewProductWeight(product.weight);
+    setNewName(product.name);
+    setNewDescription(product.description);
+    setNewSize(product.characteristic.size);
+    setNewPrice(product.characteristic.price);
+    setNewWeight(product.characteristic.weight);
+    setNewImage(product.image);
+    setShowModal(true);
   };
 
-  const handleSave = (id) => {
-    setProducts(
-      products.map((product) =>
-        product.id === id
-          ? { ...product, name: newProductName, weight: newProductWeight }
-          : product
-      )
-    );
+  const handleSave = () => {
+    if (isAdding) {
+      const newProduct = {
+        id: products.length + 1,
+        name: newName,
+        description: newDescription,
+        characteristic: { size: newSize, price: newPrice, weight: newWeight },
+        image: newImage,
+      };
+      setProducts([...products, newProduct]);
+    } else {
+      setProducts(
+        products.map((product) =>
+          product.id === editingProduct
+            ? {
+                ...product,
+                name: newName,
+                description: newDescription,
+                characteristic: {
+                  size: newSize,
+                  price: newPrice,
+                  weight: newWeight,
+                },
+                image: newImage,
+              }
+            : product
+        )
+      );
+    }
+    resetForm();
+    setShowModal(false);
+  };
+
+  const handleAddImage = (id) => {
+    alert(`Add image for product ${id}`);
+  };
+
+  const handleRemoveImage = (id) => {
+    alert(`Remove image for product ${id}`);
+  };
+
+  const resetForm = () => {
     setEditingProduct(null);
-    setNewProductName("");
-    setNewProductWeight("");
+    setIsAdding(false);
+    setNewName("");
+    setNewDescription("");
+    setNewSize("");
+    setNewPrice("");
+    setNewWeight("");
+    setNewImage("");
   };
 
   return (
-    <div>
+    <>
+      <h1>Products</h1>
       <ToastContainer />
+      <div className="d-flex align-items-center justify-content-end jus m-2">
+        <Button
+          variant="primary"
+          className="mb-3"
+          onClick={() => {
+            setIsAdding(true);
+            setShowModal(true);
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} /> Add Product
+        </Button>
+      </div>
       <Table responsive>
         <thead>
           <tr>
             <th>#</th>
             <th>Product Name</th>
-            <th>Weight</th>
+            <th>Description</th>
+            <th>Characteristics</th>
+            <th>Image</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -80,55 +173,114 @@ const Products = () => {
           {products.map((product) => (
             <tr key={product.id}>
               <td>{product.id}</td>
+              <td>{product.name}</td>
+              <td>{product.description}</td>
+              <td>{`Size: ${product.characteristic.size}, Price: ${product.characteristic.price}, Weight: ${product.characteristic.weight}`}</td>
               <td>
-                {editingProduct === product.id ? (
-                  <Form.Control
-                    type="text"
-                    value={newProductName}
-                    onChange={(e) => setNewProductName(e.target.value)}
-                  />
-                ) : (
-                  product.name
-                )}
+                {product.image}
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  className="ml-2 mt-2"
+                  onClick={() => handleAddImage(product.id)}
+                >
+                  <FontAwesomeIcon icon={faImage} />
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  className="ml-2 mt-2"
+                  onClick={() => handleRemoveImage(product.id)}
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </Button>
               </td>
               <td>
-                {editingProduct === product.id ? (
-                  <Form.Control
-                    type="text"
-                    value={newProductWeight}
-                    onChange={(e) => setNewProductWeight(e.target.value)}
-                  />
-                ) : (
-                  product.weight
-                )}
-              </td>
-              <td>
-                {editingProduct === product.id ? (
-                  <Button
-                    variant="success"
-                    onClick={() => handleSave(product.id)}
-                  >
-                    Save
-                  </Button>
-                ) : (
-                  <Button variant="warning" onClick={() => handleEdit(product)}>
-                    Edit
-                  </Button>
-                )}
+                <Button variant="warning" onClick={() => handleEdit(product)}>
+                  <FontAwesomeIcon icon={faEdit} />
+                </Button>
               </td>
               <td>
                 <Button
                   variant="danger"
                   onClick={() => handleDelete(product.id)}
                 >
-                  Delete
+                  <FontAwesomeIcon icon={faTrash} />
                 </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
-    </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {isAdding ? "Add New Product" : "Edit Product"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formProductName">
+              <Form.Label>Product Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formSize">
+              <Form.Label>Size</Form.Label>
+              <Form.Control
+                type="text"
+                value={newSize}
+                onChange={(e) => setNewSize(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formPrice">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="number"
+                value={newPrice}
+                onChange={(e) => setNewPrice(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formWeight">
+              <Form.Label>Weight</Form.Label>
+              <Form.Control
+                type="text"
+                value={newWeight}
+                onChange={(e) => setNewWeight(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formImage">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                value={newImage}
+                onChange={(e) => setNewImage(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+          <Button variant="success" onClick={handleSave}>
+            <FontAwesomeIcon icon={faSave} /> Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 
