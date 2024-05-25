@@ -99,12 +99,6 @@ const Category = () => {
       <ToastContainer />
       <div className="d-flex align-items-center justify-content-between mb-3 w-100">
         <div className="d-flex align-items-center">
-          <Form.Select size="xl" onChange={(e) => setFilter(e.target.value)}>
-            <option value="">All</option>
-            <option value="Men">Men</option>
-            <option value="Women">Women</option>
-            <option value="Children">Children</option>
-          </Form.Select>
           <Button
             variant="primary"
             onClick={() => setShowAddModal(true)}

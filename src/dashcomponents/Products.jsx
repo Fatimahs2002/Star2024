@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -13,28 +13,41 @@ import {
   faTimes,
   faSave,
   faImage,
+  faSortAlphaDown,
+  faSortAlphaUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Products = () => {
   const [products, setProducts] = useState([
     {
       id: 1,
-      name: "t-shirt",
+      name: "Flooer cleaner",
       description: "the best",
+      category: "Detergents",
       characteristic: { size: "L", price: 20, weight: "200g" },
       image: "image1",
     },
     {
       id: 2,
-      name: "bantalon",
+      name: "Star Hand Soap",
       description: "the best",
+      category: "body care",
       characteristic: { size: "XL", price: 30, weight: "500g" },
       image: "image2",
     },
     {
       id: 3,
-      name: "shoes",
+      name: "Gel & wax",
       description: "the best",
+      category: "Hair care",
+      characteristic: { size: "Small", price: 50, weight: "1kg" },
+      image: "image3",
+    },
+    {
+      id: 4,
+      name: "Alcohol",
+      description: "the best",
+      category: "Personal care",
       characteristic: { size: "Small", price: 50, weight: "1kg" },
       image: "image3",
     },
@@ -45,10 +58,13 @@ const Products = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const [newCategory, setNewCategory] = useState("");
   const [newSize, setNewSize] = useState("");
   const [newPrice, setNewPrice] = useState("");
   const [newWeight, setNewWeight] = useState("");
   const [newImage, setNewImage] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleDelete = (id) => {
     toast(
@@ -64,7 +80,7 @@ const Products = () => {
         </div>
       </div>,
       {
-        position: 'top-center',
+        position: "top-center",
         autoClose: true,
         closeOnClick: false,
         draggable: false,
@@ -75,14 +91,14 @@ const Products = () => {
 
   const confirmDelete = (id) => {
     setProducts(products.filter((product) => product.id !== id));
-    toast.success('Product deleted successfully!');
-    
+    toast.success("Product deleted successfully!");
   };
 
   const handleEdit = (product) => {
     setEditingProduct(product.id);
     setNewName(product.name);
     setNewDescription(product.description);
+    setNewCategory(product.category);
     setNewSize(product.characteristic.size);
     setNewPrice(product.characteristic.price);
     setNewWeight(product.characteristic.weight);
@@ -96,6 +112,7 @@ const Products = () => {
         id: products.length + 1,
         name: newName,
         description: newDescription,
+        category: newCategory,
         characteristic: { size: newSize, price: newPrice, weight: newWeight },
         image: newImage,
       };
@@ -108,6 +125,7 @@ const Products = () => {
                 ...product,
                 name: newName,
                 description: newDescription,
+                category: newCategory,
                 characteristic: {
                   size: newSize,
                   price: newPrice,
@@ -136,17 +154,34 @@ const Products = () => {
     setIsAdding(false);
     setNewName("");
     setNewDescription("");
+    setNewCategory("");
     setNewSize("");
     setNewPrice("");
     setNewWeight("");
     setNewImage("");
   };
 
+  const handleSort = () => {
+    const sortedProducts = [...products].sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+    setProducts(sortedProducts);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       <h1>Products</h1>
       <ToastContainer />
-      <div className="d-flex align-items-center justify-content-end jus m-2">
+      <div className="d-flex align-items-center justify-content-between m-2">
         <Button
           variant="primary"
           className="mb-3"
@@ -157,13 +192,28 @@ const Products = () => {
         >
           <FontAwesomeIcon icon={faPlus} /> Add Product
         </Button>
+
+        <Form.Control
+          type="text"
+          placeholder="Search by name"
+          className="mb-3"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <Button variant="secondary" className="mb-3" onClick={handleSort}>
+          <FontAwesomeIcon
+            icon={sortOrder === "asc" ? faSortAlphaDown : faSortAlphaUp}
+          />{" "}
+          Sort by Name
+        </Button>
       </div>
       <Table responsive>
         <thead>
           <tr>
-            <th>#</th>
             <th>Product Name</th>
             <th>Description</th>
+            <th>Category</th>
             <th>Characteristics</th>
             <th>Image</th>
             <th>Edit</th>
@@ -171,11 +221,11 @@ const Products = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <tr key={product.id}>
-              <td>{product.id}</td>
               <td>{product.name}</td>
               <td>{product.description}</td>
+              <td>{product.category}</td>
               <td>{`Size: ${product.characteristic.size}, Price: ${product.characteristic.price}, Weight: ${product.characteristic.weight}`}</td>
               <td>
                 {product.image}
@@ -237,6 +287,20 @@ const Products = () => {
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
               />
+            </Form.Group>
+            <Form.Group controlId="formCategory">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                as="select"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+              >
+                <option value="">Select Category</option>
+                <option value="Bodycare">Body care</option>
+                <option value="Haircare">Hair care</option>
+                <option value="Detergents">Detergents</option>
+                <option value="Personal care">Personal care</option>
+              </Form.Control>
             </Form.Group>
             <Form.Group controlId="formSize">
               <Form.Label>Size</Form.Label>

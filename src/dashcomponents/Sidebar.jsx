@@ -10,9 +10,10 @@ import {
   faChevronLeft,
   faChevronRight,
   faBox,
+  faBell,
+  faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Settings from "./Settings";
 import Products from "./Products";
 import "../style/Sidebar.css";
 import Category from "./Category";
@@ -36,8 +37,6 @@ const Sidebar = () => {
         return <Products />;
       case "category":
         return <Category />;
-      case "settings":
-        return <Settings />;
       case "user":
         return <Users />;
       case "reports":
@@ -62,7 +61,7 @@ const Sidebar = () => {
           />
           {isVisible && <h5>John D</h5>}
         </div>
-        <div className="list-group list-group-flush">
+        <div className="list-group list-group-flush flex-grow-1">
           <div
             className="list-group-item list-group-item-action bg-light"
             onClick={() => setActiveComponent("order")}
@@ -93,37 +92,33 @@ const Sidebar = () => {
           </div>
           <div
             className="list-group-item list-group-item-action bg-light"
-            onClick={() => setActiveComponent("")}
-          >
-            <FontAwesomeIcon icon={faCog} />
-            {isVisible && <span className="ml-1">Settings</span>}
-          </div>
-          <div
-            className="list-group-item list-group-item-action bg-light"
             onClick={() => setActiveComponent("reports")}
           >
             <FontAwesomeIcon icon={faChartLine} />
             {isVisible && <span className="ml-1">Reports</span>}
           </div>
+          <div
+            className="list-group-item list-group-item-action bg-light logout"
+            onClick={() => setActiveComponent("logout")}
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} />
+            {isVisible && <span className="ml-1">Logout</span>}
+          </div>
         </div>
       </div>
 
       <div id="page-content-wrapper" className="w-100 page-content">
-        <nav className="navbar navbar-light bg-light border-bottom d-flex justify-content-between w-100">
+        <nav className="navbar navbar-light bg-light border-bottom d-flex  align-items-center w-100">
           <Button variant="outline-primary" onClick={toggleSidebar}>
             <FontAwesomeIcon
               icon={isVisible ? faChevronLeft : faChevronRight}
             />
           </Button>
-          <div
-            className="d-flex align-items-center "
-            onClick={() => setActiveComponent("logout")}
-          >
-            <FontAwesomeIcon icon={faSignOutAlt} />
-            {isVisible && <span className="">Logout</span>}
+          <div className="d-flex align-items-center gap-3  nav_right">
+            <FontAwesomeIcon icon={faBell} className="mr-3 nav-icon" />
+            <FontAwesomeIcon icon={faUserCircle} className="mr-3 nav-icon" />
           </div>
         </nav>
-        {/* page contenet */}
         <div className="container-fluid">{pageContent()}</div>
       </div>
     </div>

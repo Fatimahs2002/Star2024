@@ -30,7 +30,7 @@
 .list-group-item {
   display: flex;
   align-items: center;
-  gap:10px;
+  gap: 10px;
 }
 
 .list-group-item .ml-2 {
@@ -41,7 +41,17 @@
   cursor: pointer;
 }
 
-
-.icon{
+.icon {
   width: 50px;
 }
+
+
+.nav_right {
+  margin-right: 40px;
+}
+
+.nav-icon {
+  height: 27px;
+  color: blue;
+}
+
