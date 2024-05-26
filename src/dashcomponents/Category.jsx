@@ -26,7 +26,7 @@ const Category = () => {
     name: "",
     category: "",
   });
-  const [filter, setFilter] = useState("");
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -53,7 +53,7 @@ const Category = () => {
         autoClose: true,
         closeOnClick: false,
         draggable: false,
-        closeButton:true,
+        closeButton: true,
       }
     );
   };
@@ -89,10 +89,6 @@ const Category = () => {
     toast.success("Category added successfully!");
   };
 
-  const filteredCategories = filter
-    ? categories.filter((category) => category.category === filter)
-    : categories;
-
   return (
     <>
       <h1>Category</h1>
@@ -119,7 +115,7 @@ const Category = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCategories.map((category) => (
+          {categories.map((category) => (
             <tr key={category.id}>
               <td>{category.id}</td>
               <td>{category.name}</td>

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import  { useState } from "react";
+import { Link } from 'react-router-dom';
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,6 +21,7 @@ import Category from "./Category";
 import Report from "./Report";
 import Order from "./Order";
 import Users from "./Users";
+import Login from "../pages/Login";
 
 const Sidebar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -98,12 +100,15 @@ const Sidebar = () => {
             {isVisible && <span className="ml-1">Reports</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action bg-light logout"
-            onClick={() => setActiveComponent("logout")}
-          >
-            <FontAwesomeIcon icon={faSignOutAlt} />
-            {isVisible && <span className="ml-1">Logout</span>}
-          </div>
+  className="list-group-item list-group-item-action bg-light logout"
+  onClick={() => setActiveComponent("logout")}
+>
+  <Link to="/login">
+    <FontAwesomeIcon icon={faSignOutAlt} />
+    {isVisible && <span className="ml-1">Logout</span>}
+  </Link>
+</div>
+
         </div>
       </div>
 

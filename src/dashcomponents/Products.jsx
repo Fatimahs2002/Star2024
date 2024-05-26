@@ -208,7 +208,7 @@ const Products = () => {
           Sort by Name
         </Button>
       </div>
-      <Table responsive>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>Product Name</th>

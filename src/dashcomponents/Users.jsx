@@ -25,7 +25,7 @@ const Users = () => {
   return (
     <>
       <h1>Users</h1>
-      <Table responsive>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>#</th>
