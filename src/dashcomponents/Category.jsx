@@ -26,7 +26,7 @@ const Category = () => {
     name: "",
     category: "",
   });
-  const [filter, setFilter] = useState("");
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -53,7 +53,7 @@ const Category = () => {
         autoClose: true,
         closeOnClick: false,
         draggable: false,
-        closeButton:true,
+        closeButton: true,
       }
     );
   };
@@ -89,22 +89,12 @@ const Category = () => {
     toast.success("Category added successfully!");
   };
 
-  const filteredCategories = filter
-    ? categories.filter((category) => category.category === filter)
-    : categories;
-
   return (
     <>
       <h1>Category</h1>
       <ToastContainer />
       <div className="d-flex align-items-center justify-content-between mb-3 w-100">
         <div className="d-flex align-items-center">
-          <Form.Select size="xl" onChange={(e) => setFilter(e.target.value)}>
-            <option value="">All</option>
-            <option value="Men">Men</option>
-            <option value="Women">Women</option>
-            <option value="Children">Children</option>
-          </Form.Select>
           <Button
             variant="primary"
             onClick={() => setShowAddModal(true)}
@@ -125,7 +115,7 @@ const Category = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCategories.map((category) => (
+          {categories.map((category) => (
             <tr key={category.id}>
               <td>{category.id}</td>
               <td>{category.name}</td>
