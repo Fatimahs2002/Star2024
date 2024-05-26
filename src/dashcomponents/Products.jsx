@@ -16,7 +16,7 @@ import {
   faSortAlphaDown,
   faSortAlphaUp,
 } from "@fortawesome/free-solid-svg-icons";
-
+import "../style/ProductDash.css";
 const Products = () => {
   const [products, setProducts] = useState([
     {
@@ -196,7 +196,7 @@ const Products = () => {
         <Form.Control
           type="text"
           placeholder="Search by name"
-          className="mb-3"
+          className="mb-3 search_prod"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -229,22 +229,7 @@ const Products = () => {
               <td>{`Size: ${product.characteristic.size}, Price: ${product.characteristic.price}, Weight: ${product.characteristic.weight}`}</td>
               <td>
                 {product.image}
-                <Button
-                  variant="outline-primary"
-                  size="sm"
-                  className="ml-2 mt-2"
-                  onClick={() => handleAddImage(product.id)}
-                >
-                  <FontAwesomeIcon icon={faImage} />
-                </Button>
-                <Button
-                  variant="outline-danger"
-                  size="sm"
-                  className="ml-2 mt-2"
-                  onClick={() => handleRemoveImage(product.id)}
-                >
-                  <FontAwesomeIcon icon={faTimes} />
-                </Button>
+               
               </td>
               <td>
                 <Button variant="warning" onClick={() => handleEdit(product)}>
@@ -278,6 +263,7 @@ const Products = () => {
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
+                className="input_group"
               />
             </Form.Group>
             <Form.Group controlId="formDescription">
@@ -286,6 +272,7 @@ const Products = () => {
                 type="text"
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
+                className="input_group"
               />
             </Form.Group>
             <Form.Group controlId="formCategory">
@@ -294,6 +281,7 @@ const Products = () => {
                 as="select"
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
+                className="input_group"
               >
                 <option value="">Select Category</option>
                 <option value="Bodycare">Body care</option>
@@ -308,6 +296,7 @@ const Products = () => {
                 type="text"
                 value={newSize}
                 onChange={(e) => setNewSize(e.target.value)}
+                className="input_group"
               />
             </Form.Group>
             <Form.Group controlId="formPrice">
@@ -316,6 +305,7 @@ const Products = () => {
                 type="number"
                 value={newPrice}
                 onChange={(e) => setNewPrice(e.target.value)}
+                className="input_group"
               />
             </Form.Group>
             <Form.Group controlId="formWeight">
@@ -324,14 +314,16 @@ const Products = () => {
                 type="text"
                 value={newWeight}
                 onChange={(e) => setNewWeight(e.target.value)}
+                className="input_group"
               />
             </Form.Group>
             <Form.Group controlId="formImage">
               <Form.Label>Image</Form.Label>
               <Form.Control
-                type="text"
+                type="file"
                 value={newImage}
                 onChange={(e) => setNewImage(e.target.value)}
+                className="input_group"
               />
             </Form.Group>
           </Form>

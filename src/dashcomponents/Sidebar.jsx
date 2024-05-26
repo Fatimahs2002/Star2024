@@ -54,7 +54,7 @@ const Sidebar = () => {
         isVisible ? "sidebar-expanded" : "sidebar-collapsed"
       }`}
     >
-      <div className="bg-light border-right sidebar" id="sidebar-wrapper">
+      <div className="border-right sidebar" id="sidebar-wrapper">
         <div className="sidebar-header text-center my-3">
           <img
             src="/images/avatar.png"
@@ -65,42 +65,42 @@ const Sidebar = () => {
         </div>
         <div className="list-group list-group-flush flex-grow-1">
           <div
-            className="list-group-item list-group-item-action bg-light"
+            className="list-group-item list-group-item-action"
             onClick={() => setActiveComponent("order")}
           >
             <FontAwesomeIcon icon={faHome} />
             {isVisible && <span className="ml-1">Order</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action bg-light"
+            className="list-group-item list-group-item-action"
             onClick={() => setActiveComponent("user")}
           >
             <FontAwesomeIcon icon={faUser} />
             {isVisible && <span className="ml-1">Users</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action bg-light"
+            className="list-group-item list-group-item-action"
             onClick={() => setActiveComponent("category")}
           >
             <FontAwesomeIcon icon={faCog} />
             {isVisible && <span className="ml-1">Category</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action bg-light"
+            className="list-group-item list-group-item-action"
             onClick={() => setActiveComponent("product")}
           >
             <FontAwesomeIcon icon={faBox} />
             {isVisible && <span className="ml-1">Products</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action bg-light"
+            className="list-group-item list-group-item-action"
             onClick={() => setActiveComponent("reports")}
           >
             <FontAwesomeIcon icon={faChartLine} />
             {isVisible && <span className="ml-1">Reports</span>}
           </div>
           <div
-  className="list-group-item list-group-item-action bg-light logout"
+  className="list-group-item list-group-item-action logout"
   onClick={() => setActiveComponent("logout")}
 >
   <Link to="/login">
@@ -113,7 +113,7 @@ const Sidebar = () => {
       </div>
 
       <div id="page-content-wrapper" className="w-100 page-content">
-        <nav className="navbar navbar-light bg-light border-bottom d-flex  align-items-center w-100">
+        <nav className="navbar border-bottom d-flex  align-items-center w-100">
           <Button variant="outline-primary" onClick={toggleSidebar}>
             <FontAwesomeIcon
               icon={isVisible ? faChevronLeft : faChevronRight}

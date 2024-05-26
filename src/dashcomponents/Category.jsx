@@ -13,12 +13,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Category = () => {
   const [categories, setCategories] = useState([
-    { id: 1, name: "T-Shirt", category: "Men" },
-    { id: 2, name: "Dress", category: "Women" },
+    { id: 1, name: "", category: "Body care" },
+    { id: 2, name: "", category: "Hair care" },
     {
       id: 3,
-      name: "Shoes",
-      category: "Children",
+      name: "",
+      category: "Detergents",
+    },
+    {
+      id: 4,
+      name: "",
+      category: "Personal care",
     },
   ]);
   const [editingCategory, setEditingCategory] = useState(null);
@@ -108,8 +113,6 @@ const Category = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Name</th>
             <th>Category</th>
             <th>Actions</th>
           </tr>
@@ -117,8 +120,6 @@ const Category = () => {
         <tbody>
           {categories.map((category) => (
             <tr key={category.id}>
-              <td>{category.id}</td>
-              <td>{category.name}</td>
               <td>{category.category}</td>
               <td className="d-flex align-items-center gap-3">
                 <Button variant="warning" onClick={() => handleEdit(category)}>
@@ -152,6 +153,7 @@ const Category = () => {
                 onChange={(e) =>
                   setNewCategory({ ...newCategory, name: e.target.value })
                 }
+                className="input_group"
               />
             </Form.Group>
             <Form.Group controlId="formCategory">
@@ -162,11 +164,13 @@ const Category = () => {
                 onChange={(e) =>
                   setNewCategory({ ...newCategory, category: e.target.value })
                 }
+                className="input_group"
               >
                 <option value="">Select Category</option>
-                <option value="Men">Men</option>
-                <option value="Women">Women</option>
-                <option value="Children">Children</option>
+                <option value="Bodycare">Body care</option>
+                <option value="Haircare">Hair care</option>
+                <option value="Detergents">Detergents</option>
+                <option value="Personal care">Personal care</option>
               </Form.Control>
             </Form.Group>
           </Form>
@@ -196,6 +200,7 @@ const Category = () => {
                 onChange={(e) =>
                   setNewCategory({ ...newCategory, name: e.target.value })
                 }
+                className="input_group"
               />
             </Form.Group>
             <Form.Group controlId="formEditCategory">
@@ -206,10 +211,13 @@ const Category = () => {
                 onChange={(e) =>
                   setNewCategory({ ...newCategory, category: e.target.value })
                 }
+                className="input_group"
               >
-                <option value="Men">Men</option>
-                <option value="Women">Women</option>
-                <option value="Children">Children</option>
+                <option value="">Select Category</option>
+                <option value="Bodycare">Body care</option>
+                <option value="Haircare">Hair care</option>
+                <option value="Detergents">Detergents</option>
+                <option value="Personal care">Personal care</option>
               </Form.Control>
             </Form.Group>
           </Form>

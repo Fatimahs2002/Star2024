@@ -28,7 +28,7 @@ const Users = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
+          
             <th>Name</th>
             <th>Email</th>
             <th>Phone Number</th>
@@ -38,7 +38,7 @@ const Users = () => {
         <tbody>
           {customers.map((customer) => (
             <tr key={customer.id}>
-              <td>{customer.id}</td>
+              
               <td>{customer.name}</td>
               <td>{customer.email}</td>
               <td>{customer.phoneNumber}</td>
@@ -49,10 +49,10 @@ const Users = () => {
                   className="mr-2"
                 >
                   <FontAwesomeIcon icon={faUserShield} />{' '}
-                  {customer.isAdmin ? 'Revoke Admin' : 'Make Admin'}
+                  {customer.isAdmin ? 'remove' : 'Make Admin'}
                 </Button>
                 <Button variant="danger" onClick={() => handleDelete(customer.id)}>
-                  <FontAwesomeIcon icon={faTrash} /> Delete
+                  <FontAwesomeIcon icon={faTrash} /> 
                 </Button>
               </td>
             </tr>

@@ -1,0 +1,10 @@
+.input_group:focus{
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+
+.search_prod{
+    width: 50%;
+    box-shadow: none !important;
+}
