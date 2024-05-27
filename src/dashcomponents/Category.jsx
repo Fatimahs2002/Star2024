@@ -1,70 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { Table, Button, Form, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEdit,
-  faTrash,
-  faPlus,
-  faSave,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Category = () => {
-  const [categories, setCategories] = useState([
-    { id: 1, name: "", category: "Body care" },
-    { id: 2, name: "", category: "Hair care" },
-    {
-      id: 3,
-      name: "",
-      category: "Detergents",
-    },
-    {
-      id: 4,
-      name: "",
-      category: "Personal care",
-    },
-  ]);
+  const [categories, setCategories] = useState([]);
   const [editingCategory, setEditingCategory] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [newCategory, setNewCategory] = useState({
     name: "",
     category: "",
   });
 
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
+  useEffect(() => {
+    fetchCategory();
+  }, []);
 
-  const handleDelete = (id) => {
-    const confirmDelete = () => {
-      setCategories(categories.filter((category) => category.id !== id));
+  const fetchCategory = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8080/category/get`);
+      console.log(res.data);
+      setCategories(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async (_id) => {
+    try {
+      await axios.delete(`http://localhost:8080/category/delete/${_id}`);
+      setCategories(categories.filter((category) => category._id !== _id));
       toast.success("Category deleted successfully!");
-    };
-
-    toast(
-      <div>
-        Are you sure?
-        <div className="mt-2 d-flex gap-3 align-center">
-          <Button variant="danger" onClick={confirmDelete}>
-            Yes
-          </Button>
-          <Button variant="secondary" onClick={() => toast.dismiss()}>
-            No
-          </Button>
-        </div>
-      </div>,
-      {
-        position: "top-center",
-        autoClose: true,
-        closeOnClick: false,
-        draggable: false,
-        closeButton: true,
-      }
-    );
+    } catch (error) {
+      console.error("There was an error deleting the category!", error);
+    }
   };
 
   const handleEdit = (category) => {
-    setEditingCategory(category.id);
+    setEditingCategory(category._id);
     setNewCategory({
       name: category.name,
       category: category.category,
@@ -72,26 +50,33 @@ const Category = () => {
     setShowEditModal(true);
   };
 
-  const handleSave = (id) => {
-    setCategories(
-      categories.map((category) =>
-        category.id === id ? { ...category, ...newCategory } : category
-      )
-    );
-    setEditingCategory(null);
-    setShowEditModal(false);
-    setNewCategory({ name: "", category: "" });
-    toast.success("Category updated successfully!");
+  const handleSave = async (_id) => {
+    try {
+      await axios.put(`http://localhost:8080/category/update/${_id}`, newCategory);
+      setCategories(
+        categories.map((category) =>
+          category._id === _id ? { ...category, ...newCategory } : category
+        )
+      );
+      setEditingCategory(null);
+      setShowEditModal(false);
+      setNewCategory({ name: "", category: "" });
+      toast.success("Category updated successfully!");
+    } catch (error) {
+      console.error("There was an error updating the category!", error);
+    }
   };
 
-  const handleAdd = () => {
-    setCategories([
-      ...categories,
-      { id: categories.length + 1, ...newCategory },
-    ]);
-    setShowAddModal(false);
-    setNewCategory({ name: "", category: "" });
-    toast.success("Category added successfully!");
+  const handleAdd = async () => {
+    try {
+      const res = await axios.post(`http://localhost:8080/category/add`, newCategory);
+      setCategories([...categories, { _id: res.data._id, ...newCategory }]);
+      setShowAddModal(false);
+      setNewCategory({ name: "", category: "" });
+      toast.success("Category added successfully!");
+    } catch (error) {
+      console.error("There was an error adding the category!", error);
+    }
   };
 
   return (
@@ -119,15 +104,15 @@ const Category = () => {
         </thead>
         <tbody>
           {categories.map((category) => (
-            <tr key={category.id}>
-              <td>{category.category}</td>
+            <tr key={category._id}>
+              <td>{category.name}</td>
               <td className="d-flex align-items-center gap-3">
                 <Button variant="warning" onClick={() => handleEdit(category)}>
                   <FontAwesomeIcon icon={faEdit} />
                 </Button>
                 <Button
                   variant="danger"
-                  onClick={() => handleDelete(category.id)}
+                  onClick={() => handleDelete(category._id)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
