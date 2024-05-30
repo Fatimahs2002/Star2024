@@ -1,17 +1,16 @@
-import  { useState } from "react";
-import { Link } from 'react-router-dom';
-import { Button } from "react-bootstrap";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button, Dropdown} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
   faUser,
-  faCog,
+  faThList,
   faChartLine,
   faSignOutAlt,
   faChevronLeft,
   faChevronRight,
   faBox,
-  faBell,
   faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -21,7 +20,6 @@ import Category from "./Category";
 import Report from "./Report";
 import Order from "./Order";
 import Users from "./Users";
-import Login from "../pages/Login";
 
 const Sidebar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -54,74 +52,99 @@ const Sidebar = () => {
         isVisible ? "sidebar-expanded" : "sidebar-collapsed"
       }`}
     >
-      <div className="border-right sidebar" id="sidebar-wrapper">
-        <div className="sidebar-header text-center my-3">
-          <img
-            src="/images/avatar.png"
-            alt="avatar"
-            className="icon rounded-circle"
-          />
-          {isVisible && <h5>John D</h5>}
+      <div bg="" className="bg-light border-right sidebar" id="sidebar-wrapper">
+        <div className="bg-light sidebar-header my-3">
+          <div>
+            <img src="/images/avatar.png" alt="avatar" className="icon" />
+          </div>
+          <div className="">
+            {isVisible && <h6 className="fs-6">John D</h6>}
+            {isVisible && <p className="admin_font">Admin</p>}
+          </div>
         </div>
-        <div className="list-group list-group-flush flex-grow-1">
+        <div className=" list-group list-group-flush flex-grow-1">
           <div
-            className="list-group-item list-group-item-action"
+            className="bg-light nav-link active"
             onClick={() => setActiveComponent("order")}
           >
-            <FontAwesomeIcon icon={faHome} />
+            <div className="side_icon">
+              <FontAwesomeIcon icon={faHome} />
+            </div>
             {isVisible && <span className="ml-1">Order</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action"
+            className="bg-light nav-link"
             onClick={() => setActiveComponent("user")}
           >
-            <FontAwesomeIcon icon={faUser} />
+            <div className="side_icon">
+              <FontAwesomeIcon icon={faUser} />
+            </div>
             {isVisible && <span className="ml-1">Users</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action"
+            className="bg-light nav-link"
             onClick={() => setActiveComponent("category")}
           >
-            <FontAwesomeIcon icon={faCog} />
+            <div className="side_icon">
+              <FontAwesomeIcon icon={faThList} />
+            </div>
             {isVisible && <span className="ml-1">Category</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action"
+            className="bg-light nav-link"
             onClick={() => setActiveComponent("product")}
           >
-            <FontAwesomeIcon icon={faBox} />
+            <div className="side_icon">
+              <FontAwesomeIcon icon={faBox} />
+            </div>
             {isVisible && <span className="ml-1">Products</span>}
           </div>
           <div
-            className="list-group-item list-group-item-action"
+            className="bg-light nav-link"
             onClick={() => setActiveComponent("reports")}
           >
-            <FontAwesomeIcon icon={faChartLine} />
+            <div className="side_icon">
+              <FontAwesomeIcon icon={faChartLine} />
+            </div>
             {isVisible && <span className="ml-1">Reports</span>}
           </div>
-          <div
-  className="list-group-item list-group-item-action logout"
-  onClick={() => setActiveComponent("logout")}
->
-  <Link to="/login">
-    <FontAwesomeIcon icon={faSignOutAlt} />
-    {isVisible && <span className="ml-1">Logout</span>}
-  </Link>
-</div>
-
         </div>
       </div>
 
       <div id="page-content-wrapper" className="w-100 page-content">
-        <nav className="navbar border-bottom d-flex  align-items-center w-100">
+        <nav className="bg-light navbar border-bottom d-flex align-items-center w-100">
           <Button variant="outline-primary" onClick={toggleSidebar}>
             <FontAwesomeIcon
               icon={isVisible ? faChevronLeft : faChevronRight}
             />
           </Button>
-          <div className="d-flex align-items-center gap-3  nav_right">
-            <FontAwesomeIcon icon={faBell} className="mr-3 nav-icon" />
-            <FontAwesomeIcon icon={faUserCircle} className="mr-3 nav-icon" />
+          <div className="d-flex align-items-center gap-3 nav_right">
+            <div className="d-flex align-items-center w-100 justify-content-center">
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="link"
+                  id="dropdown-basic"
+                  className="text-decoration-none d-flex align-items-center"
+                >
+                  <div className="d-flex align-items-center">
+                    <div className="side_icon">
+                      <FontAwesomeIcon icon={faUserCircle} className="mr-3" />
+                    </div>
+                    <p className="mb-0">Account</p>
+                  </div>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+                  <Dropdown.Item as="div">
+                    <Link to="/login" className="d-flex align-items-center">
+                      <FontAwesomeIcon icon={faSignOutAlt} />
+                      {isVisible && <span className="">Logout</span>}
+                    </Link>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           </div>
         </nav>
         <div className="container-fluid">{pageContent()}</div>

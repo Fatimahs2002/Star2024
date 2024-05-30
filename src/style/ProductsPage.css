@@ -43,7 +43,7 @@
     margin: 0px;
 }
 
-.img img{
+.tshirt_img {
     width: 100%;
     text-align: center;
     margin: 50px 0px;
@@ -76,8 +76,8 @@
 
 .seemore_bt {
     width: 100%;
-   
-    text-align: center;
+    float: right;
+    text-align: right;
 }
 
 .seemore_bt a {
@@ -113,10 +113,7 @@
     color: #ffffff;
 }
 
-#main_slider .carousel-control-next:focus,
-#main_slider .carousel-control-next:hover,
-#main_slider .carousel-control-prev:focus,
-#main_slider .carousel-control-prev:hover {
-    color: #fff;
-    background-color: #f26522;
+.carousel-control-next-icon,
+.carousel-control-prev-icon{
+    background-color: #262626 !important;
 }

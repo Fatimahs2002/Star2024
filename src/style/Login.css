@@ -1,0 +1,26 @@
+.log_input{
+    box-shadow: none !important;
+    
+    padding: 10px;
+}
+
+/* .container{
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    width: 100%;
+    padding: 20px 15px;
+    display: flex;
+   ;
+   ;
+} */
+
+
+.log_image img{
+    width:32rem
+}
+
+
+@media (max-width:768px) {
+    .log_image img{
+        display: none;
+    }
+}

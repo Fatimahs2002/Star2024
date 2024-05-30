@@ -95,9 +95,9 @@ const Category = () => {
         </div>
       </div>
 
-      <Table striped bordered hover>
+      <Table className="able text-start align-middle table-bordered table-hover mb-0">
         <thead>
-          <tr>
+          <tr className="text-dark">
             <th>Category</th>
             <th>Actions</th>
           </tr>
