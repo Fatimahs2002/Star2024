@@ -1,70 +1,70 @@
 .banner_section {
-    width: 100%;
-    /* float: left; */
-    padding-bottom: 60px;
-    /* background-image: url("images/pic.jpg"); */
+  width: 100%;
+  height: 30rem;
+  background-image: url("/public/images/back.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 .banner_taital {
-    width: 100%;
-    font-size: 60px;
-    color: #ffffff;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
+  width: 100%;
+  font-size: 60px;
+  color: #1b47d8;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .buynow_bt {
-    width: 170px;
-    margin: 0 auto;
-    padding-top: 30px;
+  width: 170px;
+  margin: 0 auto;
+  padding-top: 30px;
 }
 
 .buynow_bt a {
-    width: 100%;
-    float: left;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: #252525;
-    text-align: center;
-    padding: 10px 0px;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: bold;
+  width: 100%;
+  float: left;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #252525;
+  text-align: center;
+  padding: 10px 0px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .buynow_bt a:hover {
-    background-color: #f26522;
-    color: #ffffff;
+  background-color: #f26522;
+  color: #ffffff;
 }
 
 #my_slider a.carousel-control-next {
-    right: 0px;
-    top: 40px;
+  right: 0px;
+  top: 40px;
 }
 
 #my_slider a.carousel-control-prev {
-    left: 0px;
-    top: 40px;
+  left: 0px;
+  top: 40px;
 }
 
 #my_slider .carousel-control-next,
 #my_slider .carousel-control-prev {
-    width: 45px;
-    height: 45px;
-    background: rgb(242, 222, 172, 0.80);
-    opacity: 1;
-    font-size: 20px;
-    color: #000;
-    border-radius: 100px;
+  width: 45px;
+  height: 45px;
+  background: rgba(235, 199, 110, 0.8);
+  opacity: 1;
+  font-size: 20px;
+  color: #000000;
+  border-radius: 100px;
 }
 
 #my_slider .carousel-control-next:focus,
 #my_slider .carousel-control-next:hover,
 #my_slider .carousel-control-prev:focus,
 #my_slider .carousel-control-prev:hover {
-    color: #fff;
+  color: #fff;
 }
-
 
 /* banner section end */

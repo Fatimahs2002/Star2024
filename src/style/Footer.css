@@ -1,13 +1,15 @@
 .footer_section {
     width: 100%;
     float: left;
-    background-color: #252525;
+    background-color: #45A7CA;
     height: auto;
 }
 
 .footer_logo {
-    width: 100%;
-    text-align: center;
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .input_bt {
@@ -112,7 +114,7 @@ input.mail_bt::placeholder {
 .copyright_section {
     width: 100%;
     float: left;
-    background-color: #252525;
+    background-color: #45A7CA;
     height: auto;
 }
 
@@ -136,6 +138,3 @@ input.mail_bt::placeholder {
 .margin_top90 {
     margin-top: 90px;
 }
-
-
-/* copyright section end */

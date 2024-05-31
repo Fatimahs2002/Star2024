@@ -1,17 +1,17 @@
-/* Sidebar.css */
 .sidebar-expanded .sidebar {
   width: 250px;
   height: 100vh;
-  background-color: #52a8f3;
-  color: #f5f5dc;
 }
 
 .sidebar-collapsed .sidebar {
   width: 70px;
   height: 100vh;
   transition: width 0.5s;
-  background-color: #52a8f3;
-  color: #f5f5dc;
+}
+.sidebar-collapsed .side_icon {
+  width: 40px;
+  height: 40px;
+  transition: width 0.5s;
 }
 
 .sidebar-expanded .page-content {
@@ -31,31 +31,33 @@
   transition: margin-left 0.5s;
 }
 
-.list-group-item {
+.sidebar .nav-link {
+  padding: 10px 20px;
+  color: #191c24;
+  font-weight: 500;
+  border-left: 3px solid #f3f6f9;
+  border-radius: 0 30px 30px 0;
+  outline: none;
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #52a8f3;
-  color: #f5f5dc;
-  font-size: 1.2rem;
-  /* border: none; */
 }
 
-.list-group-item .ml-2 {
-  display: inline-block;
-}
-
-.list-group-item {
+.nav-link:hover,
+.nav-link.active {
+  color: var(--primary);
+  background-color: #ffffff !important;
+  border-color: var(--primary);
   cursor: pointer;
 }
-
-.icon {
-  width: 60px;
-}
-
-.navbar {
-  background-color: #52a8f3;
-  color: #f5f5dc;
+.side_icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 40px;
 }
 
 .nav_right {
@@ -65,4 +67,22 @@
 .nav-icon {
   height: 27px;
   color: blue;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  line-height: 0;
+}
+
+.admin_font {
+  font-size: 13px;
+  color: #969494;
 }

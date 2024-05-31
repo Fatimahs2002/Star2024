@@ -1,7 +1,26 @@
+/* Logo styles */
+/* .nav_back{
+    background-color: #0D4C90;
+} */
+
+.blue-badge {
+    background-color: blue;
+    color: white;
+    border-radius: 0.25em;
+    padding: 0.5em;
+  }
+.logo_brand {
+    width: 50%;
+}
+.logo_nav {
+    width: 100px;
+}
+
+/* Header top section */
 .header_section_top {
     width: 100%;
     float: left;
-    background-color: #2b2a29;
+    background-color: #0D4C90;
     clip-path: polygon(0 0, 100% 0, 96% 100%, 3% 100%);
     height: auto;
     padding: 10px 0px;
@@ -34,14 +53,181 @@
     color: #f26522;
 }
 
+/* Logo section */
+.logo_section {
+    width: 100%;
+    float: left;
+}
 
+.logo {
+    width: 100px;
+    float: left;
+    text-align: center;
+    padding: 30px 0px;
+}
+
+/* Header section */
 .header_section {
     width: 100%;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .containt_main {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Open nav bar */
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #ffffff;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f26522;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+.toggle_icon {
+    cursor: pointer;
+    background-color: #0a0a0a;
+    order: 2;
+}
+
+/* Dropdown styles */
+.header_box {
+    order: 2;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown,
+.dropleft,
+.dropright,
+.dropup {
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+    display: inline-block;
+    margin-left: 30px;
+    order: 2;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #30302e;
+    border-color: #30302e;
+}
+
+.btn-secondary:hover {
+    color: #fff;
+    background-color: #30302e;
+    border-color: #30302e;
+}
+
+.show > .btn-secondary.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+/* Search box styles */
+.main {
+    flex: 1;
+    margin: 0px 30px;
+    display: inline-block;
+    order: 2;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+/* Login menu */
+.login_menu {
+    display: flex;
+    text-align: right;
+    float: right;
+}
+
+.login_menu ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    display: flex;
+}
+
+.login_menu li {
+    font-size: 16px;
+    text-transform: uppercase;
+    padding-left: 10px;
+    padding-top: 4px;
+}
+
+.login_menu li a {
+    color: #000;
+}
+
+.login_menu li a:hover {
+    color: #0D4C90;
+}
+
+.padding_10 {
+    padding-left: 10px;
 }
 
 
+
+@media (max-width:768px) {
+
+    .header_section_top{
+        display: none;
+    }
+}
