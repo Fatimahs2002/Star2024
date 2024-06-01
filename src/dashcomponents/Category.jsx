@@ -14,7 +14,7 @@ const Category = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [newCategory, setNewCategory] = useState({
     name: "",
-    category: "",
+  
   });
 
   useEffect(() => {
@@ -141,23 +141,7 @@ const Category = () => {
                 className="input_group"
               />
             </Form.Group>
-            <Form.Group controlId="formCategory">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                as="select"
-                value={newCategory.category}
-                onChange={(e) =>
-                  setNewCategory({ ...newCategory, category: e.target.value })
-                }
-                className="input_group"
-              >
-                <option value="">Select Category</option>
-                <option value="Bodycare">Body care</option>
-                <option value="Haircare">Hair care</option>
-                <option value="Detergents">Detergents</option>
-                <option value="Personal care">Personal care</option>
-              </Form.Control>
-            </Form.Group>
+        
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -188,23 +172,7 @@ const Category = () => {
                 className="input_group"
               />
             </Form.Group>
-            <Form.Group controlId="formEditCategory">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                as="select"
-                value={newCategory.category}
-                onChange={(e) =>
-                  setNewCategory({ ...newCategory, category: e.target.value })
-                }
-                className="input_group"
-              >
-                <option value="">Select Category</option>
-                <option value="Bodycare">Body care</option>
-                <option value="Haircare">Hair care</option>
-                <option value="Detergents">Detergents</option>
-                <option value="Personal care">Personal care</option>
-              </Form.Control>
-            </Form.Group>
+       
           </Form>
         </Modal.Body>
         <Modal.Footer>

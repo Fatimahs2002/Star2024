@@ -1,58 +1,84 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserShield, faTrash } from '@fortawesome/free-solid-svg-icons';
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";  // Ensure you import the CSS for react-toastify
 
 const Users = () => {
-  // Example data
-  const [customers, setCustomers] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', phoneNumber: '123-456-7890', order: 'Order #1', isAdmin: false },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', phoneNumber: '987-654-3210', order: 'Order #2', isAdmin: false },
-    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', phoneNumber: '555-555-5555', order: 'Order #3', isAdmin: false },
-  ]);
+  const [users, setUsers] = useState([]);
 
-  const handleSwitchToAdmin = (id) => {
-    setCustomers(customers.map(customer =>
-      customer.id === id ? { ...customer, isAdmin: !customer.isAdmin } : customer
-    ));
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8080/user/getAll`);
+      console.log(res.data);
+      setUsers(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleDelete = (id) => {
-    setCustomers(customers.filter(customer => customer.id !== id));
+  const handleSwitchToAdmin = async (id) => {
+    try {
+      await axios.get(`http://localhost:8080/user/switchAdmin/${id}`);
+      setUsers(users.map(user =>
+        user._id === id ? { ...user, isAdmin: !user.isAdmin } : user
+      ));
+      toast.success("User switched to admin successfully");
+    } catch (error) {
+      console.error("There was an error switching to admin!", error);
+      toast.error("Failed to switch user to admin");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/user/delete/${id}`);
+      setUsers(users.filter((user) => user._id !== id));
+      toast.success("User deleted successfully!");
+    } catch (error) {
+      console.error("There was an error deleting the user!", error);
+    }
   };
 
   return (
     <>
       <h1>Users</h1>
+      <ToastContainer />
       <Table striped bordered hover>
         <thead>
           <tr>
-          
             <th>Name</th>
             <th>Email</th>
             <th>Phone Number</th>
+            <th>Address</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {customers.map((customer) => (
-            <tr key={customer.id}>
-              
-              <td>{customer.name}</td>
-              <td>{customer.email}</td>
-              <td>{customer.phoneNumber}</td>
+          {users.map((user) => (
+            <tr key={user._id}>
+              <td>{user.fullName}</td>
+              <td>{user.email}</td>
+              <td>{user.phoneNumber}</td>
+              <td>{user.address}</td>
               <td>
                 <Button
                   variant="warning"
-                  onClick={() => handleSwitchToAdmin(customer.id)}
+                  onClick={() => handleSwitchToAdmin(user._id)}
                   className="mr-2"
                 >
                   <FontAwesomeIcon icon={faUserShield} />{' '}
-                  {customer.isAdmin ? 'remove' : 'Make Admin'}
+                  {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
                 </Button>
-                <Button variant="danger" onClick={() => handleDelete(customer.id)}>
-                  <FontAwesomeIcon icon={faTrash} /> 
+                <Button variant="danger" onClick={() => handleDelete(user._id)}>
+                  <FontAwesomeIcon icon={faTrash} />
                 </Button>
               </td>
             </tr>
@@ -64,3 +90,5 @@ const Users = () => {
 };
 
 export default Users;
+
+
