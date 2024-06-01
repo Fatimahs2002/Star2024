@@ -1,7 +1,6 @@
 .fashion_section {
     width: 100%;
-    float: left;
-    padding-bottom: 150px;
+    /* padding-bottom: 150px; */
 }
 
 .fashion_taital {
@@ -53,6 +52,10 @@
 .btn_main {
     width: 100%;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 10px;
 }
 
 .buy_bt {
@@ -75,9 +78,7 @@
 }
 
 .seemore_bt {
-    width: 100%;
-    float: right;
-    text-align: right;
+    
 }
 
 .seemore_bt a {

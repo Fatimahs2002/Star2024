@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
+import './style/Responsive.css'
 import Home from "./pages/Home";
 import Dashboard from "./Dashboard/Dashboard";
 import Login from "./pages/Login";
@@ -11,6 +12,7 @@ import ProtectedRoute from "./util/ProtectedRoute";
 import Cart from "./pages/Cart";
 import User from "./pages/User";
 import CartProvider from "./Context/CartContext";
+import ProductDetails from "./components/ProductDetails";
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/user" element={<User />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/products/:ID" element={<ProductDetails />} />
             <Route
               path="/admin"
               element={

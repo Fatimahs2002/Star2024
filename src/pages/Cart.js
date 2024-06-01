@@ -1,31 +1,57 @@
-import React, { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../Context/CartContext';
-import { Container, Row, Col, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import '../style/Cart.css';
+import { getUserID } from '../util/userData'; 
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
+  const [userID, setUserID] = useState(null);
+
+  useEffect(() => {
+    const fetchUserID = async () => {
+      const id = await getUserID();
+      setUserID(id);
+    };
+    fetchUserID();
+  }, []);
 
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
-      updateQuantity(item.id, item.quantity - 1);
+      updateQuantity(item.id, item.quantity - 1, item.selectedOptions);
     } else {
-      removeFromCart(item.id);
+      removeFromCart(item.id, item.selectedOptions);
     }
   };
 
   const handleIncrement = (item) => {
-    updateQuantity(item.id, item.quantity + 1);
+    updateQuantity(item.id, item.quantity + 1, item.selectedOptions);
+  };
+
+  const handleCheckout = () => {
+    if (!userID) {
+      toast.error('You must be logged in to proceed with the checkout!');
+    } else {
+      // Proceed with checkout logic
+      toast.success('Checkout Successful!');
+    }
   };
 
   const totalAmount = cart.reduce((total, item) => {
-    return total + (item.characteristics?.[0]?.price ?? 0) * item.quantity;
+    const itemPrice = item.selectedOptions.weights.reduce((price, weight) => {
+      const weightOption = item.characteristics.find(char => char.type.toLowerCase() === 'size')
+        ?.options.find(option => option.value === weight);
+      return price + (weightOption ? weightOption.price : 0);
+    }, 0);
+    return total + itemPrice * item.quantity;
   }, 0);
 
   return (
     <Container>
       <h1 className="text-center my-4">Shopping Cart</h1>
+      <ToastContainer />
       {cart.length === 0 ? (
         <p className="text-center">Your cart is empty.</p>
       ) : (
@@ -36,23 +62,37 @@ const Cart = () => {
                 <Col key={index} lg={6} sm={12} className="mb-4">
                   <div className="cart_item">
                     <h4 className="cart_item_name">{item.name}</h4>
-                    <p className="cart_item_price">Price: ${item.characteristics?.[0]?.price ?? 'N/A'}</p>
+                    <p className="cart_item_price">
+                      Price: ${item.selectedOptions.weights.reduce((price, weight) => {
+                        const weightOption = item.characteristics.find(char => char.type.toLowerCase() === 'size')
+                          ?.options.find(option => option.value === weight);
+                        return price + (weightOption ? weightOption.price : 0);
+                      }, 0)}
+                    </p>
                     <img
                       src={item.images?.[0] ?? 'path/to/fallback/image.jpg'}
                       alt={item.name}
                       style={{ width: '100%', height: 'auto' }}
                     />
-                    <div className="quantity_control">
+                    <div className="cart_item_options">
+                      <h5>Selected Options:</h5>
+                      <ListGroup>
+                        <ListGroup.Item><strong>Weights:</strong> {item.selectedOptions.weights.join(', ')}</ListGroup.Item>
+                        <ListGroup.Item><strong>Color:</strong> {item.selectedOptions.color}</ListGroup.Item>
+                      </ListGroup>
+                    </div>
+                    <div className="quantity_control mt-3 d-flex">
                       <Button variant="secondary" onClick={() => handleDecrement(item)}>-</Button>
                       <Form.Control
                         type="text"
                         value={item.quantity}
                         readOnly
-                        className="quantity_input"
+                        className="quantity_input mx-2"
+                        style={{ width: '50px', textAlign: 'center' }}
                       />
                       <Button variant="secondary" onClick={() => handleIncrement(item)}>+</Button>
                     </div>
-                    <Button variant="danger" onClick={() => removeFromCart(item.id)}>
+                    <Button variant="danger" onClick={() => removeFromCart(item.id, item.selectedOptions)} className="mt-3">
                       Remove
                     </Button>
                   </div>
@@ -65,7 +105,7 @@ const Cart = () => {
               <h4>Order Summary</h4>
               <p>Subtotal: ${totalAmount.toFixed(2)}</p>
               <p>Total: ${totalAmount.toFixed(2)}</p>
-              <Button variant="success" className="w-100" onClick={() => alert('Checkout Successful!')}>
+              <Button variant="success" className="w-100" onClick={handleCheckout}>
                 Checkout
               </Button>
             </div>
