@@ -32,7 +32,7 @@ function App() {
               element={
                 <ProtectedRoute adminOnly={true}>
                   <Dashboard />
-                </ProtectedRoute>
+                 </ProtectedRoute>
               }
             />
             <Route path="*" element={<NoPageFound />} />

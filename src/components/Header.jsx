@@ -82,7 +82,7 @@ const Header = () => {
           <div id="mySidenav" className="sidenav">
             <Link to="#" className="closebtn" onClick={closeNav}>&times;</Link>
             <Link to="/">Home</Link>
-            <Link to="#">Products</Link>
+            {/* <Link to="#">Products</Link> */}
             <Link to="/about">About Us</Link>
           </div>
           <span className="toggle_icon" onClick={openNav}>
@@ -95,7 +95,6 @@ const Header = () => {
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <li><Link className="dropdown-item" to="#">Action</Link></li>
               <li><Link className="dropdown-item" to="#">Another action</Link></li>
-              <li><Link className="dropdown-item" to="#">Something else here</Link></li>
             </ul>
           </div>
           <div className="main">
