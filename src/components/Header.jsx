@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { faSearch, faShoppingCart, faUser, faSignOutAlt, faUserPlus, faSignInAlt } from '@fortawesome/free-solid-svg-icons';import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/Header.css';
 import { CartContext } from '../Context/CartContext';
 import { getUserID } from '../util/userData';
@@ -109,9 +108,9 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <div className="header_box">
+          <div className="header_box ">
             <div className="login_menu">
-              <ul>
+              <ul className="d-flex">
                 <li>
                   <Link to="/cart">
                     <FontAwesomeIcon icon={faShoppingCart} aria-hidden="true" />
@@ -121,24 +120,52 @@ const Header = () => {
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
-                  <Link className="nav-link dropdown-toggle" to="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <FontAwesomeIcon icon={faUser} aria-hidden="true" />
-                    <span className="padding_10">Account</span>
-                  </Link>
-                  <ul className="dropdown-menu" aria-labelledby="accountDropdown">
-                    {isAuthenticated ? (
-                      <>
-                        <li><Link className="dropdown-item" to="#">Profile</Link></li>
-                        <li><Link className="dropdown-item" onClick={handleLogout}>Logout</Link></li>
-                      </>
-                    ) : (
-                      <>
-                        <li><Link className="dropdown-item" to="/login">Login</Link></li>
-                        <li><Link className="dropdown-item" to="/register">Register</Link></li>
-                      </>
-                    )}
-                  </ul>
-                </li>
+  <Link
+    className="nav-link dropdown-toggle"
+    to="#"
+    id="accountDropdown"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <FontAwesomeIcon icon={faUser} aria-hidden="true" />
+    <span className="padding_10">Account</span>
+  </Link>
+  <ul className="dropdown-menu custom-dropdown" aria-labelledby="accountDropdown">
+    {isAuthenticated ? (
+      <>
+        <li>
+          <Link className="dropdown-item" to="#">
+            <FontAwesomeIcon icon={faUser} aria-hidden="true" />
+            Profile
+          </Link>
+        </li>
+        <li>
+          <Link className="dropdown-item" onClick={handleLogout} to="#">
+            <FontAwesomeIcon icon={faSignOutAlt} aria-hidden="true" />
+            Logout
+          </Link>
+        </li>
+      </>
+    ) : (
+      <>
+        <li>
+          <Link className="dropdown-item" to="/login">
+            <FontAwesomeIcon icon={faSignInAlt} aria-hidden="true" />
+            Login
+          </Link>
+        </li>
+        <li>
+          <Link className="dropdown-item" to="/register">
+            <FontAwesomeIcon icon={faUserPlus} aria-hidden="true" />
+            Register
+          </Link>
+        </li>
+      </>
+    )}
+  </ul>
+</li>
+
               </ul>
             </div>
           </div>
