@@ -56,12 +56,13 @@
 /* Logo section */
 .logo_section {
     width: 100%;
-    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .logo {
     width: 100px;
-    float: left;
     text-align: center;
     padding: 30px 0px;
 }
@@ -226,8 +227,17 @@
 
 
 @media (max-width:768px) {
-
-    .header_section_top{
+.header_section_top{
         display: none;
+    }
+
+  
+
+    .header_box {
+        order: 1;
+        display: flex;
+        width: 100%;
+        margin-bottom: 20px;
+        justify-content: space-between;
     }
 }

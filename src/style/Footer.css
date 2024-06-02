@@ -1,7 +1,7 @@
 .footer_section {
     width: 100%;
-    float: left;
-    background-color: #45A7CA;
+    /* float: left; */
+    background-color: #0D4C90;
     height: auto;
 }
 
@@ -91,7 +91,7 @@ input.mail_bt::placeholder {
 }
 
 .location_main {
-    float: left;
+    /* float: left; */
     font-size: 16px;
     color: #ffffff;
     padding: 30px 30px 30px 30px;
@@ -113,14 +113,14 @@ input.mail_bt::placeholder {
 
 .copyright_section {
     width: 100%;
-    float: left;
-    background-color: #45A7CA;
+    display: flex;
+    /* float: left; */
+    background-color: #0D4C90;
     height: auto;
 }
 
 .copyright_text {
     width: 100%;
-    float: left;
     color: #ffffff;
     text-align: center;
     font-size: 16px;
@@ -135,6 +135,3 @@ input.mail_bt::placeholder {
     color: #f26522;
 }
 
-.margin_top90 {
-    margin-top: 90px;
-}

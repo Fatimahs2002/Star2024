@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Carousel, Container, Row, Col, Button, Modal } from "react-bootstrap";
+import { Carousel, Container, Row, Col, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { CartContext } from "../Context/CartContext";
@@ -9,8 +10,6 @@ const ProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const { addToCart } = useContext(CartContext);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -65,16 +64,6 @@ const ProductsPage = () => {
 
   const groupedProducts = groupProductsByCategory();
 
-  const handleSeeMore = (product) => {
-    setSelectedProduct(product);
-    setShowModal(true);
-  };
-
-  const handleClose = () => {
-    setShowModal(false);
-    setSelectedProduct(null);
-  };
-
   return (
     <div className="fashion_section">
       {Object.keys(groupedProducts).map((categoryName, index) => (
@@ -122,18 +111,26 @@ const ProductsPage = () => {
                                 />
                               </div>
                               <div className="btn_main">
-                                <Button
-                                  variant="secondary"
-                                  className="seemore_bt"
-                                  onClick={() => handleSeeMore(product)}
-                                >
-                                  See More
-                                </Button>
+                                <Link to={`/products/${product._id}`}>
+                                  <Button
+                                    variant="secondary"
+                                    className="seemore_bt"
+                                  >
+                                    See More
+                                  </Button>
+                                </Link>
                                 <Button
                                   variant="success"
                                   className="addtocart_bt"
                                   onClick={() =>
-                                    addToCart({ ...product, id: product.id })
+                                    addToCart({ 
+                                      ...product, 
+                                      id: product.id,
+                                      selectedOptions: {
+                                        weights: [/* example weight options here */],
+                                        color: 'exampleColor'
+                                      }
+                                    })
                                   }
                                 >
                                   Add to Cart
@@ -151,60 +148,6 @@ const ProductsPage = () => {
           </Carousel>
         </div>
       ))}
-
-      <Modal show={showModal} onHide={handleClose}>
-        {selectedProduct && (
-          <>
-            <Modal.Header closeButton>
-              <Modal.Title>{selectedProduct.name}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p>{selectedProduct.description}</p>
-              <img
-                src={
-                  selectedProduct.images?.[0] ?? "path/to/fallback/image.jpg"
-                }
-                alt={selectedProduct.name}
-                style={{ width: "100%", height: "auto" }}
-                onError={handleImageError}
-              />
-              <p className="price_text">
-                Price:{" "}
-                <span style={{ color: "#262626" }}>
-                  $
-                  {selectedProduct.characteristics && selectedProduct.characteristics.length > 0
-                    ? selectedProduct.characteristics.map((char) => char.price).join(" / ")
-                    : "N/A"}
-                </span>
-              </p>
-              <div>
-                <h5>Characteristics:</h5>
-                <ul>
-                  {selectedProduct.characteristics?.map((char, index) => (
-                    <li key={index}>
-                      <strong>{char.type}:</strong> {char.value} - ${char.price}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button
-                variant="success"
-                onClick={() => {
-                  addToCart(selectedProduct);
-                  handleClose();
-                }}
-              >
-                Buy
-              </Button>
-            </Modal.Footer>
-          </>
-        )}
-      </Modal>
     </div>
   );
 };

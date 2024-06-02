@@ -1,16 +1,27 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
-      const existingProduct = prevCart.find((item) => item.id === product.id);
+      const existingProduct = prevCart.find((item) => 
+        item.id === product.id && 
+        JSON.stringify(item.selectedOptions) === JSON.stringify(product.selectedOptions)
+      );
       if (existingProduct) {
         return prevCart.map((item) =>
-          item.id === product.id
+          item.id === product.id && 
+          JSON.stringify(item.selectedOptions) === JSON.stringify(product.selectedOptions)
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -19,14 +30,21 @@ const CartProvider = ({ children }) => {
     });
   };
 
-  const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+  const removeFromCart = (productId, selectedOptions) => {
+    setCart((prevCart) => 
+      prevCart.filter((item) => 
+        item.id !== productId || 
+        JSON.stringify(item.selectedOptions) !== JSON.stringify(selectedOptions)
+      )
+    );
   };
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = (productId, quantity, selectedOptions) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
+        item.id === productId && JSON.stringify(item.selectedOptions) === JSON.stringify(selectedOptions)
+          ? { ...item, quantity }
+          : item
       )
     );
   };

@@ -1,6 +1,6 @@
 .banner_section {
   width: 100%;
-  height: 30rem;
+  /* height: 30rem; */
   background-image: url("/public/images/back.jpg");
   background-size: cover;
   background-position: center;
@@ -9,7 +9,7 @@
 .banner_taital {
   width: 100%;
   font-size: 60px;
-  color: #1b47d8;
+  color: #1b47d8 !important;
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
@@ -23,11 +23,11 @@
 
 .buynow_bt a {
   width: 100%;
-  float: left;
+  display: flex;
+  justify-content: center;
   font-size: 16px;
   color: #ffffff;
   background-color: #252525;
-  text-align: center;
   padding: 10px 0px;
   border-radius: 5px;
   text-transform: uppercase;
@@ -35,7 +35,7 @@
 }
 
 .buynow_bt a:hover {
-  background-color: #f26522;
+  background-color: #1b47d8;
   color: #ffffff;
 }
 
@@ -53,7 +53,7 @@
 #my_slider .carousel-control-prev {
   width: 45px;
   height: 45px;
-  background: rgba(235, 199, 110, 0.8);
+  /* background: rgba(235, 199, 110, 0.8); */
   opacity: 1;
   font-size: 20px;
   color: #000000;
@@ -67,4 +67,8 @@
   color: #fff;
 }
 
-/* banner section end */
+@media (max-width:768px) {
+  .banner_taital{
+    font-size: 24px;
+}
+}
