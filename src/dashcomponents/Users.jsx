@@ -58,6 +58,7 @@ const Users = () => {
             <th>Email</th>
             <th>Phone Number</th>
             <th>Address</th>
+            <th>Role</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -68,6 +69,7 @@ const Users = () => {
               <td>{user.email}</td>
               <td>{user.phoneNumber}</td>
               <td>{user.address}</td>
+              <td>{user.role}</td>
               <td>
                 <Button
                   variant="warning"
