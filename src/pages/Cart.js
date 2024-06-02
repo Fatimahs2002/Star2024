@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
@@ -72,10 +72,9 @@ const Cart = () => {
                     <img
                       src={item.images?.[0] ?? 'path/to/fallback/image.jpg'}
                       alt={item.name}
-                      style={{ width: '100%', height: 'auto' }}
+                      style={{ width: '100%', height: 'auto', borderRadius: '10px' }}
                     />
                     <div className="cart_item_options">
-                      <h5>Selected Options:</h5>
                       <ListGroup>
                         <ListGroup.Item><strong>Weights:</strong> {item.selectedOptions.weights.join(', ')}</ListGroup.Item>
                         <ListGroup.Item><strong>Color:</strong> {item.selectedOptions.color}</ListGroup.Item>

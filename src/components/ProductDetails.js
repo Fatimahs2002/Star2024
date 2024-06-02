@@ -55,8 +55,8 @@ const ProductDetails = () => {
     return <p>Loading...</p>;
   }
 
-  const weightOptions = product.characteristics.find((char) => char.type.toLowerCase() === "size");
-  const colorOptions = product.characteristics.find((char) => char.type.toLowerCase() === "color");
+  const weightOptions = product.characteristics?.find((char) => char.type.toLowerCase() === "size");
+  const colorOptions = product.characteristics?.find((char) => char.type.toLowerCase() === "color");
 
   return (
     <>

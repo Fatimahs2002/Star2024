@@ -4,7 +4,7 @@
 } */
 
 .blue-badge {
-    background-color: blue;
+    background-color: #0D4C90;
     color: white;
     border-radius: 0.25em;
     padding: 0.5em;
@@ -202,7 +202,6 @@
     margin: 0px;
     padding: 0px;
     list-style: none;
-    display: flex;
 }
 
 .login_menu li {
