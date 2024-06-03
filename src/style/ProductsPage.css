@@ -118,3 +118,16 @@
 .carousel-control-prev-icon{
     background-color: #262626 !important;
 }
+
+.image-container {
+    overflow: hidden;
+  }
+  
+  .animated-image {
+    transition: transform 0.3s ease; 
+  }
+  
+  .animated-image:hover {
+    transform: scale(1.1);
+  }
+  

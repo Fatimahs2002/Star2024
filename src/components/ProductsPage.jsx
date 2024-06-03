@@ -95,15 +95,17 @@ const ProductsPage = () => {
                                 <span style={{ color: "#262626" }}>
                                   $
                                   {product.characteristics && product.characteristics.length > 0
-                                    ? product.characteristics.map((char) => char.price).join(" / ")
+                                    ? product.characteristics[0].options[0].price
                                     : "N/A"}
                                 </span>
                               </p>
-                              <div className="img">
+                              <div className="image-container">
                                 <img
+                                  className="animated-image"
                                   src={
-                                    product.images?.[0] ??
-                                    "path/to/fallback/image.jpg"
+                                    product.images && product.images.length > 0
+                                      ? product.images[0]
+                                      : "path/to/fallback/image.jpg"
                                   }
                                   alt={product.name}
                                   style={{ width: "100%", height: "auto" }}
@@ -127,8 +129,8 @@ const ProductsPage = () => {
                                       ...product, 
                                       id: product.id,
                                       selectedOptions: {
-                                        weights: [/* example weight options here */],
-                                        color: 'exampleColor'
+                                        weights: [],
+                                        color: ''
                                       }
                                     })
                                   }

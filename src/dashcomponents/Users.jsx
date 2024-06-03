@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";  // Ensure you import the CSS fo
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-
+ 
   useEffect(() => {
     fetchUsers();
   }, []);

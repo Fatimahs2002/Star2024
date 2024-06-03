@@ -1,10 +1,11 @@
-import  { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from 'react-bootstrap/Button';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../style/register.css";
 
 const Register = () => {
   const [fullName, setFullName] = useState("");
@@ -38,11 +39,8 @@ const Register = () => {
 
     setLoading(true);
     try {
-      const res = await axios.post(
-        `http://localhost:8080/user/register`,
-        user
-      );
-      navigate('/');
+      await axios.post(`http://localhost:8080/user/register`, user);
+      navigate("/");
       toast.success("Registered successfully");
     } catch (error) {
       console.error(error);
@@ -55,67 +53,77 @@ const Register = () => {
   return (
     <div className="container mt-5">
       <ToastContainer />
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="fullName" className="form-label">Full Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="fullName"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          />
+      <div className="row">
+        <div className="col-md-6">
+          <img src="/images/regi.svg" alt="Register" className="img-fluid" />
         </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+        <div className="col-md-6">
+          <form onSubmit={handleSubmit} className="form">
+            <p className="title">Register</p>
+            <p className="message">
+              Signup now and get full access to our shop.
+            </p>
+
+            <label>
+              <input
+                className="input"
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+              />
+              <span>Full Name</span>
+            </label>
+
+            <label>
+              <input
+                className="input"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <span>Email</span>
+            </label>
+            <label>
+              <input
+                className="input"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <span>Password</span>
+            </label>
+            <label>
+              <input
+                className="input"
+                type="text"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                required
+              />
+              <span>Phone Number</span>
+            </label>
+            <label>
+              <input
+                className="input"
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+              />
+              <span>Address</span>
+            </label>
+            <Button type="submit" className="submit" disabled={loading}>
+              {loading ? "Registering..." : "Submit"}
+            </Button>
+            <p className="signin">
+              Already have an account? <Link to="/login">Signin</Link>
+            </p>
+          </form>
         </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
-          <input
-            type="text"
-            className="form-control"
-            id="phoneNumber"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="address" className="form-label">Address</label>
-          <input
-            type="text"
-            className="form-control"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-          />
-        </div>
-        <Button variant="primary" type="submit" disabled={loading}>
-          {loading ? "Registering..." : "Register"}
-        </Button>
-      </form>
+      </div>
     </div>
   );
 };

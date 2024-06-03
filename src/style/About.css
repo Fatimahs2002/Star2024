@@ -1,3 +1,55 @@
-.about_image{
-    width: 50rem;
+.about_image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.timeline {
+  position: relative;
+  padding: 10px 0;
+  list-style: none;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  width: 2px;
+  background: #ddd;
+}
+
+.timeline-item {
+  position: relative;
+  margin: 20px 0;
+  padding-left: 40px;
+}
+
+.timeline-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0D4C90;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+}
+
+.timeline-content {
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 6px;
+}
+
+h2 {
+  margin-top: 40px;
+}
+
+p {
+  margin-bottom: 20px;
 }
