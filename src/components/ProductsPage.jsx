@@ -114,16 +114,14 @@ const ProductsPage = () => {
                               </div>
                               <div className="btn_main">
                                 <Link to={`/products/${product._id}`}>
-                                  <Button
-                                    variant="secondary"
-                                    className="seemore_bt"
+                                  <span
+                                    className="seemore"
                                   >
                                     See More
-                                  </Button>
+                                  </span>
                                 </Link>
-                                <Button
-                                  variant="success"
-                                  className="addtocart_bt"
+                                <span
+                                  className="addtocart"
                                   onClick={() =>
                                     addToCart({ 
                                       ...product, 
@@ -133,10 +131,11 @@ const ProductsPage = () => {
                                         color: ''
                                       }
                                     })
+
                                   }
                                 >
                                   Add to Cart
-                                </Button>
+                                </span>
                               </div>
                             </div>
                           </Col>

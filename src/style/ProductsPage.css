@@ -1,133 +1,117 @@
 .fashion_section {
-    width: 100%;
-    /* padding-bottom: 150px; */
+  width: 100%;
 }
 
 .fashion_taital {
-    width: 100%;
-    font-size: 40px;
-    color: #30302e;
-    text-align: center;
-    font-weight: bold;
+  width: 100%;
+  font-size: 40px;
+  color: #30302e;
+  text-align: center;
+  font-weight: bold;
 }
 
 .fashion_section_2 {
-    width: 100%;
-    margin-top: 30px;
+  width: 100%;
+  margin-top: 30px;
 }
 
 .box_main {
-    width: 100%;
-    background-color: #ffffff;
-    height: auto;
-    padding: 20px;
-    box-shadow: 0px 0 30px 10px #f0f0f0;
-    margin-bottom: 20px;
+  width: 100%;
+  background-color: #ffffff;
+  height: auto;
+  padding: 20px;
+  box-shadow: 0px 0 30px 10px #f0f0f0;
+  margin-bottom: 20px;
 }
 
 .shirt_text {
-    width: 100%;
-    font-size: 20px;
-    color: #30302e;
-    text-align: center;
-    font-weight: bold;
-    padding-bottom: 5px;
+  width: 100%;
+  font-size: 20px;
+  color: #30302e;
+  text-align: center;
+  font-weight: bold;
+  padding-bottom: 5px;
 }
 
 .price_text {
-    width: 100%;
-    font-size: 16px;
-    color: #f26522;
-    text-align: center;
-    margin: 0px;
+  width: 100%;
+  font-size: 16px;
+  color: #f26522;
+  text-align: center;
+  margin: 0px;
 }
 
 .tshirt_img {
-    width: 100%;
-    text-align: center;
-    margin: 50px 0px;
-    min-height: 370px;
+  width: 100%;
+  text-align: center;
+  margin: 50px 0px;
+  min-height: 370px;
 }
 
 .btn_main {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 10px;
 }
 
-.buy_bt {
-    float: left;
-    width: 100%;
+.seemore{
+  background-color: #262626;
+  color: #f0f0f0;
+  font-size: 16px;
+  border: none; 
+  border-radius: 10px; 
+  padding: 10px 15px;
 }
 
-.buy_bt a {
-    width: 100%;
-    font-size: 16px;
-    color: #f26522;
-    background-color: transparent;
-    text-align: right;
-    font-weight: bold;
+.addtocart {
+  background-color: #0d4c90;
+  color: #f0f0f0;
+  font-size: 16px;
+  border: none; 
+  border-radius: 10px; 
+  padding: 10px 15px;
 }
 
-.buy_bt a:hover {
-    background-color: transparent;
-    color: #262626;
-}
-
-.seemore_bt {
-    
-}
-
-.seemore_bt a {
-    width: 100%;
-    font-size: 16px;
-    color: #262626;
-    background-color: transparent;
-    text-align: right;
-}
-
-.seemore_bt a:hover {
-    background-color: transparent;
-    color: #f26522;
+.addtocart:hover{
+  cursor: pointer;
 }
 
 #main_slider a.carousel-control-next {
-    right: 615px;
-    top: 105%;
+  right: 615px;
+  top: 105%;
 }
 
 #main_slider a.carousel-control-prev {
-    left: 615px;
-    top: 105%;
+  left: 615px;
+  top: 105%;
 }
 
 #main_slider .carousel-control-next,
 #main_slider .carousel-control-prev {
-    width: 55px;
-    height: 55px;
-    background-color: #30302e;
-    opacity: 1;
-    font-size: 30px;
-    color: #ffffff;
+  width: 55px;
+  height: 55px;
+  background-color: #30302e;
+  opacity: 1;
+  font-size: 30px;
+  color: #ffffff;
 }
 
 .carousel-control-next-icon,
-.carousel-control-prev-icon{
-    background-color: #262626 !important;
+.carousel-control-prev-icon {
+  background-color: #262626 !important;
 }
 
 .image-container {
-    overflow: hidden;
-  }
-  
-  .animated-image {
-    transition: transform 0.3s ease; 
-  }
-  
-  .animated-image:hover {
-    transform: scale(1.1);
-  }
-  
+  overflow: hidden;
+}
+
+.animated-image {
+  transition: transform 0.3s ease;
+}
+
+.animated-image:hover {
+  transform: scale(1.1);
+}

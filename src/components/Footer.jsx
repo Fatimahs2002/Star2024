@@ -1,57 +1,53 @@
-import { Link } from 'react-router-dom';
-import '../style/Footer.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebook,
+  faInstagram,
+  faMapMarkerAlt,
+  faPhone,
+} from "@fortawesome/free-solid-svg-icons";
+import "../style/Footer.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Footer = () => {
   return (
-    <div className="">
+    <>
       <div className="footer_section layout_padding">
         <div className="container">
           <div className="d-flex align-items-center justify-content-center w-100 ">
             <div className="footer_logo">
-              <Link to="index.html">
+              <Link to="/">
                 <img src="images/logo.png" alt="Footer Logo" />
               </Link>
             </div>
           </div>
-          <div className="input_bt">
-            <input
-              type="text"
-              className="mail_bt"
-              placeholder="Your Email"
-              name="Your Email"
-            />
-            <span className="subscribe_bt" id="basic-addon2">
-              <Link to="#">Subscribe</Link>
-            </span>
-          </div>
-          <div className="footer_menu">
-            <ul>
+          <div className="footer_social_icons">
+            <ul className="social_icons_list">
               <li>
-                <Link to="#">Best Sellers</Link>
+                <Link to="#">
+                  {/* <FontAwesomeIcon icon={faFacebook} /> */}
+                </Link>
               </li>
               <li>
-                <Link to="#">Gift Ideas</Link>
-              </li>
-              <li>
-                <Link to="#">New Releases</Link>
-              </li>
-              <li>
-                <Link to="#">Today's Deals</Link>
-              </li>
-              <li>
-                <Link to="#">Customer Service</Link>
+                <Link to="#">
+                  {/* <FontAwesomeIcon icon={faInstagram} /> */}
+                </Link>
               </li>
             </ul>
           </div>
-          <div className="location_main">
-            Help Line Number : <Link to="#">+961 70 00 11 33</Link>
+          <div className="d-flex align-items-center justify-content-center w-100">
+            <div className="location_main">
+              <FontAwesomeIcon icon={faMapMarkerAlt} />
+              <span>1234 Street Name, City, Country</span>
+            </div>
+            <div className="location_main">
+              <FontAwesomeIcon icon={faPhone} />
+              <span>+961 70 00 11 33</span>
+            </div>
           </div>
         </div>
       </div>
-      {/* footer section end */}
 
-      {/* copyright section start */}
       <div className="copyright_section">
         <div className="container">
           <p className="copyright_text">
@@ -59,7 +55,7 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

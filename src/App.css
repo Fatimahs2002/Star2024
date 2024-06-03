@@ -1,107 +1,50 @@
-:root {
-    --primary: #009CFF;
-    --light: #F3F6F9;
-    --dark: #191C24;
-}
-
 *,
 *::after,
 *::before {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
-
 
 html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
-
-ul{
-    list-style: none;
+ul {
+  list-style: none;
 }
-
-
-
-
 
 a,
 .btn {
-    text-decoration: none !important;
-    outline: none !important;
-    -webkit-transition: all .3s ease-in-out;
-    -moz-transition: all .3s ease-in-out;
-    -ms-transition: all .3s ease-in-out;
-    -o-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
+  text-decoration: none !important;
+  outline: none !important;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 img {
-    max-width: 100%;
-    height: auto;
-}
-
- :focus {
-    outline: 0;
-}
-
-.paddind_bottom_0 {
-    padding-bottom: 0 !important;
-}
-
-.btn-custom {
-    margin-top: 20px;
-    background-color: transparent !important;
-    border: 2px solid #ddd;
-    padding: 12px 40px;
-    font-size: 16px;
-}
-
-.lead {
-    font-size: 18px;
-    line-height: 30px;
-    color: #767676;
-    margin: 0;
-    padding: 0;
-}
-
-.form-control:focus {
-    border-color: #ffffff !important;
-    box-shadow: 0 0 0 .2rem rgba(255, 255, 255, .25);
+  max-width: 100%;
+  height: auto;
 }
 
 .navbar-form input {
-    border: none !important;
-}
-
-.badge {
-    font-weight: 500;
-}
-
-blockquote {
-    margin: 20px 0 20px;
-    padding: 30px;
-}
-
-button {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
+  border: none !important;
 }
 
 .full {
-    float: left;
-    width: 100%;
+  float: left;
+  width: 100%;
 }
 
 .layout_padding {
-    padding-top: 90px;
-    padding-bottom: 0px;
+  padding-top: 20px;
+  padding-bottom: 0px;
 }
 
 .padding_0 {
-    padding: 0px;
+  padding: 0px;
 }
