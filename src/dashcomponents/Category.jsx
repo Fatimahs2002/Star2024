@@ -14,7 +14,7 @@ const Category = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [newCategory, setNewCategory] = useState({
     name: "",
-    category: "",
+  
   });
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const Category = () => {
 
   const fetchCategory = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/category/get`);
+      const res = await axios.get(`${process.env.REACT_APP_URL}/category/get`);
       console.log(res.data);
       setCategories(res.data.data);
     } catch (error) {
@@ -33,7 +33,7 @@ const Category = () => {
 
   const handleDelete = async (_id) => {
     try {
-      await axios.delete(`http://localhost:8080/category/delete/${_id}`);
+      await axios.delete(`${process.env.REACT_APP_URL}/category/delete/${_id}`);
       setCategories(categories.filter((category) => category._id !== _id));
       toast.success("Category deleted successfully!");
     } catch (error) {
@@ -52,7 +52,7 @@ const Category = () => {
 
   const handleSave = async (_id) => {
     try {
-      await axios.put(`http://localhost:8080/category/update/${_id}`, newCategory);
+      await axios.put(`${process.env.REACT_APP_URL}/category/update/${_id}`, newCategory);
       setCategories(
         categories.map((category) =>
           category._id === _id ? { ...category, ...newCategory } : category
@@ -69,7 +69,7 @@ const Category = () => {
 
   const handleAdd = async () => {
     try {
-      const res = await axios.post(`http://localhost:8080/category/add`, newCategory);
+      const res = await axios.post(`${process.env.REACT_APP_URL}/category/add`, newCategory);
       setCategories([...categories, { _id: res.data._id, ...newCategory }]);
       setShowAddModal(false);
       setNewCategory({ name: "", category: "" });
@@ -141,23 +141,7 @@ const Category = () => {
                 className="input_group"
               />
             </Form.Group>
-            <Form.Group controlId="formCategory">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                as="select"
-                value={newCategory.category}
-                onChange={(e) =>
-                  setNewCategory({ ...newCategory, category: e.target.value })
-                }
-                className="input_group"
-              >
-                <option value="">Select Category</option>
-                <option value="Bodycare">Body care</option>
-                <option value="Haircare">Hair care</option>
-                <option value="Detergents">Detergents</option>
-                <option value="Personal care">Personal care</option>
-              </Form.Control>
-            </Form.Group>
+        
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -188,23 +172,7 @@ const Category = () => {
                 className="input_group"
               />
             </Form.Group>
-            <Form.Group controlId="formEditCategory">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                as="select"
-                value={newCategory.category}
-                onChange={(e) =>
-                  setNewCategory({ ...newCategory, category: e.target.value })
-                }
-                className="input_group"
-              >
-                <option value="">Select Category</option>
-                <option value="Bodycare">Body care</option>
-                <option value="Haircare">Hair care</option>
-                <option value="Detergents">Detergents</option>
-                <option value="Personal care">Personal care</option>
-              </Form.Control>
-            </Form.Group>
+       
           </Form>
         </Modal.Body>
         <Modal.Footer>

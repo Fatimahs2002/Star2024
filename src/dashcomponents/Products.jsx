@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -10,155 +11,225 @@ import {
   faEdit,
   faTrash,
   faPlus,
-  faTimes,
   faSave,
-  faImage,
   faSortAlphaDown,
   faSortAlphaUp,
 } from "@fortawesome/free-solid-svg-icons";
 import "../style/ProductDash.css";
-const Products = () => {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Flooer cleaner",
-      description: "the best",
-      category: "Detergents",
-      characteristic: { size: "L", price: 20, weight: "200g" },
-      image: "image1",
-    },
-    {
-      id: 2,
-      name: "Star Hand Soap",
-      description: "the best",
-      category: "body care",
-      characteristic: { size: "XL", price: 30, weight: "500g" },
-      image: "image2",
-    },
-    {
-      id: 3,
-      name: "Gel & wax",
-      description: "the best",
-      category: "Hair care",
-      characteristic: { size: "Small", price: 50, weight: "1kg" },
-      image: "image3",
-    },
-    {
-      id: 4,
-      name: "Alcohol",
-      description: "the best",
-      category: "Personal care",
-      characteristic: { size: "Small", price: 50, weight: "1kg" },
-      image: "image3",
-    },
-  ]);
 
-  const [editingProduct, setEditingProduct] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
-  const [newName, setNewName] = useState("");
-  const [newDescription, setNewDescription] = useState("");
-  const [newCategory, setNewCategory] = useState("");
-  const [newSize, setNewSize] = useState("");
-  const [newPrice, setNewPrice] = useState("");
-  const [newWeight, setNewWeight] = useState("");
-  const [newImage, setNewImage] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleDelete = (id) => {
-    toast(
-      <div>
-        Are you sure?
-        <div className="mt-2 d-flex gap-3 align-center">
-          <Button variant="danger" onClick={() => confirmDelete(id)}>
-            Yes
-          </Button>
-          <Button variant="secondary" onClick={() => toast.dismiss()}>
-            No
-          </Button>
-        </div>
-      </div>,
-      {
-        position: "top-center",
-        autoClose: true,
-        closeOnClick: false,
-        draggable: false,
-        closeButton: false,
-      }
-    );
+// YourComponent
+function YourComponent({ formData, setFormData }) {
+  const handleRemoveImage = (indexToRemove) => {
+    setFormData(prevData => ({
+      ...prevData,
+      images: prevData.images.filter((_, index) => index !== indexToRemove)
+    }));
   };
 
-  const confirmDelete = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
-    toast.success("Product deleted successfully!");
+  return (
+    <div>
+      {formData.images.map((image, index) => (
+        <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+          <img
+            src={image}
+            alt={`Product Image ${index + 1}`}
+            style={{ width: "100px", marginRight: "10px" }}
+          />
+          <button onClick={() => handleRemoveImage(index)}>Remove</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Products Component
+const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    categoryName: "",
+    characteristics: [],
+    images: [],
+  });
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [newCharacteristicType, setNewCharacteristicType] = useState("");
+  const [newOptionValue, setNewOptionValue] = useState("");
+  const [newOptionPrice, setNewOptionPrice] = useState("");
+
+  useEffect(() => {
+    fetchProducts();
+    fetchCategories();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8080/product/get`);
+      setProducts(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8080/category/get`);
+      setCategories(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_URL}/product/delete/${id}`);
+      setProducts(products.filter((product) => product._id !== id));
+      toast.success("Product deleted successfully!");
+    } catch (error) {
+      console.error("There was an error deleting the product!", error);
+    }
   };
 
   const handleEdit = (product) => {
-    setEditingProduct(product.id);
-    setNewName(product.name);
-    setNewDescription(product.description);
-    setNewCategory(product.category);
-    setNewSize(product.characteristic.size);
-    setNewPrice(product.characteristic.price);
-    setNewWeight(product.characteristic.weight);
-    setNewImage(product.image);
-    setShowModal(true);
+    setEditingProduct(product._id);
+    setFormData({
+      name: product.name,
+      description: product.description,
+      categoryName: product.categoryName,
+      characteristics: product.characteristics,
+      images: product.images,
+    });
+    setShowEditModal(true);
   };
 
-  const handleSave = () => {
-    if (isAdding) {
-      const newProduct = {
-        id: products.length + 1,
-        name: newName,
-        description: newDescription,
-        category: newCategory,
-        characteristic: { size: newSize, price: newPrice, weight: newWeight },
-        image: newImage,
-      };
-      setProducts([...products, newProduct]);
-    } else {
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleImageChange = (e) => {
+    setFormData({
+      ...formData,
+      images: [...formData.images, ...e.target.files],
+    });
+  };
+
+  const handleAddCharacteristicType = () => {
+    if (newCharacteristicType.trim() !== "") {
+      setFormData({
+        ...formData,
+        characteristics: [
+          ...formData.characteristics,
+          { type: newCharacteristicType, options: [] },
+        ],
+      });
+      setNewCharacteristicType("");
+    }
+  };
+
+  const handleAddOption = (index) => {
+    const updatedCharacteristics = [...formData.characteristics];
+    updatedCharacteristics[index].options.push({
+      value: newOptionValue,
+      price: newOptionPrice,
+    });
+    setFormData({
+      ...formData,
+      characteristics: updatedCharacteristics,
+    });
+    setNewOptionValue("");
+    setNewOptionPrice("");
+  };
+
+  const handleRemoveCharacteristic = (index) => {
+    const updatedCharacteristics = [...formData.characteristics];
+    updatedCharacteristics.splice(index, 1);
+    setFormData({
+      ...formData,
+      characteristics: updatedCharacteristics,
+    });
+  };
+
+  const handleSubmitAdd = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("description", formData.description);
+    data.append("categoryName", formData.categoryName);
+    data.append("characteristics", JSON.stringify(formData.characteristics));
+    formData.images.forEach((image) => {
+      data.append("images", image);
+    });
+
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_URL}/product/add`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setProducts([...products, res.data.data]);
+      toast.success("Product added successfully!");
+      resetForm();
+      setShowAddModal(false);
+    } catch (error) {
+      console.error("There was an error adding the product!", error);
+      toast.error("Error adding the product. Please try again.");
+    }
+  };
+
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("description", formData.description);
+    data.append("categoryName", formData.categoryName);
+    data.append("characteristics", JSON.stringify(formData.characteristics));
+    formData.images.forEach((image) => {
+      data.append("images", image);
+    });
+
+    try {
+      const res = await axios.put(
+        `${process.env.REACT_APP_URL}/product/update/${editingProduct}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       setProducts(
         products.map((product) =>
-          product.id === editingProduct
-            ? {
-                ...product,
-                name: newName,
-                description: newDescription,
-                category: newCategory,
-                characteristic: {
-                  size: newSize,
-                  price: newPrice,
-                  weight: newWeight,
-                },
-                image: newImage,
-              }
-            : product
+          product._id === editingProduct ? res.data.data : product
         )
       );
+      toast.success("Product updated successfully!");
+      resetForm();
+      setShowEditModal(false);
+    } catch (error) {
+      console.error("There was an error updating the product!", error);
+      toast.error("Error updating the product. Please try again.");
     }
-    resetForm();
-    setShowModal(false);
-  };
-
-  const handleAddImage = (id) => {
-    toast.warning(`Add image for product ${id}`);
-  };
-
-  const handleRemoveImage = (id) => {
-    toast.warning(`Remove image for product ${id}`);
   };
 
   const resetForm = () => {
     setEditingProduct(null);
-    setIsAdding(false);
-    setNewName("");
-    setNewDescription("");
-    setNewCategory("");
-    setNewSize("");
-    setNewPrice("");
-    setNewWeight("");
-    setNewImage("");
+    setFormData({
+      name: "",
+      description: "",
+      categoryName: "",
+      characteristics: [],
+      images: [],
+    });
   };
 
   const handleSort = () => {
@@ -185,10 +256,7 @@ const Products = () => {
         <Button
           variant="primary"
           className="mb-3"
-          onClick={() => {
-            setIsAdding(true);
-            setShowModal(true);
-          }}
+          onClick={() => setShowAddModal(true)}
         >
           <FontAwesomeIcon icon={faPlus} /> Add Product
         </Button>
@@ -222,15 +290,31 @@ const Products = () => {
         </thead>
         <tbody>
           {filteredProducts.map((product) => (
-            <tr key={product.id}>
+            <tr key={product._id}>
               <td>{product.name}</td>
               <td>{product.description}</td>
-              <td>{product.category}</td>
-              <td>{`Size: ${product.characteristic.size}, Price: ${product.characteristic.price}, Weight: ${product.characteristic.weight}`}</td>
+              <td>{product.categoryName}</td>
               <td>
-                {product.image}
-               
+                {product.characteristics.map((char, index) => (
+                  <div key={index}>
+                    <strong>{char.type}:</strong>
+                    {char.options.map((option, i) => (
+                      <div key={i}>
+                        Value: {option.value}, Price: {option.price}
+                      </div>
+                    ))}
+                  </div>
+                ))}
               </td>
+              <td>
+  {product.images.length > 0 && (
+    <img
+      src={product.images[0]}
+      alt={`Product Image 1`}
+      style={{ width: "100px", marginRight: "10px" }}
+    />
+  )}
+</td>
               <td>
                 <Button variant="warning" onClick={() => handleEdit(product)}>
                   <FontAwesomeIcon icon={faEdit} />
@@ -239,7 +323,7 @@ const Products = () => {
               <td>
                 <Button
                   variant="danger"
-                  onClick={() => handleDelete(product.id)}
+                  onClick={() => handleDelete(product._id)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
@@ -249,20 +333,20 @@ const Products = () => {
         </tbody>
       </Table>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      {/* Add Product Modal */}
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            {isAdding ? "Add New Product" : "Edit Product"}
-          </Modal.Title>
+          <Modal.Title>Add New Product</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={handleSubmitAdd}>
             <Form.Group controlId="formProductName">
               <Form.Label>Product Name</Form.Label>
               <Form.Control
                 type="text"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
                 className="input_group"
               />
             </Form.Group>
@@ -270,8 +354,9 @@ const Products = () => {
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
-                value={newDescription}
-                onChange={(e) => setNewDescription(e.target.value)}
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
                 className="input_group"
               />
             </Form.Group>
@@ -279,63 +364,210 @@ const Products = () => {
               <Form.Label>Category</Form.Label>
               <Form.Control
                 as="select"
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
+                name="categoryName"
+                value={formData.categoryName}
+                onChange={handleInputChange}
                 className="input_group"
               >
                 <option value="">Select Category</option>
-                <option value="Bodycare">Body care</option>
-                <option value="Haircare">Hair care</option>
-                <option value="Detergents">Detergents</option>
-                <option value="Personal care">Personal care</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
               </Form.Control>
             </Form.Group>
-            <Form.Group controlId="formSize">
-              <Form.Label>Size</Form.Label>
+            <Form.Group controlId="formNewCharacteristicType">
+              <Form.Label>New Characteristic Type</Form.Label>
               <Form.Control
                 type="text"
-                value={newSize}
-                onChange={(e) => setNewSize(e.target.value)}
+                value={newCharacteristicType}
+                onChange={(e) => setNewCharacteristicType(e.target.value)}
                 className="input_group"
               />
+              <Button
+                variant="primary"
+                onClick={handleAddCharacteristicType}
+                className="mt-2 mb-3"
+              >
+                Add Characteristic Type
+              </Button>
             </Form.Group>
-            <Form.Group controlId="formPrice">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                value={newPrice}
-                onChange={(e) => setNewPrice(e.target.value)}
-                className="input_group"
-              />
-            </Form.Group>
-            <Form.Group controlId="formWeight">
-              <Form.Label>Weight</Form.Label>
-              <Form.Control
-                type="text"
-                value={newWeight}
-                onChange={(e) => setNewWeight(e.target.value)}
-                className="input_group"
-              />
-            </Form.Group>
-            <Form.Group controlId="formImage">
-              <Form.Label>Image</Form.Label>
+            {formData.characteristics.map((char, index) => (
+              <div key={index} className="characteristic-group">
+                <strong>{char.type}:</strong>
+                <ul>
+                  {char.options.map((option, i) => (
+                    <li key={i}>
+                      Value: {option.value}, Price: {option.price}
+                    </li>
+                  ))}
+                </ul>
+                <Form.Group controlId={`formNewOptionValue-${index}`}>
+                  <Form.Label>New Value</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={newOptionValue}
+                    onChange={(e) => setNewOptionValue(e.target.value)}
+                    className="input_group"
+                  />
+                </Form.Group>
+                <Form.Group controlId={`formNewOptionPrice-${index}`}>
+                  <Form.Label>New Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={newOptionPrice}
+                    onChange={(e) => setNewOptionPrice(e.target.value)}
+                    className="input_group"
+                  />
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  onClick={() => handleAddOption(index)}
+                  className="mb-3"
+                >
+                  Add Option
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleRemoveCharacteristic(index)}
+                  className="mb-3"
+                >
+                  Remove Characteristic
+                </Button>
+              </div>
+            ))}
+            <Form.Group controlId="formImages">
+              <Form.Label>Images</Form.Label>
               <Form.Control
                 type="file"
-                value={newImage}
-                onChange={(e) => setNewImage(e.target.value)}
+                multiple
+                onChange={handleImageChange}
                 className="input_group"
               />
             </Form.Group>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                Close
+              </Button>
+              <Button variant="success" type="submit">
+                <FontAwesomeIcon icon={faSave} /> Add
+              </Button>
+            </Modal.Footer>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Close
-          </Button>
-          <Button variant="success" onClick={handleSave}>
-            <FontAwesomeIcon icon={faSave} /> Save
-          </Button>
-        </Modal.Footer>
+      </Modal>
+
+      {/* Edit Product Modal */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmitEdit}>
+            <Form.Group controlId="formProductName">
+              <Form.Label>Product Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="input_group"
+              />
+            </Form.Group>
+            <Form.Group controlId="formDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                className="input_group"
+              />
+            </Form.Group>
+            <Form.Group controlId="formCategory">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                as="select"
+                name="categoryName"
+                value={formData.categoryName}
+                onChange={handleInputChange}
+                className="input_group"
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            {formData.characteristics.map((char, index) => (
+              <div key={index} className="characteristic-group">
+                <strong>{char.type}:</strong>
+                <ul>
+                  {char.options.map((option, i) => (
+                    <li key={i}>
+                      Value: {option.value}, Price: {option.price}
+                    </li>
+                  ))}
+                </ul>
+                <Form.Group controlId={`formNewOptionValue-${index}`}>
+                  <Form.Label>New Value</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={newOptionValue}
+                    onChange={(e) => setNewOptionValue(e.target.value)}
+                    className="input_group"
+                  />
+                </Form.Group>
+                <Form.Group controlId={`formNewOptionPrice-${index}`}>
+                  <Form.Label>New Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={newOptionPrice}
+                    onChange={(e) => setNewOptionPrice(e.target.value)}
+                    className="input_group"
+                  />
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  onClick={() => handleAddOption(index)}
+                  className="mb-3"
+                >
+                  Add Option
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleRemoveCharacteristic(index)}
+                  className="mb-3"
+                >
+                  Remove Characteristic
+                </Button>
+              </div>
+            ))}
+
+            <YourComponent formData={formData} setFormData={setFormData} />
+
+            <Form.Group controlId="formImages">
+              <Form.Label>Images</Form.Label>
+              <Form.Control
+                type="file"
+                multiple
+                onChange={handleImageChange}
+                className="input_group"
+              />
+            </Form.Group>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+                Close
+              </Button>
+              <Button variant="success" type="submit">
+                <FontAwesomeIcon icon={faSave} /> Save
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal.Body>
       </Modal>
     </>
   );

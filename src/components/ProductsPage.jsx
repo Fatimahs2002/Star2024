@@ -18,7 +18,7 @@ const ProductsPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/category/get");
+      const res = await axios.get(`${process.env.REACT_APP_URL}/category/get`);
       setCategories(res.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -27,7 +27,7 @@ const ProductsPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/product/get");
+      const res = await axios.get(`${process.env.REACT_APP_URL}/product/get`);
       const productsWithId = res.data.data.map((product, index) => ({
         ...product,
         id: product.id || index,
