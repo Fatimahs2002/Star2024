@@ -26,7 +26,7 @@ const Users = () => {
 
   const handleSwitchToAdmin = async (id) => {
     try {
-      await axios.get(`http://localhost:8080/user/switchAdmin/${id}`);
+      await axios.put(`http://localhost:8080/user/switchAdmin/${id}`);
       setUsers(users.map(user =>
         user._id === id ? { ...user, isAdmin: !user.isAdmin } : user
       ));
@@ -92,5 +92,6 @@ const Users = () => {
 };
 
 export default Users;
+
 
 
