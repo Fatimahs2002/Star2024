@@ -82,7 +82,7 @@ const Header = () => {
           <div id="mySidenav" className="sidenav">
             <Link to="#" className="closebtn" onClick={closeNav}>&times;</Link>
             <Link to="/">Home</Link>
-            <Link to="#">Products</Link>
+            <Link to="/product">Products</Link>
             <Link to="/about">About Us</Link>
           </div>
           <span className="toggle_icon" onClick={openNav}>
