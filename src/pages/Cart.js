@@ -4,10 +4,10 @@ import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { getUserID } from '../util/userData'; 
+import { getUserID } from '../util/userData';
 
 const Cart = () => {
-  const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, submitCart } = useContext(CartContext);
   const [userID, setUserID] = useState(null);
 
   useEffect(() => {
@@ -20,22 +20,26 @@ const Cart = () => {
 
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
-      updateQuantity(item.id, item.quantity - 1, item.selectedOptions);
+      updateQuantity(item.product, item.quantity - 1, item.selectedOptions);
     } else {
-      removeFromCart(item.id, item.selectedOptions);
+      removeFromCart(item.product, item.selectedOptions);
     }
   };
 
   const handleIncrement = (item) => {
-    updateQuantity(item.id, item.quantity + 1, item.selectedOptions);
+    updateQuantity(item.product, item.quantity + 1, item.selectedOptions);
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!userID) {
       toast.error('You must be logged in to proceed with the checkout!');
     } else {
-      // Proceed with checkout logic
-      toast.success('Checkout Successful!');
+      try {
+        await submitCart(userID);
+        toast.success('Checkout Successful!');
+      } catch (error) {
+        toast.error('Checkout Failed!');
+      }
     }
   };
 
@@ -91,7 +95,7 @@ const Cart = () => {
                       />
                       <Button variant="secondary" onClick={() => handleIncrement(item)}>+</Button>
                     </div>
-                    <Button variant="danger" onClick={() => removeFromCart(item.id, item.selectedOptions)} className="mt-3">
+                    <Button variant="danger" onClick={() => removeFromCart(item.product, item.selectedOptions)} className="mt-3">
                       Remove
                     </Button>
                   </div>

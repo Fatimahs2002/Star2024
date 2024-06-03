@@ -13,17 +13,25 @@ const ProductDetails = () => {
   const { addToCart } = useContext(CartContext);
   const [selectedWeights, setSelectedWeights] = useState([]);
   const [selectedColor, setSelectedColor] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_URL}/product/getById/${ID}`);
         setProduct(res.data.data);
+        if (res.data.data.images?.length > 0) {
+          setSelectedImage(res.data.data.images[0]);
+        }
+        console.log(res.data.data);
       } catch (error) {
         console.error("Error fetching product:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
+    
     fetchProduct();
   }, [ID]);
 
@@ -36,14 +44,14 @@ const ProductDetails = () => {
       weights: selectedWeights,
       color: selectedColor,
     };
-    addToCart({ ...product, selectedOptions });
+    addToCart({ ...product, selectedOptions, quantity: 1 });
   };
 
   const handleWeightChange = (value) => {
     setSelectedWeights(prevSelectedWeights =>
       prevSelectedWeights.includes(value)
-        ? prevSelectedWeights.filter(weight => weight !== value)
-        : [...prevSelectedWeights, value]
+      ? prevSelectedWeights.filter(weight => weight !== value)
+      : [...prevSelectedWeights, value]
     );
   };
 
@@ -51,8 +59,38 @@ const ProductDetails = () => {
     setSelectedColor(event.target.value);
   };
 
-  if (!product) {
+  const handleImageClick = (img) => {
+    setSelectedImage(img);
+  };
+
+  const calculatePrice = () => {
+    let basePrice = product.price || 0;
+
+    if (selectedWeights.length > 0) {
+      const weightOption = product.characteristics
+        .find(char => char.type.toLowerCase() === "size")
+        ?.options.find(option => selectedWeights.includes(option.value));
+      if (weightOption) {
+        basePrice += weightOption.price;
+      }
+    }
+
+    const colorOption = product.characteristics
+      .find(char => char.type.toLowerCase() === "color")
+      ?.options.find(option => option.value === selectedColor);
+    if (colorOption) {
+      basePrice += colorOption.price;
+    }
+
+    return basePrice.toFixed(2);
+  };
+
+  if (loading) {
     return <p>Loading...</p>;
+  }
+
+  if (!product) {
+    return <p>Product not found</p>;
   }
 
   const weightOptions = product.characteristics?.find((char) => char.type.toLowerCase() === "size");
@@ -65,25 +103,29 @@ const ProductDetails = () => {
         <Row>
           <Col lg={6}>
             <img
-              src={product.images?.[0] ?? "path/to/fallback/image.jpg"}
+              src={selectedImage || "path/to/fallback/image.jpg"}
               alt={product.name}
               style={{ width: "100%", height: "auto" }}
               onError={handleImageError}
             />
-            {product.images?.slice(1).map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={product.name}
-                style={{ width: "100px", height: "auto", margin: "10px" }}
-                onError={handleImageError}
-              />
-            ))}
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '10px' }}>
+              {product.images?.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={product.name}
+                  style={{ width: "100px", height: "auto", margin: "10px", cursor: 'pointer' }}
+                  onError={handleImageError}
+                  onClick={() => handleImageClick(img)}
+                />
+              ))}
+            </div>
           </Col>
           <Col lg={6}>
             <h1>{product.name}</h1>
             <p>{product.description}</p>
             <p>Category: {product.categoryName}</p>
+            <h3>Price: ${calculatePrice()}</h3>
 
             {weightOptions && (
               <>
@@ -119,7 +161,7 @@ const ProductDetails = () => {
                           <Form.Check
                             type="radio"
                             name="color"
-                            label={option.value}
+                            label={`${option.value} - $${option.price}`}
                             value={option.value}
                             checked={selectedColor === option.value}
                             onChange={handleColorChange}
