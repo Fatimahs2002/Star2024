@@ -12,16 +12,8 @@
 }
 
 .location_main {
-  width: 100%;
-  margin: 0 auto;
-  padding-top: 30px;
-  text-align: center;
-}
-
-.location_main {
   font-size: 16px;
   color: #ffffff;
-  padding: 30px 30px 30px 30px;
 }
 
 .location_main a {
@@ -41,4 +33,14 @@
   text-align: center;
   font-size: 16px;
   margin: 20px 0px;
+}
+.footer_text {
+  color: #ffffff !important;
+  font-size: 18px;
+  margin: 10px;
+}
+
+.footer_icon {
+  color: #ffffff !important;
+  font-size: 17px;
 }

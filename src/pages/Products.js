@@ -35,7 +35,7 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/product/get`);
+      const res = await axios.get(`${process.env.REACT_APP_URL}/product/getProducts`);
       setProducts(res.data.data);
       setFilteredProducts(res.data.data);
     } catch (error) {

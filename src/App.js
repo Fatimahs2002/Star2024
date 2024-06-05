@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import './style/Responsive.css'
+import "./style/Responsive.css";
 import Home from "./pages/Home";
 import Dashboard from "./Dashboard/Dashboard";
 import Login from "./pages/Login";
@@ -14,10 +14,15 @@ import User from "./pages/User";
 import CartProvider from "./Context/CartContext";
 import ProductDetails from "./components/ProductDetails";
 import Products from "./pages/Products";
+import EditProduct from "./dashcomponents/EditProduct";
+import AddPro from "./dashcomponents/AddPro";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <div>
+       <ToastContainer />
       <CartProvider>
         <Router>
           <Routes>
@@ -29,12 +34,14 @@ function App() {
             <Route path="/user" element={<User />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/products/:ID" element={<ProductDetails />} />
+           <Route path="/add" element={<AddPro/>}/>
+            <Route path="/edit/:id" element={<EditProduct />} />
             <Route
               path="/admin"
               element={
                 // <ProtectedRoute adminOnly={true}>
-                  <Dashboard />
-                //  </ProtectedRoute>
+                <Dashboard />
+                //  {/* </ProtectedRoute> */}
               }
             />
             <Route path="*" element={<NoPageFound />} />
@@ -46,4 +53,3 @@ function App() {
 }
 
 export default App;
-

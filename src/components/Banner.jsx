@@ -12,7 +12,7 @@ const Banner = () => {
             <div className="row">
               <div className="col-sm-12">
                 <h1 className="banner_taital text-black">
-                  Get Start <br />
+                  Get Started <br />
                   Your favorite shopping
                 </h1>
                 <div className="buynow_bt">
