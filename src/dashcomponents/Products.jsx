@@ -87,7 +87,7 @@ const Products = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/product/delete/${id}`);
+      await axios.delete(`${process.env.REACT_APP_URL}/product/delete/${id}`);
       setProducts(products.filter((product) => product._id !== id));
       toast.success("Product deleted successfully!");
     } catch (error) {
@@ -170,7 +170,7 @@ const Products = () => {
     });
 
     try {
-      const res = await axios.post(`http://localhost:8080/product/add`, data, {
+      const res = await axios.post(`${process.env.REACT_APP_URL}/product/add`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -199,7 +199,7 @@ const Products = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:8080/product/update/${editingProduct}`,
+        `${process.env.REACT_APP_URL}/product/update/${editingProduct}`,
         data,
         {
           headers: {

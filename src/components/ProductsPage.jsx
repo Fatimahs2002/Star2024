@@ -18,7 +18,7 @@ const ProductsPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/category/get");
+      const res = await axios.get(`${process.env.REACT_APP_URL}/category/get`);
       setCategories(res.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -27,7 +27,7 @@ const ProductsPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/product/get");
+      const res = await axios.get(`${process.env.REACT_APP_URL}/product/get`);
       const productsWithId = res.data.data.map((product, index) => ({
         ...product,
         id: product.id || index,
@@ -114,16 +114,14 @@ const ProductsPage = () => {
                               </div>
                               <div className="btn_main">
                                 <Link to={`/products/${product._id}`}>
-                                  <Button
-                                    variant="secondary"
-                                    className="seemore_bt"
+                                  <span
+                                    className="seemore"
                                   >
                                     See More
-                                  </Button>
+                                  </span>
                                 </Link>
-                                <Button
-                                  variant="success"
-                                  className="addtocart_bt"
+                                <span
+                                  className="addtocart"
                                   onClick={() =>
                                     addToCart({ 
                                       ...product, 
@@ -133,10 +131,11 @@ const ProductsPage = () => {
                                         color: ''
                                       }
                                     })
+
                                   }
                                 >
                                   Add to Cart
-                                </Button>
+                                </span>
                               </div>
                             </div>
                           </Col>

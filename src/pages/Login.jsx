@@ -34,7 +34,7 @@ const Login = () => {
     setLoading(true); 
 
     try {
-      const response = await axios.post(`http://localhost:8080/user/login`, {
+      const response = await axios.post(`${process.env.REACT_APP_URL}/user/login`, {
         email,
         password,
       });

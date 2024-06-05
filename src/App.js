@@ -13,6 +13,7 @@ import Cart from "./pages/Cart";
 import User from "./pages/User";
 import CartProvider from "./Context/CartContext";
 import ProductDetails from "./components/ProductDetails";
+import Products from "./pages/Products";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<Aboutus />} />
+            <Route path="/product" element={<Products />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/user" element={<User />} />
@@ -30,9 +32,9 @@ function App() {
             <Route
               path="/admin"
               element={
-                <ProtectedRoute adminOnly={true}>
+                // <ProtectedRoute adminOnly={true}>
                   <Dashboard />
-                </ProtectedRoute>
+                //  </ProtectedRoute>
               }
             />
             <Route path="*" element={<NoPageFound />} />

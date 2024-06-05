@@ -16,7 +16,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/user/getAll`);
+      const res = await axios.get(`${process.env.REACT_APP_URL}/user/getAll`);
       console.log(res.data);
       setUsers(res.data.data);
     } catch (error) {
@@ -26,6 +26,7 @@ const Users = () => {
 
   const handleSwitchToAdmin = async (id) => {
     try {
+      await axios.get(`${process.env.REACT_APP_URL}/user/switchAdmin/${id}`);
       await axios.put(`http://localhost:8080/user/switchAdmin/${id}`);
       setUsers(users.map(user =>
         user._id === id ? { ...user, isAdmin: !user.isAdmin } : user
@@ -39,7 +40,7 @@ const Users = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/user/delete/${id}`);
+      await axios.delete(`${process.env.REACT_APP_URL}/user/delete/${id}`);
       setUsers(users.filter((user) => user._id !== id));
       toast.success("User deleted successfully!");
     } catch (error) {
