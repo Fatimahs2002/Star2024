@@ -151,27 +151,37 @@ const EditProduct = () => {
   };
 
   return (
+    <div className="container mt-5">
+       <h2>Edit Product</h2>
+    <div className="row">
+          <div className="col-md-6">
+            <div className="mb-3">
     <Form onSubmit={handleSubmit}>
       <Form.Group controlId="formProductName">
         <Form.Label>Product Name</Form.Label>
+        <Col xs={12} md={6}>
         <Form.Control
           type="text"
           name="name"
           value={formData.name}
           onChange={handleInputChange}
         />
+        </Col>
       </Form.Group>
       <Form.Group controlId="formDescription">
         <Form.Label>Description</Form.Label>
+        <Col xs={12} md={6}>
         <Form.Control
           type="text"
           name="description"
           value={formData.description}
           onChange={handleInputChange}
         />
+        </Col>
       </Form.Group>
       <Form.Group controlId="formCategory">
         <Form.Label>Category</Form.Label>
+        <Col xs={12} md={6}>
         <Form.Control
           as="select"
           name="categoryName"
@@ -185,9 +195,11 @@ const EditProduct = () => {
             </option>
           ))}
         </Form.Control>
+        </Col>
       </Form.Group>
       <Form.Group controlId="formCharacteristics">
         <Form.Label>Characteristics</Form.Label>
+        <Col xs={12} md={6}>
         {formData.characteristics.map((characteristic, charIndex) => (
           <div key={charIndex}>
             <Row>
@@ -243,9 +255,12 @@ const EditProduct = () => {
         <Button variant="success" onClick={handleAddCharacteristic}>
           Add Characteristic
         </Button>
+        </Col>
       </Form.Group>
+
       <Form.Group controlId="formImages">
         <Form.Label>Images</Form.Label>
+        <Col xs={12} md={6}>
         <div>
           {formData.images.map((image, index) => (
             <div key={index}>
@@ -257,6 +272,7 @@ const EditProduct = () => {
           ))}
         </div>
         <Form.Control type="file" multiple onChange={handleImageChange} />
+        </Col>
       </Form.Group>
       <Button variant="primary" type="submit">
         Update Product
@@ -264,7 +280,12 @@ const EditProduct = () => {
       <Button variant="danger" onClick={handleCancel} className="ml-2">
         Cancel
       </Button>
+      
     </Form>
+    </div>
+      </div>
+      </div>
+    </div>
   );
 };
 

@@ -24,7 +24,7 @@
   width: 100%;
   display: flex;
   background-color: #0d4c90;
-  height: auto;
+  /* height: auto; */
 }
 
 .copyright_text {
@@ -43,4 +43,22 @@
 .footer_icon {
   color: #ffffff !important;
   font-size: 17px;
+}
+
+.footer_title{
+  color: #dbd9d9 !important;
+  font-size: 18px;
+}
+ .link_footer{
+  color: #ffffff !important;
+}
+
+
+@media (max-width:768px) {
+  .footer_social_icons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
 }

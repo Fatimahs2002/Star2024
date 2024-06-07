@@ -10,7 +10,7 @@ import Aboutus from "./pages/Aboutus";
 import Register from "./pages/Register";
 import ProtectedRoute from "./util/ProtectedRoute";
 import Cart from "./pages/Cart";
-import User from "./pages/User";
+import UserProfile from "./pages/UserProfile";
 import CartProvider from "./Context/CartContext";
 import ProductDetails from "./components/ProductDetails";
 import Products from "./pages/Products";
@@ -31,7 +31,7 @@ function App() {
             <Route path="/product" element={<Products />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/user" element={<User />} />
+            <Route path="/profile" element={<UserProfile />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/products/:ID" element={<ProductDetails />} />
            <Route path="/add" element={<AddPro/>}/>

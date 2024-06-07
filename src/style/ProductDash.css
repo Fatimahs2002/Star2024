@@ -8,3 +8,36 @@
     width: 50%;
     box-shadow: none !important;
 }
+
+.product-dashboard {
+    padding: 20px;
+  }
+  
+  .product-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .table-responsive {
+    margin-top: 20px;
+  }
+  
+  .pagination-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 576px) {
+    .product-dashboard-header {
+      flex-direction: column;
+    }
+  
+    .pagination-buttons {
+      flex-direction: column;
+    }
+  }
+  

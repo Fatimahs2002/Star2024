@@ -1,60 +1,74 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getUserID } from '../util/userData';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import axios from 'axios';
 
 const Cart = () => {
-  const { cart, removeFromCart, updateQuantity, submitCart, cartID } = useContext(CartContext);
+  const { cart, removeFromCart, submitCart, cartID} = useContext(CartContext);
   const [userID, setUserID] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('');
+  // const [cartID , setCartID ] = useState(null); 
 
+  const handleRemoveFromCart = (productId) => {
+    removeFromCart(productId);
+  };
   useEffect(() => {
     const fetchUserID = async () => {
       const id = await getUserID();
+      
       setUserID(id);
+      
     };
     fetchUserID();
+   
   }, []);
 
-  const handleDecrement = (item) => {
-    if (item.quantity > 1) {
-      updateQuantity(item.product, item.quantity - 1, item.selectedOptions);
-    } else {
-      removeFromCart(item.product, item.selectedOptions);
-    }
-  };
 
-  const handleIncrement = (item) => {
-    updateQuantity(item.product, item.quantity + 1, item.selectedOptions);
-  };
 
   const handleCheckout = async () => {
     if (!userID || !cartID) {
+      console.log(cartID, "id cart")
       toast.error('You must be logged in!');
+    } else if (!paymentMethod) {
+      toast.error('Please select a payment method!');
     } else {
       try {
-        await submitCart(userID, cartID);
+        await submitCart(userID, cartID, paymentMethod);
         toast.success('Checkout Successful!');
+        localStorage.removeItem('cart');
       } catch (error) {
         toast.error('Checkout Failed!');
       }
     }
   };
 
-  const totalAmount = cart.reduce((total, item) => {
-    const itemPrice = item.selectedOptions.weights.reduce((price, weight) => {
-      const weightOption = item.characteristics.find(char => char.type.toLowerCase() === 'size')
+  const calculateItemPrice = (item) => {
+    const basePrice = item.price || 0;
+    const weightPrice = item.selectedOptions.weights.reduce((total, weight) => {
+      const weightOption = item.characteristics.find(char => char.type.toLowerCase() === 'weight')
         ?.options.find(option => option.value === weight);
-      return price + (weightOption ? weightOption.price : 0);
+      return total + (weightOption ? weightOption.price : 0);
     }, 0);
-    return total + itemPrice * item.quantity;
+    const colorPrice = item.characteristics.find(char => char.type.toLowerCase() === 'color')
+      ?.options.find(option => option.value === item.selectedOptions.color)?.price || 0;
+    return basePrice + weightPrice + colorPrice;
+  };
+
+  const totalAmount = cart.reduce((total, item) => {
+    return total + calculateItemPrice(item) * item.quantity;
   }, 0);
 
   return (
+    <>
+    <Header/>
     <Container>
-      <h1 className="text-center my-4">Checkout </h1>
+      <h1 className="text-center my-4">Checkout</h1>
       <ToastContainer />
       {cart.length === 0 ? (
         <p className="text-center">Your cart is empty.</p>
@@ -67,11 +81,7 @@ const Cart = () => {
                   <div className="cart_item">
                     <h4 className="cart_item_name">{item.name}</h4>
                     <p className="cart_item_price">
-                      Price: ${item.selectedOptions.weights.reduce((price, weight) => {
-                        const weightOption = item.characteristics.find(char => char.type.toLowerCase() === 'size')
-                          ?.options.find(option => option.value === weight);
-                        return price + (weightOption ? weightOption.price : 0);
-                      }, 0)}
+                      Price: ${(calculateItemPrice(item)).toFixed(2)}
                     </p>
                     <img
                       src={item.images?.[0] ?? 'path/to/fallback/image.jpg'}
@@ -84,20 +94,12 @@ const Cart = () => {
                         <ListGroup.Item><strong>Color:</strong> {item.selectedOptions.color}</ListGroup.Item>
                       </ListGroup>
                     </div>
-                    <div className="quantity_control mt-3 d-flex">
-                      <Button variant="secondary" onClick={() => handleDecrement(item)}>-</Button>
-                      <Form.Control
-                        type="text"
-                        value={item.quantity}
-                        readOnly
-                        className="quantity_input mx-2"
-                        style={{ width: '50px', textAlign: 'center' }}
-                      />
-                      <Button variant="secondary" onClick={() => handleIncrement(item)}>+</Button>
-                    </div>
-                    <Button variant="danger" onClick={() => removeFromCart(item.product, item.selectedOptions)} className="mt-3">
-                      Remove
-                    </Button>
+                    <Button
+                          variant="danger"
+                          onClick={() => handleRemoveFromCart(item._id)}
+                        >
+                          Remove
+                        </Button>
                   </div>
                 </Col>
               ))}
@@ -111,11 +113,21 @@ const Cart = () => {
               <Button variant="success" className="w-100" onClick={handleCheckout}>
                 Checkout
               </Button>
+              <Form.Check 
+                type="radio" 
+                label="Cash on Delivery" 
+                name="paymentMethod" 
+                value="COD" 
+                onChange={(e) => setPaymentMethod(e.target.value)} 
+                className="mt-3" 
+              />
             </div>
           </Col>
         </Row>
       )}
     </Container>
+    <Footer/>
+    </>
   );
 };
 
