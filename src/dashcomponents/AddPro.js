@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import '../style/AddProduct.css';
 
 const AddPro = () => {
   const [product, setProduct] = useState({
     name: "",
-    images: [null], // Initialize with null for file inputs
+    images: [],
     description: "",
     characteristics: [
       {
@@ -31,8 +32,7 @@ const AddPro = () => {
     axios
       .get(`${process.env.REACT_APP_URL}/category/get`)
       .then((response) => {
-        console.log(response.data);
-        setCategories(response.data);
+        setCategories(response.data.data);
       })
       .catch((error) => {
         console.error("There was an error fetching the categories!", error);
@@ -54,13 +54,11 @@ const AddPro = () => {
     }));
   };
 
-  const handleImageChange = (index, e) => {
-    const file = e.target.files[0];
-    const newImages = [...product.images];
-    newImages[index] = file;
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
     setProduct((prevProduct) => ({
       ...prevProduct,
-      images: newImages,
+      images: files,
     }));
   };
 
@@ -121,6 +119,15 @@ const AddPro = () => {
     }));
   };
 
+  const handleRemoveOption = (charIndex, optIndex) => {
+    const newCharacteristics = [...product.characteristics];
+    newCharacteristics[charIndex].options.splice(optIndex, 1);
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      characteristics: newCharacteristics,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -155,7 +162,7 @@ const AddPro = () => {
   const handleCancel = () => {
     setProduct({
       name: "",
-      images: [null],
+      images: [],
       description: "",
       characteristics: [
         {
@@ -178,129 +185,131 @@ const AddPro = () => {
       <ToastContainer />
       <h2>Add Product</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Product Name:
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            className="form-control"
-            value={product.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Images:</label>
-          {product.images.map((image, index) => (
-            <div key={index} className="mb-2">
+        <div className="row">
+          <div className="col-md-6">
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Product Name:
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="form-control"
+                value={product.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Images:</label>
               <input
                 type="file"
                 className="form-control"
-                onChange={(e) => handleImageChange(index, e)}
-                required={index === 0}
-              />
-            </div>
-          ))}
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleAddImage}
-          >
-            Add Image
-          </button>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">
-            Description:
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            className="form-control"
-            value={product.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Characteristics:</label>
-          {product.characteristics.map((char, charIndex) => (
-            <div key={charIndex} className="mb-3">
-              <input
-                type="text"
-                name="type"
-                className="form-control mb-2"
-                value={char.type}
-                onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                onChange={handleImageChange}
+                multiple
                 required
               />
-              <div>
-                <label>Options:</label>
-                {char.options.map((opt, optIndex) => (
-                  <div key={optIndex} className="input-group mb-2">
-                    <input
-                      type="text"
-                      name="value"
-                      className="form-control"
-                      value={opt.value}
-                      onChange={(e) =>
-                        handleOptionChange(charIndex, optIndex, e)
-                      }
-                      required
-                    />
-                    <input
-                      type="number"
-                      name="price"
-                      className="form-control"
-                      value={opt.price}
-                      onChange={(e) =>
-                        handleOptionChange(charIndex, optIndex, e)
-                      }
-                      required
-                    />
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => handleAddOption(charIndex)}
-                >
-                  Add Option
-                </button>
-              </div>
             </div>
-          ))}
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleAddCharacteristic}
-          >
-            Add Characteristic
-          </button>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="categoryName" className="form-label">
-            Category Name:
-          </label>
-          <select
-            id="categoryName"
-            name="categoryName"
-            className="form-control"
-            value={product.categoryName}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Category</option>
-            {Array.isArray(categories) &&
-              categories.map((category) => (
-                <option key={category._id} value={category.name}>
-                  {category.name}
-                </option>
+            <div className="mb-3">
+              <label htmlFor="categoryName" className="form-label">
+                Category Name:
+              </label>
+              <select
+                id="categoryName"
+                name="categoryName"
+                className="form-control"
+                value={product.categoryName}
+                onChange={handleCategoryChange}
+                required
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="mb-3">
+              <label htmlFor="description" className="form-label">
+                Description:
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                className="form-control"
+                value={product.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Characteristics:</label>
+              {product.characteristics.map((char, charIndex) => (
+                <div key={charIndex} className="mb-3">
+                  <input
+                    type="text"
+                    name="type"
+                    className="form-control mb-2"
+                    value={char.type}
+                    onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                    required
+                  />
+                  <div>
+                    <label>Options:</label>
+                    {char.options.map((opt, optIndex) => (
+                      <div key={optIndex} className="input-group mb-2">
+                        <input
+                          type="text"
+                          name="value"
+                          className="form-control"
+                          value={opt.value}
+                          onChange={(e) =>
+                            handleOptionChange(charIndex, optIndex, e)
+                          }
+                          required
+                        />
+                        <input
+                          type="number"
+                          name="price"
+                          className="form-control"
+                          value={opt.price}
+                          onChange={(e) =>
+                            handleOptionChange(charIndex, optIndex, e)
+                          }
+                          required
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => handleRemoveOption(charIndex, optIndex)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => handleAddOption(charIndex)}
+                    >
+                      Add Option
+                    </button>
+                  </div>
+                </div>
               ))}
-          </select>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleAddCharacteristic}
+              >
+                Add Characteristic
+              </button>
+            </div>
+          </div>
         </div>
         <div className="d-flex justify-content-between">
           <button type="submit" className="btn btn-primary">

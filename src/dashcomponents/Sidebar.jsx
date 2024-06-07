@@ -20,6 +20,7 @@ import Category from "./Category";
 import Report from "./Report";
 import Order from "./Order";
 import Users from "./Users";
+import AddPro from "./AddPro";
 
 const Sidebar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -41,6 +42,9 @@ const Sidebar = () => {
         return <Users />;
       case "reports":
         return <Report />;
+        case "/add":
+       return <AddPro/>
+
       default:
         return <Order />;
     }

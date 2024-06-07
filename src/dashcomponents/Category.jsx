@@ -24,7 +24,7 @@ const Category = () => {
   const fetchCategory = async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_URL}/category/get`);
-      console.log(res.data);
+      // console.log(res.data);
       setCategories(res.data.data);
     } catch (error) {
       console.log(error);

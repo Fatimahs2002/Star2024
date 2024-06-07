@@ -8,14 +8,16 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header";
 import Footer from "./Footer";
-import '../style/ProductDetails.css'
+import '../style/ProductDetails.css';
+
 const ProductDetails = () => {
   const { ID } = useParams();
   const [product, setProduct] = useState(null);
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, cart } = useContext(CartContext);
   const [selectedWeights, setSelectedWeights] = useState([]);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
+  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,11 +26,12 @@ const ProductDetails = () => {
         const res = await axios.get(
           `${process.env.REACT_APP_URL}/product/getById/${ID}`
         );
-        setProduct(res.data.data);
-        if (res.data.data.images?.length > 0) {
-          setSelectedImage(res.data.data.images[0]);
+        const productData = res.data.data;
+        // console.log("Fetched product data:", productData);
+        setProduct(productData);
+        if (productData.images?.length > 0) {
+          setSelectedImage(productData.images[0]);
         }
-        console.log(ID, "cart");
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -44,11 +47,18 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
+    if (!product || !product._id) {
+      console.error("Product data is not available or _id is missing.");
+      return;
+    }
+
     const selectedOptions = {
       weights: selectedWeights,
       color: selectedColor,
     };
-    addToCart({ ...product, selectedOptions, quantity: 1 });
+
+    const productToAdd = { ...product, selectedOptions, quantity };
+    addToCart(productToAdd);
     toast.success("Item added to cart!");
   };
 
@@ -68,26 +78,45 @@ const ProductDetails = () => {
     setSelectedImage(img);
   };
 
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity > 0) {
+      setQuantity(newQuantity);
+    }
+  };
+
+  const handleIncrement = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+
   const calculatePrice = () => {
-    let basePrice = product.price || 0;
+    let basePrice = product?.price || 0;
 
-    if (selectedWeights.length > 0) {
-      const weightOption = product.characteristics
-        .find((char) => char.type.toLowerCase() === "size")
-        ?.options.find((option) => selectedWeights.includes(option.value));
-      if (weightOption) {
-        basePrice += weightOption.price;
+    product?.characteristics?.forEach((char) => {
+      if (char.type.toLowerCase() === "weight" && selectedWeights.length > 0) {
+        char.options.forEach((option) => {
+          if (selectedWeights.includes(option.value)) {
+            basePrice += option.price;
+          }
+        });
       }
-    }
 
-    const colorOption = product.characteristics
-      .find((char) => char.type.toLowerCase() === "color")
-      ?.options.find((option) => option.value === selectedColor);
-    if (colorOption) {
-      basePrice += colorOption.price;
-    }
+      if (char.type.toLowerCase() === "color" && selectedColor) {
+        const colorOption = char.options.find(
+          (option) => option.value === selectedColor
+        );
+        if (colorOption) {
+          basePrice += colorOption.price;
+        }
+      }
+    });
 
-    return basePrice.toFixed(2);
+    return (basePrice * quantity).toFixed(2);
   };
 
   if (loading) {
@@ -99,7 +128,7 @@ const ProductDetails = () => {
   }
 
   const weightOptions = product.characteristics?.find(
-    (char) => char.type.toLowerCase() === "size"
+    (char) => char.type.toLowerCase() === "weight"
   );
   const colorOptions = product.characteristics?.find(
     (char) => char.type.toLowerCase() === "color"
@@ -115,12 +144,10 @@ const ProductDetails = () => {
             <img
               src={selectedImage || "path/to/fallback/image.jpg"}
               alt={product.name}
-              style={{ width: "10%", height: "auto" }}
+              style={{ width: "100%", height: "auto" }}
               onError={handleImageError}
             />
-            <div
-              style={{ display: "flex", flexWrap: "wrap", marginTop: "10px" }}
-            >
+            <div style={{ display: "flex", flexWrap: "wrap", marginTop: "10px" }}>
               {product.images?.map((img, idx) => (
                 <img
                   key={idx}
@@ -140,67 +167,61 @@ const ProductDetails = () => {
           </Col>
           <Col lg={6}>
             <div className="d-flex gap-3 pro_d">
-              {" "}
-              <p>home</p> <p>{product.categoryName} </p> <p>{product.name}</p>
+              <p>home</p> <p>{product.categoryName}</p> <p>{product.name}</p>
             </div>
 
-            <h1> {product.name}</h1>
-            <p> {product.description}</p>
+            <h1>{product.name}</h1>
+            <p>{product.description}</p>
             <p>Category: {product.categoryName}</p>
+            <p>Price: ${calculatePrice()}</p>
             {weightOptions && (
               <>
                 <h5>Weight</h5>
                 <ListGroup>
                   <Row>
-                    {weightOptions.options.map((option, index) => (
-                      <Col key={index} xs={6} md={4} lg={3}>
-                        <ListGroup.Item>
-                          <Form.Check
-                            type="checkbox"
-                            label={`${option.value} - $${option.price}`}
-                            value={option.value}
-                            checked={selectedWeights.includes(option.value)}
-                            onChange={() => handleWeightChange(option.value)}
-                          />
-                        </ListGroup.Item>
+                    {weightOptions.options.map((option, idx) => (
+                      <Col key={idx} xs={6} md={4}>
+                        <Form.Check
+                          type="checkbox"
+                          id={`weight-${option.value}`}
+                          label={`${option.value} (+$${option.price})`}
+                          value={option.value}
+                          checked={selectedWeights.includes(option.value)}
+                          onChange={() => handleWeightChange(option.value)}
+                        />
                       </Col>
                     ))}
                   </Row>
                 </ListGroup>
               </>
             )}
-
             {colorOptions && (
               <>
                 <h5>Color</h5>
-                <ListGroup>
-                  <Row>
-                    {colorOptions.options.map((option, index) => (
-                      <Col key={index} xs={6} md={4} lg={3}>
-                        <ListGroup.Item>
-                          <Form.Check
-                            type="checkbox"
-                            name="color"
-                            label={`${option.value}`}
-                            value={option.value}
-                            checked={selectedColor === option.value}
-                            onChange={handleColorChange}
-                          />
-                        </ListGroup.Item>
-                      </Col>
-                    ))}
-                  </Row>
-                </ListGroup>
+                <Form.Select
+                  value={selectedColor}
+                  onChange={handleColorChange}
+                >
+                  <option value="">Select Color</option>
+                  {colorOptions.options.map((option, idx) => (
+                    <option key={idx} value={option.value}>
+                      {option.value} (+${option.price})
+                    </option>
+                  ))}
+                </Form.Select>
               </>
             )}
-
-            <Button
-              variant="success"
-              onClick={handleAddToCart}
-              className="mt-3"
-            >
-              Add to Cart
-            </Button>
+            <div className="quantity-selector">
+              <Button onClick={handleDecrement}>-</Button>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
+                min="1"
+              />
+              <Button onClick={handleIncrement}>+</Button>
+            </div>
+            <Button onClick={handleAddToCart}>Add to Cart</Button>
           </Col>
         </Row>
       </Container>

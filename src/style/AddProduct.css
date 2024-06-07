@@ -1,0 +1,7 @@
+input ,textarea{
+    box-shadow: none !important;
+}
+
+textarea{
+    resize: none;
+}

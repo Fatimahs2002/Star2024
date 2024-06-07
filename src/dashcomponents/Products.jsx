@@ -110,68 +110,70 @@ const Products = () => {
           onChange={handleSearch}
         />
       </Form.Group>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>
-              Name{" "}
-              <FontAwesomeIcon
-                icon={sortOrder === "asc" ? faSortAlphaDown : faSortAlphaUp}
-                onClick={() => handleSort("name")}
-              />
-            </th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Characteristics</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredProducts?.map((product) => (
-            <tr key={product._id}>
-              <td>{product.name}</td>
-              <td>{product.description}</td>
-              <td>{product.categoryName}</td>
-              <td>
-                {product.characteristics.map((char, index) => (
-                  <div key={index}>
-                    <strong>{char.type}</strong>
-                    <ul>
-                      {char.options.map((option, optIndex) => (
-                        <li key={optIndex}>
-                          {option.value} - ${option.price}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </td>
-              <td>
-                {product.images.length > 0 && (
-                  <img src={product.images[0]} alt="Product" width="100" />
-                )}
-              </td>
-              <td>
-                <Button
-                  variant="warning"
-                  onClick={() => handleEdit(product._id)}
-                  className="mr-2"
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => handleDelete(product._id)}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </Button>
-              </td>
+      <div className="table-responsive">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>
+                Name{" "}
+                <FontAwesomeIcon
+                  icon={sortOrder === "asc" ? faSortAlphaDown : faSortAlphaUp}
+                  onClick={() => handleSort("name")}
+                />
+              </th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Characteristics</th>
+              <th>Image</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-      <div>
+          </thead>
+          <tbody>
+            {filteredProducts?.map((product) => (
+              <tr key={product._id}>
+                <td>{product.name}</td>
+                <td>{product.description}</td>
+                <td>{product.categoryName}</td>
+                <td>
+                  {product.characteristics.map((char, index) => (
+                    <div key={index}>
+                      <strong>{char.type}</strong>
+                      <ul>
+                        {char.options.map((option, optIndex) => (
+                          <li key={optIndex}>
+                            {option.value} - ${option.price}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </td>
+                <td>
+                  {product.images.length > 0 && (
+                    <img src={product.images[0]} alt="Product" width="100" />
+                  )}
+                </td>
+                <td>
+                  <Button
+                    variant="warning"
+                    onClick={() => handleEdit(product._id)}
+                    className="mr-2"
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDelete(product._id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+      <div className="pagination-buttons">
         <Button
           variant="secondary"
           disabled={currentPage === 1}

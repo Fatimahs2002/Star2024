@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserShield, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";  // Ensure you import the CSS for react-toastify
+import "react-toastify/dist/ReactToastify.css"; 
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -17,7 +17,7 @@ const Users = () => {
   const fetchUsers = async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_URL}/user/getAll`);
-      console.log(res.data);
+      // console.log(res.data);
       setUsers(res.data.data);
     } catch (error) {
       console.log(error);
