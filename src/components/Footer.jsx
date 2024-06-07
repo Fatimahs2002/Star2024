@@ -2,15 +2,15 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons";
-import {
-  faMapMarkerAlt,
-  faPhone,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  faFacebook,
-  faInstagram,
-} 
-from "@fortawesome/free-brands-svg-icons";
+// import {
+//   faMapMarkerAlt,
+//   faPhone,
+// } from "@fortawesome/free-solid-svg-icons";
+// import {
+//   faFacebook,
+//   faInstagram,
+// } 
+// from "@fortawesome/free-brands-svg-icons";
 import "../style/Footer.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
