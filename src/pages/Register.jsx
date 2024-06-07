@@ -40,7 +40,7 @@ const Register = () => {
     setLoading(true);
     try {
       await axios.post(`${process.env.REACT_APP_URL}/user/register`, user);
-      navigate("/");
+      navigate("/login");
       toast.success("Registered successfully");
     } catch (error) {
       console.error(error);

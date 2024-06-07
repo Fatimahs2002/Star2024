@@ -27,7 +27,7 @@ const ProductsPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_URL}/product/get`);
+      const res = await axios.get(`${process.env.REACT_APP_URL}/product/getProducts`);
       const productsWithId = res.data.data.map((product, index) => ({
         ...product,
         id: product.id || index,
@@ -108,7 +108,7 @@ const ProductsPage = () => {
                                       : "path/to/fallback/image.jpg"
                                   }
                                   alt={product.name}
-                                  style={{ width: "100%", height: "auto" }}
+                                  
                                   onError={handleImageError}
                                 />
                               </div>

@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { getUserID } from '../util/userData';
 
 const Cart = () => {
-  const { cart, removeFromCart, updateQuantity, submitCart } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, submitCart, cartID } = useContext(CartContext);
   const [userID, setUserID] = useState(null);
 
   useEffect(() => {
@@ -31,11 +31,11 @@ const Cart = () => {
   };
 
   const handleCheckout = async () => {
-    if (!userID) {
-      toast.error('You must be logged in to proceed with the checkout!');
+    if (!userID || !cartID) {
+      toast.error('You must be logged in!');
     } else {
       try {
-        await submitCart(userID);
+        await submitCart(userID, cartID);
         toast.success('Checkout Successful!');
       } catch (error) {
         toast.error('Checkout Failed!');
@@ -54,7 +54,7 @@ const Cart = () => {
 
   return (
     <Container>
-      <h1 className="text-center my-4">Shopping Cart</h1>
+      <h1 className="text-center my-4">Checkout </h1>
       <ToastContainer />
       {cart.length === 0 ? (
         <p className="text-center">Your cart is empty.</p>

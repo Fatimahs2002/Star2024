@@ -1,8 +1,9 @@
 .banner_section {
   width: 100%;
-  /* height: 30rem; */
-  background-image: url("/public/images/back.jpg");
+  height: 20rem;
+  background-image: url("/public/images/back_pic.jpg");
   background-size: cover;
+  background-repeat: no-repeat;
   background-position: center;
 }
 
