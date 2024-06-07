@@ -80,7 +80,7 @@ const Header = () => {
           <span className="toggle_icon" onClick={openNav}>
             <img src="/images/toggle-icon.png" alt="toggle icon" />
           </span>
-          <div className="dropdown">
+          {/* <div className="dropdown">
             <button
               className="btn btn-secondary dropdown-toggle"
               type="button"
@@ -102,19 +102,19 @@ const Header = () => {
                 </Link>
               </li>
             </ul>
-          </div>
-          <div className="main">
-            <div className="input-group">
+          </div> */}
+          <div className="main ">
+            <div className="input-group d-flex gap-2">
               <input
                 type="text"
                 className="form-control"
                 placeholder="Search this blog"
               />
-              <div className="input-group-append">
+              <div className="input-group-append ">
                 <button
                   className="btn btn-secondary"
                   type="button"
-                  style={{ backgroundColor: "#f26522", borderColor: "#f26522" }}
+                  style={{ backgroundColor: "#0D4C90", borderColor: "none" }}
                 >
                   <FontAwesomeIcon icon={faSearch} />
                 </button>

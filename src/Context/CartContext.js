@@ -29,6 +29,16 @@ const CartProvider = ({ children }) => {
       const updatedCart = [...prevCart, product];
       return updatedCart;
     });
+
+    // Generate and set a new cartID when a product is added to the cart
+    const newCartID = generateCartID();
+    setCartID(newCartID);
+  };
+
+  const generateCartID = () => {
+    // Generate a unique cart ID here (e.g., using UUID or a similar method)
+    const newCartID = "cart_" + Math.random().toString(36).substr(2, 9);
+    return newCartID;
   };
 
   const removeFromCart = (productId) => {
@@ -64,18 +74,15 @@ const CartProvider = ({ children }) => {
         orderStatus: "Pending",
         orderDate: new Date(),
       };
-      // console.log("Submitting order:", orderData);
       const response = await axios.post(
         `${process.env.REACT_APP_URL}/order/create`,
         orderData
       );
       if (response && response.status === 200 && response.data.success) {
-        // console.log("Order submitted successfully:", response.data);
         setCart([]);
         sessionStorage.removeItem("cart");
         return response.data;
       } else {
-        // console.error("Unexpected response:", response);
         throw new Error("Unexpected response from server");
       }
     } catch (error) {
@@ -84,8 +91,8 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  // console.log("Current cart:", cart);
-  // console.log("Current cartID:", cartID);
+  console.log("Current cart:", cart);
+  console.log("Current cartID:", cartID);
 
   return (
     <CartContext.Provider

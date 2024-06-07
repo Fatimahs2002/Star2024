@@ -27,7 +27,7 @@ const Cart = () => {
 
   const handleCheckout = async () => {
     if (!userID || !cartID) {
-      // console.log(cartID, "checkout cart")
+      console.log(cartID, "checkout cart")
       toast.error('You must be logged in!');
     } else if (!paymentMethod) {
       toast.error('Please select a payment method!');
@@ -36,7 +36,7 @@ const Cart = () => {
         await submitCart(userID);
         toast.success('Checkout Successful!');
       } catch (error) {
-        // console.log(error)
+        console.log(error)
         toast.error('Checkout Failed!');
       }
     }
