@@ -20,7 +20,6 @@ import Category from "./Category";
 import Report from "./Report";
 import Order from "./Order";
 import Users from "./Users";
-import AddPro from "./AddPro";
 
 const Sidebar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -40,11 +39,8 @@ const Sidebar = () => {
         return <Category />;
       case "user":
         return <Users />;
-      case "reports":
-        return <Report />;
-        case "/add":
-       return <AddPro/>
-
+      // case "reports":
+      //   return <Report />;
       default:
         return <Order />;
     }
@@ -58,9 +54,6 @@ const Sidebar = () => {
     >
       <div bg="" className="bg-light border-right sidebar" id="sidebar-wrapper">
         <div className="bg-light sidebar-header my-3">
-          <div>
-            <img src="/images/avatar.png" alt="avatar" className="icon" />
-          </div>
           <div className="">
             {isVisible && <h6 className="fs-6">John D</h6>}
             {isVisible && <p className="admin_font">Admin</p>}
@@ -139,7 +132,7 @@ const Sidebar = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+                  <Dropdown.Item href="/profile">Profile</Dropdown.Item>
                   <Dropdown.Item as="div">
                     <Link to="/login" className="d-flex align-items-center">
                       <FontAwesomeIcon icon={faSignOutAlt} />

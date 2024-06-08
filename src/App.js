@@ -18,11 +18,12 @@ import EditProduct from "./dashcomponents/EditProduct";
 import AddPro from "./dashcomponents/AddPro";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import NoAccess from "./pages/NoAccess";
 
 function App() {
   return (
     <div>
-       <ToastContainer />
+      <ToastContainer />
       <CartProvider>
         <Router>
           <Routes>
@@ -34,16 +35,17 @@ function App() {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/products/:ID" element={<ProductDetails />} />
-           <Route path="/add" element={<AddPro/>}/>
+            <Route path="/add" element={<AddPro />} />
             <Route path="/edit/:id" element={<EditProduct />} />
             <Route
               path="/admin"
               element={
-                // <ProtectedRoute adminOnly={true}>
-                <Dashboard />
-                //  {/* </ProtectedRoute> */}
+                <ProtectedRoute adminOnly={true}>
+                  <Dashboard />
+                </ProtectedRoute>
               }
             />
+            <Route path="/noAccess" element={<NoAccess />} />
             <Route path="*" element={<NoPageFound />} />
           </Routes>
         </Router>

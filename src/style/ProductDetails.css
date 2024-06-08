@@ -1,3 +1,66 @@
-.pro_d{
-    font-size: 12px;
+.pro_d {
+  font-size: 14px;
+  color: #a19b9b;
+}
+
+.q_input {
+  width: 40px;
+  border: none;
+}
+.q_input:focus {
+  outline: none;
+}
+
+.q_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 4px;
+  height: 32px;
+  width: 81px;
+  border: none;
+  background: #c6daf0;
+  border-radius: 10px;
+}
+.svg-icon {
+  color: #fff !important;
+}
+/* .lable {
+  line-height: 22px;
+  font-size: 17px;
+  color: #f0eeeb;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+} */
+
+.q_button:hover {
+  background: #1b1b1cea;
+  cursor: pointer;
+}
+
+.q_button:hover .svg-icon {
+  animation: rotate 1.3s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(10deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  75% {
+    transform: rotate(-10deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }

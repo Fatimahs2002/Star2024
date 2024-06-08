@@ -1,6 +1,5 @@
 .footer_section {
   width: 100%;
-  background-color: #0d4c90;
   height: auto;
 }
 
@@ -13,11 +12,7 @@
 
 .location_main {
   font-size: 16px;
-  color: #ffffff;
-}
-
-.location_main a {
-  color: #ffffff;
+  color: #0d4c90 !important;
 }
 
 .copyright_section {
@@ -34,31 +29,33 @@
   font-size: 16px;
   margin: 20px 0px;
 }
+
 .footer_text {
-  color: #ffffff !important;
+  color: #0d4c90!important;
   font-size: 18px;
   margin: 10px;
 }
 
 .footer_icon {
-  color: #ffffff !important;
-  font-size: 17px;
+  color: #0d4c90 !important;
+  font-size: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, ;
 }
 
 .footer_title{
-  color: #dbd9d9 !important;
+  color: #0d4c90 !important;
   font-size: 18px;
 }
  .link_footer{
-  color: #ffffff !important;
+  color: #0d4c90 !important;
 }
 
 
 @media (max-width:768px) {
   .footer_social_icons{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center;
+    justify-content: center; */
     flex-direction: column;
   }
 }

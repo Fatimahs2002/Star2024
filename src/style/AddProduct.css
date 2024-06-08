@@ -5,3 +5,7 @@ input ,textarea{
 textarea{
     resize: none;
 }
+
+.m{
+    margin: 10px;
+}
