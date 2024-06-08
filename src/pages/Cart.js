@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,47 +7,40 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { getUserID } from '../util/userData';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import axios from 'axios';
 
 const Cart = () => {
-  const { cart, removeFromCart, submitCart, cartID} = useContext(CartContext);
+  const { cart, removeFromCart, submitCart, cartID } = useContext(CartContext);
   const [userID, setUserID] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('');
-  // const [cartID , setCartID ] = useState(null); 
 
   const handleRemoveFromCart = (productId) => {
     removeFromCart(productId);
   };
+
   useEffect(() => {
     const fetchUserID = async () => {
       const id = await getUserID();
-      
       setUserID(id);
-      
     };
     fetchUserID();
-   
   }, []);
-
-
 
   const handleCheckout = async () => {
     if (!userID || !cartID) {
-      console.log(cartID, "id cart")
+      console.log(cartID, "checkout cart")
       toast.error('You must be logged in!');
     } else if (!paymentMethod) {
       toast.error('Please select a payment method!');
     } else {
       try {
-        await submitCart(userID, cartID, paymentMethod);
+        await submitCart(userID);
         toast.success('Checkout Successful!');
-        localStorage.removeItem('cart');
       } catch (error) {
+        console.log(error)
         toast.error('Checkout Failed!');
       }
     }
   };
-
   const calculateItemPrice = (item) => {
     const basePrice = item.price || 0;
     const weightPrice = item.selectedOptions.weights.reduce((total, weight) => {

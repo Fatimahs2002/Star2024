@@ -1,41 +1,49 @@
-import axios from "axios";
 import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
-    const localCart = localStorage.getItem("cart");
-    return localCart ? JSON.parse(localCart) : [];
+    const sessionCart = sessionStorage.getItem("cart");
+    return sessionCart ? JSON.parse(sessionCart) : [];
   });
 
   const [cartID, setCartID] = useState(() => {
-    const localCartID = localStorage.getItem("cartID");
-    return localCartID ? localCartID : null;
+    const sessionCartID = sessionStorage.getItem("cartID");
+    return sessionCartID ? JSON.parse(sessionCartID) : null;
   });
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    sessionStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
     if (cartID !== null) {
-      localStorage.setItem("cartID", JSON.stringify(cartID));
+      sessionStorage.setItem("cartID", JSON.stringify(cartID));
     }
   }, [cartID]);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
       const updatedCart = [...prevCart, product];
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
       return updatedCart;
     });
+
+    // Generate and set a new cartID when a product is added to the cart
+    const newCartID = generateCartID();
+    setCartID(newCartID);
+  };
+
+  const generateCartID = () => {
+    // Generate a unique cart ID here (e.g., using UUID or a similar method)
+    const newCartID = "cart_" + Math.random().toString(36).substr(2, 9);
+    return newCartID;
   };
 
   const removeFromCart = (productId) => {
     setCart((prevCart) => {
       const updatedCart = prevCart.filter((item) => item._id !== productId);
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
       return updatedCart;
     });
   };
@@ -57,7 +65,7 @@ const CartProvider = ({ children }) => {
     try {
       const orderData = {
         user: userId,
-        cartId: cartID, // Use cartID from state
+        cartId: cartID,
         products: cart.map((item) => ({
           productId: item._id.toString(),
           quantity: item.quantity,
@@ -66,29 +74,15 @@ const CartProvider = ({ children }) => {
         orderStatus: "Pending",
         orderDate: new Date(),
       };
-
-      console.log("Submitting order:", orderData);
-
       const response = await axios.post(
         `${process.env.REACT_APP_URL}/order/create`,
         orderData
       );
-
-      if (
-        response &&
-        response.status === 200 &&
-        response.data &&
-        response.data.success
-      ) {
-        console.log("Order submitted successfully:", response.data);
-
-        // Assuming cartID is returned from server
-        const newCartID = response.data.cartId;
-        setCartID(newCartID); // Update cartID in state
-
+      if (response && response.status === 200 && response.data.success) {
+        setCart([]);
+        sessionStorage.removeItem("cart");
         return response.data;
       } else {
-        console.error("Unexpected response:", response);
         throw new Error("Unexpected response from server");
       }
     } catch (error) {
