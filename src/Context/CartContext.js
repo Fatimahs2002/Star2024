@@ -97,22 +97,22 @@ const CartProvider = ({ children }) => {
   };
 
   const calculateItemPrice = (item) => {
-    console.log('Calculating price for item:', item);
+    // console.log('Calculating price for item:', item);
 
     if (!item || typeof item !== 'object') {
       console.error('Invalid item structure:', item);
       return 0;
     }
     const basePrice = item.price || 0;
-    console.log('Base price:', basePrice);
+    // console.log('Base price:', basePrice);
 
     const weightPrice = Array.isArray(item.selectedOptions?.weights)
       ? item.selectedOptions.weights.reduce((total, weight) => {
-          console.log('Weight:', weight); 
+          // console.log('Weight:', weight); 
           const weightOption = item.characteristics
-            ?.find(char => char.type.toLowerCase() === 'weight')
+            ?.find(char => char.type.toLowerCase() === 'size')
             ?.options.find(option => option.value === weight);
-          console.log('Weight option:', weightOption); 
+          console.log('Size option:', weightOption); 
           return total + (weightOption ? weightOption.price : 0);
         }, 0)
       : 0;

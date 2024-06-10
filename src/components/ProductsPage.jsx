@@ -9,7 +9,9 @@ import "../style/ProductsPage.css";
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("All");
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
@@ -17,12 +19,30 @@ const ProductsPage = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    if (selectedCategory !== "All") {
+      fetchSubCategories(selectedCategory);
+    } else {
+      setSubCategories([]);
+      setSelectedSubCategory("All");
+    }
+  }, [selectedCategory]);
+
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_URL}/category/get`);
       setCategories(res.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
+    }
+  };
+
+  const fetchSubCategories = async (categoryName) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_URL}/subcategory/get?category=${categoryName}`);
+      setSubCategories(res.data.data);
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
     }
   };
 
@@ -53,18 +73,22 @@ const ProductsPage = () => {
 
   const groupedProducts = products.reduce((acc, product) => {
     const categoryName = product.categoryName || "Uncategorized";
+    const subCategoryName = product.subCategoryName || "No Subcategory";
     if (!acc[categoryName]) {
-      acc[categoryName] = [];
+      acc[categoryName] = {};
     }
-    acc[categoryName].push(product);
+    if (!acc[categoryName][subCategoryName]) {
+      acc[categoryName][subCategoryName] = [];
+    }
+    acc[categoryName][subCategoryName].push(product);
     return acc;
   }, {});
 
-  const renderProductsByCategory = (categoryName, products) => {
+  const renderProductsBySubCategory = (subCategoryName, products) => {
     const productChunks = chunkArray(products, 3);
     return (
-      <div key={categoryName}>
-        <h1 className="text-center">{categoryName}</h1>
+      <div key={subCategoryName}>
+        <h2 className="text-center">{subCategoryName}</h2>
         <Carousel
           controls={true}
           indicators={false}
@@ -135,6 +159,24 @@ const ProductsPage = () => {
     );
   };
 
+  const renderProductsByCategory = (categoryName, subCategories) => {
+    const hasSubcategories = Object.keys(subCategories).length > 0;
+    return (
+      <div key={categoryName}>
+        {hasSubcategories && <h1 className="text-center">{categoryName}</h1>}
+        {hasSubcategories &&
+          Object.keys(subCategories).map((subCategoryName) =>
+            subCategoryName !== "" &&
+            renderProductsBySubCategory(subCategoryName, subCategories[subCategoryName])
+          )}
+        {!hasSubcategories && <h1 className="text-center">{categoryName}</h1>}
+        {categoryName === "" &&
+          renderProductsBySubCategory(categoryName, subCategories[categoryName])}
+      </div>
+    );
+  };
+  
+
   return (
     <div className="prod_section">
       <div className="d-flex mb-4">
@@ -154,13 +196,17 @@ const ProductsPage = () => {
             </Dropdown.Item>
           ))}
         </DropdownButton>
-       
       </div>
       {selectedCategory === "All"
         ? Object.keys(groupedProducts).map((categoryName) =>
             renderProductsByCategory(categoryName, groupedProducts[categoryName])
           )
-        : renderProductsByCategory(selectedCategory, groupedProducts[selectedCategory] || [])}
+        : renderProductsByCategory(
+            selectedCategory,
+            selectedSubCategory === "All"
+              ? groupedProducts[selectedCategory] || {}
+              : { [selectedSubCategory]: groupedProducts[selectedCategory][selectedSubCategory] || [] }
+          )}
     </div>
   );
 };

@@ -1,35 +1,50 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Form, Button, Row, Col, Container } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Form, Button, Row, Col, Container } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const EditProduct = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     categoryName: "",
+    subCategoryName: "",
     characteristics: [{ type: "", options: [{ value: "", price: 0 }] }],
     images: [],
     newImages: [],
-    removedImages: []
+    removedImages: [],
   });
 
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
 
   useEffect(() => {
     fetchProductDetails();
     fetchCategories();
   }, [id]);
 
+  useEffect(() => {
+    if (selectedCategory) {
+      fetchSubCategories(selectedCategory);
+    } else {
+      setSubCategories([]);
+      setSelectedSubCategory("");
+    }
+  }, [selectedCategory]);
+
   const fetchProductDetails = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_URL}/product/getById/${id}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_URL}/product/getById/${id}`
+      );
       const product = res.data.data;
 
       if (!product) {
@@ -40,13 +55,14 @@ const EditProduct = () => {
         name: product.name,
         description: product.description,
         categoryName: product.categoryName,
-        characteristics: product.characteristics.map(char => ({
+        subCategoryName: product.subCategoryName,
+        characteristics: product.characteristics.map((char) => ({
           type: char.type,
-          options: char.options
+          options: char.options,
         })),
         images: product.images,
         newImages: [],
-        removedImages: []
+        removedImages: [],
       });
     } catch (error) {
       console.error("There was an error fetching the product details!", error);
@@ -61,6 +77,18 @@ const EditProduct = () => {
     } catch (error) {
       console.error("There was an error fetching the categories!", error);
       toast.error("Error fetching categories. Please try again.");
+    }
+  };
+
+  const fetchSubCategories = async (categoryName) => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_URL}/subcategory/get?category=${categoryName}`
+      );
+      setSubCategories(res.data.data);
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+      toast.error("Error fetching subcategories. Please try again.");
     }
   };
 
@@ -79,7 +107,7 @@ const EditProduct = () => {
     setFormData({
       ...formData,
       images: formData.images.filter((_, i) => i !== index),
-      removedImages: [...formData.removedImages, removedImage]
+      removedImages: [...formData.removedImages, removedImage],
     });
   };
 
@@ -109,7 +137,10 @@ const EditProduct = () => {
   };
 
   const handleAddCharacteristic = () => {
-    const newCharacteristics = [...formData.characteristics, { type: "", options: [{ value: "", price: 0 }] }];
+    const newCharacteristics = [
+      ...formData.characteristics,
+      { type: "", options: [{ value: "", price: 0 }] },
+    ];
     setFormData({ ...formData, characteristics: newCharacteristics });
   };
 
@@ -126,6 +157,7 @@ const EditProduct = () => {
     data.append("name", formData.name);
     data.append("description", formData.description);
     data.append("categoryName", formData.categoryName);
+    data.append("subCategoryName", formData.subCategoryName);
     data.append("characteristics", JSON.stringify(formData.characteristics));
     formData.newImages.forEach((image) => {
       data.append("newImages", image);
@@ -135,11 +167,15 @@ const EditProduct = () => {
     });
 
     try {
-      await axios.put(`${process.env.REACT_APP_URL}/product/update/${id}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.put(
+        `${process.env.REACT_APP_URL}/product/update/${id}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       toast.success("Product updated successfully!");
       navigate("/admin");
     } catch (error) {
@@ -200,20 +236,58 @@ const EditProduct = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Row className='m'>
+        <Row>
+        <Form.Group controlId="formCategory">
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            as="select"
+            name="categoryName"
+            value={formData.categoryName}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+        </Row>
+        <Row>
+        <Form.Group controlId="formSubCategory">
+          <Form.Label>Subcategory</Form.Label>
+          <Form.Control
+            as="select"
+            name="subCategoryName"
+            value={formData.subCategoryName}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Subcategory</option>
+            {subCategories.map((subcategory) => (
+              <option key={subcategory.id} value={subcategory.name}>
+                {subcategory.name}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+        </Row>
+        {/* <Row className="m"> */}
           <Col xs={12} md={6}>
             <Form.Group controlId="formCharacteristics">
               <Form.Label>Characteristics</Form.Label>
               {formData.characteristics.map((characteristic, charIndex) => (
                 <div key={charIndex}>
-                  <Row >
+                  <Row>
                     <Col xs={12} md={6}>
                       <Form.Control
                         type="text"
                         placeholder="Type"
                         name="type"
                         value={characteristic.type}
-                        onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                        onChange={(e) =>
+                          handleCharacteristicChange(charIndex, e)
+                        }
                       />
                     </Col>
                   </Row>
@@ -225,7 +299,9 @@ const EditProduct = () => {
                           placeholder="Option"
                           name={`options.${optIndex}.value`}
                           value={option.value}
-                          onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                          onChange={(e) =>
+                            handleCharacteristicChange(charIndex, e)
+                          }
                         />
                       </Col>
                       <Col xs={12} md={4}>
@@ -234,11 +310,18 @@ const EditProduct = () => {
                           placeholder="Price"
                           name={`options.${optIndex}.price`}
                           value={option.price}
-                          onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                          onChange={(e) =>
+                            handleCharacteristicChange(charIndex, e)
+                          }
                         />
                       </Col>
                       <Col xs={12} md={4}>
-                        <Button variant="danger" onClick={() => handleRemoveOption(charIndex, optIndex)}>
+                        <Button
+                          variant="danger"
+                          onClick={() =>
+                            handleRemoveOption(charIndex, optIndex)
+                          }
+                        >
                           <FontAwesomeIcon icon={faTrash} />
                         </Button>
                       </Col>
@@ -246,12 +329,18 @@ const EditProduct = () => {
                   ))}
                   <Row>
                     <Col>
-                      <Button  variant="success" onClick={() => handleAddOption(charIndex)}>
+                      <Button
+                        variant="success"
+                        onClick={() => handleAddOption(charIndex)}
+                      >
                         <FontAwesomeIcon icon={faPlus} /> Add Option
                       </Button>
                     </Col>
                     <Col>
-                      <Button variant="danger" onClick={() => handleRemoveCharacteristic(charIndex)}>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleRemoveCharacteristic(charIndex)}
+                      >
                         <FontAwesomeIcon icon={faTrash} /> Remove Characteristic
                       </Button>
                     </Col>
@@ -263,7 +352,7 @@ const EditProduct = () => {
               </Button>
             </Form.Group>
           </Col>
-        </Row>
+        {/* </Row> */}
         <Row>
           <Col xs={12} md={6}>
             <Form.Group controlId="formImages">
@@ -271,8 +360,15 @@ const EditProduct = () => {
               <div>
                 {formData.images.map((image, index) => (
                   <div key={index}>
-                    <img src={image} alt={`Product Image ${index + 1}`} width="100" />
-                    <Button variant="danger" onClick={() => handleRemoveImage(index)}>
+                    <img
+                      src={image}
+                      alt={`Product Image ${index + 1}`}
+                      width="100"
+                    />
+                    <Button
+                      variant="danger"
+                      onClick={() => handleRemoveImage(index)}
+                    >
                       <FontAwesomeIcon icon={faTrash} />
                     </Button>
                   </div>
