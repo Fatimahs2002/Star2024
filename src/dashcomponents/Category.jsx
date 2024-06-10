@@ -16,9 +16,7 @@ const Category = () => {
 
   // for subcategory
   const [subcategories, setSubcategories] = useState([]);
-  const [editingSubcategory, setEditingSubcategory] = useState(null);
   const [showAddSubModal, setShowAddSubModal] = useState(false);
-  const [showEditSubModal, setShowEditSubModal] = useState(false);
   const [newSubcategory, setNewSubcategory] = useState({
     name: "",
     categoryName: "",
@@ -94,45 +92,16 @@ const Category = () => {
     }
   };
 
-  // Subcategory handlers
-  const handleDeleteSubcategory = async (_id) => {
-    try {
-      await axios.delete(`${process.env.REACT_APP_URL}/SubCategory/delete/${_id}`);
-      setSubcategories(subcategories.filter((subcategory) => subcategory._id !== _id));
-      toast.success("Subcategory deleted successfully!");
-    } catch (error) {
-      console.error("There was an error deleting the subcategory!", error);
-    }
-  };
-
-  const handleEditSubcategory = (subcategory) => {
-    setEditingSubcategory(subcategory._id);
-    setNewSubcategory({
-      name: subcategory.name,
-      categoryId: subcategory.categoryId,
-      categoryName: subcategory.categoryName,
-    });
-    setShowEditSubModal(true);
-  };
-
-  const handleSaveSubcategory = async (_id) => {
-    try {
-      await axios.put(`${process.env.REACT_APP_URL}/SubCategory/update/${_id}`, newSubcategory);
-      setSubcategories(
-        subcategories.map((subcategory) =>
-          subcategory._id === _id ? { ...subcategory, ...newSubcategory } : subcategory
-        )
-      );
-      setEditingSubcategory(null);
-      setShowEditSubModal(false);
-      setNewSubcategory({ name: "", categoryId: "", categoryName: "" });
-      toast.success("Subcategory updated successfully!");
-    } catch (error) {
-      console.error("There was an error updating the subcategory!", error);
-    }
-  };
-
   const handleAddSubcategory = async () => {
+    const subcategoryExists = subcategories.some(
+      (subcategory) => subcategory.name === newSubcategory.name
+    );
+    
+    if (subcategoryExists) {
+      toast.error("Subcategory name already exists!");
+      return;
+    }
+
     try {
       const res = await axios.post(`${process.env.REACT_APP_URL}/SubCategory/add`, newSubcategory);
       setSubcategories([...subcategories, { _id: res.data._id, ...newSubcategory }]);
@@ -165,7 +134,7 @@ const Category = () => {
         </div>
       </div>
 
-      <Table className="able text-start align-middle table-bordered table-hover mb-0">
+      <Table className="table text-start align-middle table-bordered table-hover mb-0">
         <thead>
           <tr className="text-dark">
             <th>Category</th>
@@ -191,12 +160,6 @@ const Category = () => {
                   onClick={() => openAddSubModal(category)}
                 >
                   <FontAwesomeIcon icon={faPlus} /> Add Subcategory
-                </Button>
-                <Button
-                  variant="info"
-                  onClick={() => fetchSubcategories(category._id)}
-                >
-                  Fetch Subcategories
                 </Button>
               </td>
             </tr>
@@ -302,45 +265,6 @@ const Category = () => {
           </Button>
           <Button variant="primary" onClick={handleAddSubcategory}>
             <FontAwesomeIcon icon={faPlus} /> Add
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Edit Subcategory Modal */}
-      <Modal show={showEditSubModal} onHide={() => setShowEditSubModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Subcategory</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formEditSubName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={newSubcategory.name}
-                onChange={(e) =>
-                  setNewSubcategory({ ...newSubcategory, name: e.target.value })
-                }
-                className="input_group"
-              />
-            </Form.Group>
-            <Form.Group controlId="formEditCategoryId">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type="text"
-                value={newSubcategory.categoryName}
-                disabled
-                className="input_group"
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditSubModal(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() => handleSaveSubcategory(editingSubcategory)}>
-            <FontAwesomeIcon icon={faSave} /> Save
           </Button>
         </Modal.Footer>
       </Modal>
