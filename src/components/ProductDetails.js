@@ -53,6 +53,11 @@ const ProductDetails = () => {
       return;
     }
 
+    if (selectedWeights.length === 0) {
+      toast.error("Please select at least one price.");
+      return;
+    }
+
     const selectedOptions = {
       weights: selectedWeights,
       color: selectedColor,
@@ -200,7 +205,7 @@ const ProductDetails = () => {
                   <option value="">Select Color</option>
                   {colorOptions.options.map((option, idx) => (
                     <option key={idx} value={option.value}>
-                      {option.value} ({option.price})
+                      {option.value}
                     </option>
                   ))}
                 </Form.Select>

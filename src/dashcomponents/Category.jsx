@@ -12,20 +12,38 @@ const Category = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [newCategory, setNewCategory] = useState({
+  const [newCategory, setNewCategory] = useState({ name: "" });
+
+  // for subcategory
+  const [subcategories, setSubcategories] = useState([]);
+  const [editingSubcategory, setEditingSubcategory] = useState(null);
+  const [showAddSubModal, setShowAddSubModal] = useState(false);
+  const [showEditSubModal, setShowEditSubModal] = useState(false);
+  const [newSubcategory, setNewSubcategory] = useState({
     name: "",
-  
+    categoryName: "",
+    categoryId: "",
   });
 
   useEffect(() => {
     fetchCategory();
   }, []);
 
+  // fetch category
   const fetchCategory = async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_URL}/category/get`);
-      // console.log(res.data);
       setCategories(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // fetch subcategory
+  const fetchSubcategories = async (categoryId) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_URL}/SubCategory/get/${categoryId}`);
+      setSubcategories(res.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -43,10 +61,7 @@ const Category = () => {
 
   const handleEdit = (category) => {
     setEditingCategory(category._id);
-    setNewCategory({
-      name: category.name,
-      category: category.category,
-    });
+    setNewCategory({ name: category.name });
     setShowEditModal(true);
   };
 
@@ -60,7 +75,7 @@ const Category = () => {
       );
       setEditingCategory(null);
       setShowEditModal(false);
-      setNewCategory({ name: "", category: "" });
+      setNewCategory({ name: "" });
       toast.success("Category updated successfully!");
     } catch (error) {
       console.error("There was an error updating the category!", error);
@@ -72,11 +87,66 @@ const Category = () => {
       const res = await axios.post(`${process.env.REACT_APP_URL}/category/add`, newCategory);
       setCategories([...categories, { _id: res.data._id, ...newCategory }]);
       setShowAddModal(false);
-      setNewCategory({ name: "", category: "" });
+      setNewCategory({ name: "" });
       toast.success("Category added successfully!");
     } catch (error) {
       console.error("There was an error adding the category!", error);
     }
+  };
+
+  // Subcategory handlers
+  const handleDeleteSubcategory = async (_id) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_URL}/SubCategory/delete/${_id}`);
+      setSubcategories(subcategories.filter((subcategory) => subcategory._id !== _id));
+      toast.success("Subcategory deleted successfully!");
+    } catch (error) {
+      console.error("There was an error deleting the subcategory!", error);
+    }
+  };
+
+  const handleEditSubcategory = (subcategory) => {
+    setEditingSubcategory(subcategory._id);
+    setNewSubcategory({
+      name: subcategory.name,
+      categoryId: subcategory.categoryId,
+      categoryName: subcategory.categoryName,
+    });
+    setShowEditSubModal(true);
+  };
+
+  const handleSaveSubcategory = async (_id) => {
+    try {
+      await axios.put(`${process.env.REACT_APP_URL}/SubCategory/update/${_id}`, newSubcategory);
+      setSubcategories(
+        subcategories.map((subcategory) =>
+          subcategory._id === _id ? { ...subcategory, ...newSubcategory } : subcategory
+        )
+      );
+      setEditingSubcategory(null);
+      setShowEditSubModal(false);
+      setNewSubcategory({ name: "", categoryId: "", categoryName: "" });
+      toast.success("Subcategory updated successfully!");
+    } catch (error) {
+      console.error("There was an error updating the subcategory!", error);
+    }
+  };
+
+  const handleAddSubcategory = async () => {
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_URL}/SubCategory/add`, newSubcategory);
+      setSubcategories([...subcategories, { _id: res.data._id, ...newSubcategory }]);
+      setShowAddSubModal(false);
+      setNewSubcategory({ name: "", categoryId: "", categoryName: "" });
+      toast.success("Subcategory added successfully!");
+    } catch (error) {
+      console.error("There was an error adding the subcategory!", error);
+    }
+  };
+
+  const openAddSubModal = (category) => {
+    setNewSubcategory({ ...newSubcategory, categoryId: category._id, categoryName: category.name });
+    setShowAddSubModal(true);
   };
 
   return (
@@ -116,6 +186,18 @@ const Category = () => {
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => openAddSubModal(category)}
+                >
+                  <FontAwesomeIcon icon={faPlus} /> Add Subcategory
+                </Button>
+                <Button
+                  variant="info"
+                  onClick={() => fetchSubcategories(category._id)}
+                >
+                  Fetch Subcategories
+                </Button>
               </td>
             </tr>
           ))}
@@ -141,7 +223,6 @@ const Category = () => {
                 className="input_group"
               />
             </Form.Group>
-        
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -172,7 +253,6 @@ const Category = () => {
                 className="input_group"
               />
             </Form.Group>
-       
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -180,6 +260,86 @@ const Category = () => {
             Close
           </Button>
           <Button variant="primary" onClick={() => handleSave(editingCategory)}>
+            <FontAwesomeIcon icon={faSave} /> Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Add Subcategory Modal */}
+      <Modal show={showAddSubModal} onHide={() => setShowAddSubModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Subcategory</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formSubName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter name"
+                value={newSubcategory.name}
+                onChange={(e) =>
+                  setNewSubcategory({ ...newSubcategory, name: e.target.value })
+                }
+                className="input_group"
+              />
+            </Form.Group>
+            <Form.Group controlId="formCategoryName">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter category"
+                value={newSubcategory.categoryName}
+                disabled
+                className="input_group"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowAddSubModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleAddSubcategory}>
+            <FontAwesomeIcon icon={faPlus} /> Add
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Edit Subcategory Modal */}
+      <Modal show={showEditSubModal} onHide={() => setShowEditSubModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Subcategory</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formEditSubName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={newSubcategory.name}
+                onChange={(e) =>
+                  setNewSubcategory({ ...newSubcategory, name: e.target.value })
+                }
+                className="input_group"
+              />
+            </Form.Group>
+            <Form.Group controlId="formEditCategoryId">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                value={newSubcategory.categoryName}
+                disabled
+                className="input_group"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowEditSubModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={() => handleSaveSubcategory(editingSubcategory)}>
             <FontAwesomeIcon icon={faSave} /> Save
           </Button>
         </Modal.Footer>

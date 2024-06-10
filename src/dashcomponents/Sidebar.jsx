@@ -20,6 +20,7 @@ import Category from "./Category";
 import Report from "./Report";
 import Order from "./Order";
 import Users from "./Users";
+import SubCategory from "./SubCategory";
 
 const Sidebar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -39,8 +40,8 @@ const Sidebar = () => {
         return <Category />;
       case "user":
         return <Users />;
-      // case "reports":
-      //   return <Report />;
+      case "subCategory":
+        return <SubCategory />;
       default:
         return <Order />;
     }
@@ -86,6 +87,15 @@ const Sidebar = () => {
               <FontAwesomeIcon icon={faThList} />
             </div>
             {isVisible && <span className="ml-1">Category</span>}
+          </div>
+          <div
+            className="bg-light nav-link"
+            onClick={() => setActiveComponent("subCategory")}
+          >
+            <div className="side_icon">
+              <FontAwesomeIcon icon={faThList} />
+            </div>
+            {isVisible && <span className="ml-1">Sub Category</span>}
           </div>
           <div
             className="bg-light nav-link"
