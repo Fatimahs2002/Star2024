@@ -1,61 +1,86 @@
 .footer_section {
-  width: 100%;
-  height: auto;
+  background-color: #f8f9fa;
+  padding: 60px 0;
+  color: #333;
 }
 
-.footer_logo {
-  width: 10%;
+.footer_section .footer_title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #0D4C90;
+}
+
+
+.footer_section .footer_subtitle {
+  font-size: 1.2rem;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.footer_section .about_us_text {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.footer_section .social_icons_list {
+  padding: 0;
+  list-style: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 15px;
 }
 
-.location_main {
-  font-size: 16px;
-  color: #0d4c90 !important;
+.footer_section .social_icons_list li {
+  display: inline;
+}
+
+.footer_section .footer_icon {
+  font-size: 1.5rem;
+  color: #0D4C90;
+  transition: color 0.3s;
+}
+
+.footer_section .footer_icon:hover {
+  color: #0056b3;
+}
+
+.footer_section .useful_links {
+  padding: 0;
+  list-style: none;
+}
+
+.footer_section .useful_links li {
+  margin-bottom: 10px;
+}
+
+.footer_section .link_footer {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.footer_section .link_footer:hover {
+  color: #0D4C90;
+}
+
+.footer_section .contact_info {
+  color: #666;
+}
+
+.footer_section .contact_info div {
+  margin-bottom: 10px;
+}
+
+.footer_section .footer_icon {
+  margin-right: 10px;
 }
 
 .copyright_section {
-  width: 100%;
-  display: flex;
-  background-color: #0d4c90;
-  /* height: auto; */
+  background-color: #e9ecef;
 }
 
 .copyright_text {
-  width: 100%;
-  color: #ffffff;
-  text-align: center;
-  font-size: 16px;
-  margin: 20px 0px;
+  margin: 0;
+  color: #666;
 }
 
-.footer_text {
-  color: #0d4c90!important;
-  font-size: 18px;
-  margin: 10px;
-}
-
-.footer_icon {
-  color: #0d4c90 !important;
-  font-size: 20px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, ;
-}
-
-.footer_title{
-  color: #0d4c90 !important;
-  font-size: 18px;
-}
- .link_footer{
-  color: #0d4c90 !important;
-}
-
-
-@media (max-width:768px) {
-  .footer_social_icons{
-    display: flex;
-    /* align-items: center;
-    justify-content: center; */
-    flex-direction: column;
-  }
-}

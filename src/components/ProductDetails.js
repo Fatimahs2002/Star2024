@@ -11,7 +11,7 @@ import Footer from "./Footer";
 import "../style/ProductDetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-
+import '../style/cart.css';
 const ProductDetails = () => {
   const { ID } = useParams();
   const [product, setProduct] = useState(null);
@@ -254,7 +254,7 @@ const ProductDetails = () => {
               </button>
             </div>
             <h4>Price: ${calculatePrice()}</h4>
-            <Button onClick={handleAddToCart}>Add to Cart</Button>
+            <Button onClick={handleAddToCart} className="cart-add">Add to Cart</Button>
           </Col>
         </Row>
       </Container>

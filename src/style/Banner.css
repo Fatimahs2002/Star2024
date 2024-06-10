@@ -1,8 +1,12 @@
 
 .banner_section {
   width: 100%;
-  height: calc(100vh - 60px); 
-  background-image: url("/public/images/back_pic.jpg");
+  /* height: calc(200vh - 10px);  */
+height: 400px !important;
+  /* background-image: url("/public/images/back_pic.png"); */
+  background-color: #0D4C90; /* Background color */
+  height: 100%; /* Full height */
+  color: white;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -10,6 +14,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 30px;
+
 }
 
 .banner_taital {
@@ -65,7 +70,7 @@
   /* background: rgba(235, 199, 110, 0.8); */
   opacity: 1;
   font-size: 20px;
-  color: #000000;
+  color: white;
   border-radius: 100px;
 }
 

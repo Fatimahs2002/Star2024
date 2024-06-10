@@ -29,6 +29,7 @@ const Products = () => {
         params: {
           page: currentPage,
           limit: itemsPerPage,
+          searchTerm: searchTerm // Pass the searchTerm as a parameter
         }
       });
       setProducts(res.data.data);
@@ -48,6 +49,8 @@ const Products = () => {
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+    // When search term changes, reset to the first page
+    setCurrentPage(1);
   };
 
   const handleDelete = async (productId) => {
@@ -193,3 +196,4 @@ const Products = () => {
 };
 
 export default Products;
+

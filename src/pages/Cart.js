@@ -9,7 +9,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-
+import '../style/cart.css';
 const Cart = () => {
   const {
     cart,
@@ -111,7 +111,7 @@ const Cart = () => {
                 />
                 <Button
                   variant="success"
-                  className="w-100 mt-3"
+                  className="w-100 mt-3 check"
                   onClick={handleCheckout}
                 >
                   Checkout
