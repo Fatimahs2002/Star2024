@@ -1,8 +1,8 @@
-.fashion_section {
+.prod_section {
   width: 100%;
 }
 
-.fashion_taital {
+.prod_taital {
   width: 100%;
   font-size: 40px;
   color: #30302e;
@@ -10,7 +10,7 @@
   font-weight: bold;
 }
 
-.fashion_section_2 {
+.prod_section_2 {
   width: 100%;
   margin-top: 30px;
 }
@@ -24,7 +24,7 @@
   margin-bottom: 20px;
 }
 
-.shirt_text {
+.prod_text {
   width: 100%;
   font-size: 20px;
   color: #30302e;
@@ -36,12 +36,12 @@
 .price_text {
   width: 100%;
   font-size: 16px;
-  color: #f26522;
+  color: #0d4c90;
   text-align: center;
   margin: 0px;
 }
 
-.tshirt_img {
+.prod_img {
   width: 100%;
   text-align: center;
   margin: 50px 0px;
@@ -58,7 +58,7 @@
 }
 
 .seemore{
-  background-color: #262626;
+  background-color: #0d4c90;
   color: #f0f0f0;
   font-size: 16px;
   border: none; 
@@ -119,4 +119,8 @@ width: 20rem;
 
 .animated-image:hover {
   transform: scale(1.1);
+}
+
+#dropdown-basic-button{
+  background-color: #0d4c90 !important;
 }

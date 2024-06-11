@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const EditProduct = () => {
   const { id } = useParams(); 
@@ -151,141 +153,143 @@ const EditProduct = () => {
   };
 
   return (
-    <div className="container mt-5">
-       <h2>Edit Product</h2>
-    <div className="row">
-          <div className="col-md-6">
-            <div className="mb-3">
-    <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="formProductName">
-        <Form.Label>Product Name</Form.Label>
-        <Col xs={12} md={6}>
-        <Form.Control
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleInputChange}
-        />
-        </Col>
-      </Form.Group>
-      <Form.Group controlId="formDescription">
-        <Form.Label>Description</Form.Label>
-        <Col xs={12} md={6}>
-        <Form.Control
-          type="text"
-          name="description"
-          value={formData.description}
-          onChange={handleInputChange}
-        />
-        </Col>
-      </Form.Group>
-      <Form.Group controlId="formCategory">
-        <Form.Label>Category</Form.Label>
-        <Col xs={12} md={6}>
-        <Form.Control
-          as="select"
-          name="categoryName"
-          value={formData.categoryName}
-          onChange={handleInputChange}
-        >
-          <option value="">Select Category</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.name}>
-              {category.name}
-            </option>
-          ))}
-        </Form.Control>
-        </Col>
-      </Form.Group>
-      <Form.Group controlId="formCharacteristics">
-        <Form.Label>Characteristics</Form.Label>
-        <Col xs={12} md={6}>
-        {formData.characteristics.map((characteristic, charIndex) => (
-          <div key={charIndex}>
-            <Row>
-              <Col>
-                <Form.Control
-                  type="text"
-                  placeholder="Type"
-                  name="type"
-                  value={characteristic.type}
-                  onChange={(e) => handleCharacteristicChange(charIndex, e)}
-                />
-              </Col>
-              {characteristic.options.map((option, optIndex) => (
-                <Row key={optIndex}>
-                  <Col>
-                    <Form.Control
-                      type="text"
-                      placeholder="Option"
-                      name={`options.${optIndex}.value`}
-                      value={option.value}
-                      onChange={(e) => handleCharacteristicChange(charIndex, e)}
-                    />
-                  </Col>
-                  <Col>
-                    <Form.Control
-                      type="number"
-                      placeholder="Price"
-                      name={`options.${optIndex}.price`}
-                      value={option.price}
-                      onChange={(e) => handleCharacteristicChange(charIndex, e)}
-                    />
-                  </Col>
-                  <Col>
-                    <Button variant="danger" onClick={() => handleRemoveOption(charIndex, optIndex)}>
-                      Remove Option
-                    </Button>
-                  </Col>
-                </Row>
+    <Container className="mt-5">
+      <h2>Edit Product</h2>
+      <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col xs={12} md={6}>
+            <Form.Group controlId="formProductName">
+              <Form.Label>Product Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col xs={12} md={6}>
+            <Form.Group controlId="formDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} md={6}>
+            <Form.Group controlId="formCategory">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                as="select"
+                name="categoryName"
+                value={formData.categoryName}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className='m'>
+          <Col xs={12} md={6}>
+            <Form.Group controlId="formCharacteristics">
+              <Form.Label>Characteristics</Form.Label>
+              {formData.characteristics.map((characteristic, charIndex) => (
+                <div key={charIndex}>
+                  <Row >
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="Type"
+                        name="type"
+                        value={characteristic.type}
+                        onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                      />
+                    </Col>
+                  </Row>
+                  {characteristic.options.map((option, optIndex) => (
+                    <Row key={optIndex}>
+                      <Col xs={12} md={4}>
+                        <Form.Control
+                          type="text"
+                          placeholder="Option"
+                          name={`options.${optIndex}.value`}
+                          value={option.value}
+                          onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                        />
+                      </Col>
+                      <Col xs={12} md={4}>
+                        <Form.Control
+                          type="number"
+                          placeholder="Price"
+                          name={`options.${optIndex}.price`}
+                          value={option.price}
+                          onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                        />
+                      </Col>
+                      <Col xs={12} md={4}>
+                        <Button variant="danger" onClick={() => handleRemoveOption(charIndex, optIndex)}>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                      </Col>
+                    </Row>
+                  ))}
+                  <Row>
+                    <Col>
+                      <Button  variant="success" onClick={() => handleAddOption(charIndex)}>
+                        <FontAwesomeIcon icon={faPlus} /> Add Option
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button variant="danger" onClick={() => handleRemoveCharacteristic(charIndex)}>
+                        <FontAwesomeIcon icon={faTrash} /> Remove Characteristic
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
               ))}
-              <Col>
-                <Button variant="success" onClick={() => handleAddOption(charIndex)}>
-                  Add Option
-                </Button>
-              </Col>
-              <Col>
-                <Button variant="danger" onClick={() => handleRemoveCharacteristic(charIndex)}>
-                  Remove Characteristic
-                </Button>
-              </Col>
-            </Row>
-          </div>
-        ))}
-        <Button variant="success" onClick={handleAddCharacteristic}>
-          Add Characteristic
-        </Button>
-        </Col>
-      </Form.Group>
-
-      <Form.Group controlId="formImages">
-        <Form.Label>Images</Form.Label>
-        <Col xs={12} md={6}>
-        <div>
-          {formData.images.map((image, index) => (
-            <div key={index}>
-              <img src={image} alt={`Product Image ${index + 1}`} width="100" />
-              <Button variant="danger" onClick={() => handleRemoveImage(index)}>
-                Remove
+              <Button variant="success" onClick={handleAddCharacteristic}>
+                <FontAwesomeIcon icon={faPlus} /> Add Characteristic
               </Button>
-            </div>
-          ))}
-        </div>
-        <Form.Control type="file" multiple onChange={handleImageChange} />
-        </Col>
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Update Product
-      </Button>
-      <Button variant="danger" onClick={handleCancel} className="ml-2">
-        Cancel
-      </Button>
-      
-    </Form>
-    </div>
-      </div>
-      </div>
-    </div>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} md={6}>
+            <Form.Group controlId="formImages">
+              <Form.Label>Images</Form.Label>
+              <div>
+                {formData.images.map((image, index) => (
+                  <div key={index}>
+                    <img src={image} alt={`Product Image ${index + 1}`} width="100" />
+                    <Button variant="danger" onClick={() => handleRemoveImage(index)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <Form.Control type="file" multiple onChange={handleImageChange} />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Button variant="primary" type="submit">
+          Update Product
+        </Button>
+        <Button variant="danger" onClick={handleCancel} className="ml-2">
+          Cancel
+        </Button>
+      </Form>
+    </Container>
   );
 };
 

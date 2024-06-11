@@ -24,7 +24,7 @@ const AddPro = () => {
     ],
     categoryName: "",
   });
-
+  const [existingProducts, setExistingProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
@@ -130,7 +130,14 @@ const AddPro = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const productExists = existingProducts.some(
+      (existingProduct) => existingProduct.name === product.name
+    );
 
+    if (productExists) {
+      toast.error("Product with the same name already exists!");
+      return;
+    }
     const formData = new FormData();
     formData.append("name", product.name);
     product.images.forEach((image, index) => {

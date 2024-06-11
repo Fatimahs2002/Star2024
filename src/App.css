@@ -34,7 +34,11 @@ img {
 .navbar-form input {
   border: none !important;
 }
-
+.no_container{
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
 /* .full {
   float: left;
   width: 100%;

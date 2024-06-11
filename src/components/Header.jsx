@@ -52,8 +52,8 @@ const Header = () => {
 
   return (
     <>
-      <div className="banner_bg_main nav_back">
-        <div className="d-flex align-items-center justify-content-center w-100 nav_back">
+      <div className="banner_bg_main">
+        <div className="d-flex align-items-center justify-content-center w-100">
           <div className="container">
             <div className="row">
               <div className="d-flex align-items-center justify-content-center w-100">
@@ -67,42 +67,20 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className="container">
+      <div className="container ">
         <div className="containt_main">
           <div id="mySidenav" className="sidenav">
             <Link to="#" className="closebtn" onClick={closeNav}>
               &times;
             </Link>
             <Link to="/">Home</Link>
-            <Link to="/product">Products</Link>
+            {/* <Link to="/product">Products</Link> */}
             <Link to="/about">About Us</Link>
           </div>
           <span className="toggle_icon" onClick={openNav}>
             <img src="/images/toggle-icon.png" alt="toggle icon" />
           </span>
-          {/* <div className="dropdown">
-            <button
-              className="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              All Category
-            </button>
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li>
-                <Link className="dropdown-item" to="#">
-                  Action
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="#">
-                  Another action
-                </Link>
-              </li>
-            </ul>
-          </div> */}
+          
           <div className="main ">
             <div className="input-group d-flex gap-2">
               <input
@@ -127,9 +105,9 @@ const Header = () => {
                 <li>
                   <Link to="/cart">
                     <FontAwesomeIcon icon={faShoppingCart} aria-hidden="true" />
-                    <span className="padding_10">
+                    <span className="padding_10 ">
                       Cart
-                      <span className="badge bg-primary">{cart.length}</span>
+                      <span className="blue-badge ">{cart.length}</span>
                     </span>
                   </Link>
                 </li>

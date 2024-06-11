@@ -24,52 +24,44 @@ const Order = () => {
         },
       });
       setOrders(res.data.data);
-      console.log(res.data.data);
     } catch (error) {
       console.error("Error fetching orders:", error);
+      toast.error("Error fetching orders. Please try again.");
     }
   };
 
-  const updateOrderStatus = async (orderId, status) => {
+  const handleApproveOrder = async (orderId) => {
     try {
-      const response = await axios.put(
-        `${process.env.REACT_APP_URL}/order/update/${orderId}`,
-        { status },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      await updateOrderStatus(orderId, "Delivered");
       toast.success(`Order status updated successfully!`);
-      fetchOrders();
     } catch (error) {
-      if (error.response) {
-        console.error("Response data:", error.response.data);
-        console.error("Response status:", error.response.status);
-        console.error("Response headers:", error.response.headers);
-      } else if (error.request) {
-        console.error("Request data:", error.request);
-      } else {
-        console.error("Error message:", error.message);
-      }
-      toast.error(
-        `Error updating order status. Please try again.`
-      );
+      console.error("Error updating order status:", error);
+      toast.error("Error updating order status. Please try again.");
     }
   };
 
-  const deleteOrder = async (orderId) => {
+  const handleDeleteOrder = async (orderId) => {
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_URL}/order/delete/${orderId}`
-      );
+      await axios.delete(`${process.env.REACT_APP_URL}/order/delete/${orderId}`);
       toast.success("Order deleted successfully!");
-      fetchOrders();
+      const updatedOrders = orders.filter(order => order._id !== orderId);
+      setOrders(updatedOrders);
     } catch (error) {
       console.error("Error deleting order:", error);
       toast.error("Error deleting order. Please try again.");
     }
+  };
+
+  const updateOrderStatus = async (orderId, status) => {
+    return axios.put(
+      `${process.env.REACT_APP_URL}/order/update/${orderId}`,
+      { status },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   };
 
   const nextPage = () => {
@@ -91,9 +83,10 @@ const Order = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Order ID</th>
+            <th>#</th>
             <th>User Name</th>
             <th>Products</th>
+            <th>Order Date</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -108,27 +101,10 @@ const Order = () => {
                   <ul>
                     {order.products.map((product, idx) => (
                       <li key={idx}>
-                        <strong>Name:</strong> {product.name} <br />
-                        <strong>Quantity:</strong> {product.quantity} <br />
-                        <strong>Category:</strong> {product.categoryName} <br />
-                        {product.selectedOptions && (
-                          <>
-                            <strong>Color:</strong> {product.selectedOptions.color} <br />
-                            <strong>Weight:</strong> {product.selectedOptions.weights.join(", ")} <br />
-                          </>
-                        )}
-                        {product.characteristics && (
-                          <>
-                            <strong>Characteristics:</strong> 
-                            <ul>
-                              {product.characteristics.map((char, cidx) => (
-                                <li key={cidx}>
-                                  {char.key}: {char.value}
-                                </li>
-                              ))}
-                            </ul>
-                          </>
-                        )}
+                        <strong>Name:</strong> {product.productId.name || "N/A"} <br />
+                        <strong>Category:</strong> {product.productId.categoryName || "N/A"} <br />
+                        <strong>Color:</strong> {product.selectedOptions?.color || "Not specified"} <br />
+                        <strong>Weight:</strong> {product.selectedOptions?.weights?.length > 0 ? product.selectedOptions.weights.join(", ") : "Not specified"} <br />
                       </li>
                     ))}
                   </ul>
@@ -136,19 +112,20 @@ const Order = () => {
                   "N/A"
                 )}
               </td>
+              <td>{order.orderDate ? new Date(order.orderDate).toLocaleDateString() : "N/A"}</td>
               <td>{order.orderStatus}</td>
               <td>
                 {order.orderStatus === "Pending" && (
                   <>
                     <Button
                       variant="success"
-                      onClick={() => updateOrderStatus(order._id, "Delivered")}
+                      onClick={() => handleApproveOrder(order._id)}
                     >
                       Approve
                     </Button>{" "}
                   </>
                 )}
-                <Button variant="danger" onClick={() => deleteOrder(order._id)}>
+                <Button variant="danger" onClick={() => handleDeleteOrder(order._id)}>
                   <FontAwesomeIcon icon={faTrashAlt} />
                 </Button>
               </td>

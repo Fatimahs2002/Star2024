@@ -9,9 +9,9 @@ const Aboutus = () => {
       <Header />
       <div className="container py-3">
         <h1 className="text-center">About Us </h1>
-        <div className="d-flex align-items-center justify-content-between g-4 mb-5">
+        <div className=" g-4 mb-5 about_cont">
           <div>
-            <span className="text fs-5">
+            <span className="text fs-5 w-50">
               Star is a chemical company manufacturing cleaning products such as
               detergents, disinfectants, all-purpose cleaners, heavy duty cleaners,
               soaps, sanitizers, shampoos, gels in addition to a variety of other
@@ -19,7 +19,7 @@ const Aboutus = () => {
             </span>
           </div>
           <div className="about_image">
-            <img src="images/about.jpg" alt="about us_pic" />
+            <img src="images/about.png" alt="about us_pic" />
           </div>
         </div>
         <h2 className="text-center my-4">Our Mission</h2>
