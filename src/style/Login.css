@@ -1,26 +1,45 @@
-.log_input{
-    box-shadow: none !important;
-    
-    padding: 10px;
-}
-
-/* .container{
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+.container {
+    max-width: 500px;
+  }
+  
+  .log_image img {
     width: 100%;
-    padding: 20px 15px;
-    display: flex;
-   ;
-   ;
-} */
-
-
-.log_image img{
-    width:32rem
-}
-
-
-@media (max-width:768px) {
-    .log_image img{
-        display: none;
+    height: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
     }
-}
+  
+    .log_image {
+      margin-bottom: 20px;
+    }
+  }
+  
+  .form {
+    width: 100%;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .submit {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .signin {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
