@@ -23,7 +23,7 @@ const AboutUs = () => {
             </p>
           </div>
          
-            <div className="team-image">
+            <div className="team-image ">
               <img src="/images/young-latin-woman-smiling-confident-250nw-2189200179.webp" alt="Our Team" />
             </div>
        
@@ -31,7 +31,7 @@ const AboutUs = () => {
 
         <h2 className="text-center my-4">Our Team</h2>
         <div className="team-section">
-          <div className="team-image">
+          <div className="team-image ">
             <img src="/images/istockphoto-1432577235-612x612.jpg" alt="Our Team" />
           </div>
           <div className="team-text">

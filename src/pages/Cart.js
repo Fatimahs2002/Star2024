@@ -9,9 +9,15 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-
+import '../style/cart.css';
 const Cart = () => {
-  const { cart, removeFromCart, submitCart, cartID } = useContext(CartContext);
+  const {
+    cart,
+    removeFromCart,
+    submitCart,
+    cartID,
+    calculateItemPrice,
+  } = useContext(CartContext);
   const [userID, setUserID] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('');
 
@@ -34,7 +40,11 @@ const Cart = () => {
       toast.error('Please select a payment method!');
     } else {
       try {
-        await submitCart(userID);
+        const totalAmount = cart.reduce((total, item) => {
+          return total + calculateItemPrice(item) * item.quantity;
+        }, 0);
+        
+        await submitCart(userID, totalAmount); 
         toast.success('Checkout Successful!');
       } catch (error) {
         toast.error('Checkout Failed!');
@@ -42,20 +52,8 @@ const Cart = () => {
     }
   };
 
-  const calculateItemPrice = (item) => {
-    const basePrice = item.price || 0;
-    const weightPrice = item.selectedOptions.weights.reduce((total, weight) => {
-      const weightOption = item.characteristics.find(char => char.type.toLowerCase() === 'weight')
-        ?.options.find(option => option.value === weight);
-      return total + (weightOption ? weightOption.price : 0);
-    }, 0);
-    const colorPrice = item.characteristics.find(char => char.type.toLowerCase() === 'color')
-      ?.options.find(option => option.value === item.selectedOptions.color)?.price || 0;
-    return basePrice + weightPrice + colorPrice;
-  };
-
   const totalAmount = cart.reduce((total, item) => {
-    return total + calculateItemPrice(item) * item.quantity;
+    return total + calculateItemPrice(item) * (item.quantity || 1);
   }, 0);
 
   return (
@@ -72,17 +70,17 @@ const Cart = () => {
               <Row>
                 {cart.map((item, index) => (
                   <Col key={index} lg={6} sm={12} className="mb-4">
-                    <div className="cart_item">
-                      <h4 className="cart_item_name">{item.name}</h4>
-                      <p className="cart_item_price">
-                        Price: ${(calculateItemPrice(item)).toFixed(2)}
+                    <div className="cart-item">
+                      <h4 className="cart-item-name">{item.name}</h4>
+                      <p className="cart-item-price">
+                        Price: ${calculateItemPrice(item).toFixed(2)}
                       </p>
                       <img
                         src={item.images?.[0] ?? 'path/to/fallback/image.jpg'}
                         alt={item.name}
                         style={{ width: '100%', height: 'auto', borderRadius: '10px' }}
                       />
-                      <div className="cart_item_options">
+                      <div className="cart-item-options">
                         <ListGroup>
                           <ListGroup.Item><strong>Weights:</strong> {item.selectedOptions.weights.join(', ')}</ListGroup.Item>
                           <ListGroup.Item><strong>Color:</strong> {item.selectedOptions.color}</ListGroup.Item>
@@ -99,7 +97,7 @@ const Cart = () => {
               </Row>
             </Col>
             <Col lg={4}>
-              <div className="order_summary">
+              <div className="order-summary">
                 <h4>Order Summary</h4>
                 <p>Subtotal: ${totalAmount.toFixed(2)}</p>
                 <p>Total: ${totalAmount.toFixed(2)}</p>
@@ -111,7 +109,11 @@ const Cart = () => {
                   onChange={(e) => setPaymentMethod(e.target.value)} 
                   className="mt-3" 
                 />
-                <Button variant="success" className="w-100 mt-3" onClick={handleCheckout}>
+                <Button
+                  variant="success"
+                  className="w-100 mt-3 check"
+                  onClick={handleCheckout}
+                >
                   Checkout
                 </Button>
               </div>

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
 export const CartContext = createContext();
@@ -29,14 +29,11 @@ const CartProvider = ({ children }) => {
       const updatedCart = [...prevCart, product];
       return updatedCart;
     });
-
-    // Generate and set a new cartID when a product is added to the cart
     const newCartID = generateCartID();
     setCartID(newCartID);
   };
 
   const generateCartID = () => {
-    // Generate a unique cart ID here (e.g., using UUID or a similar method)
     const newCartID = "cart_" + Math.random().toString(36).substr(2, 9);
     return newCartID;
   };
@@ -61,8 +58,12 @@ const CartProvider = ({ children }) => {
     );
   };
 
-  const submitCart = async (userId) => {
+  const submitCart = async (userId, totalAmount) => {
     try {
+      if (typeof totalAmount !== "number") {
+        throw new Error("Invalid totalAmount");
+      }
+
       const orderData = {
         user: userId,
         cartId: cartID,
@@ -70,14 +71,18 @@ const CartProvider = ({ children }) => {
           productId: item._id.toString(),
           quantity: item.quantity,
           selectedOptions: item.selectedOptions,
+          price: calculateItemPrice(item).toFixed(2),
         })),
+        price: totalAmount.toFixed(2),
         orderStatus: "Pending",
-        orderDate: new Date(),
+        orderDate: new Date().toISOString(),
       };
+
       const response = await axios.post(
         `${process.env.REACT_APP_URL}/order/create`,
         orderData
       );
+
       if (response && response.status === 200 && response.data.success) {
         setCart([]);
         sessionStorage.removeItem("cart");
@@ -91,8 +96,28 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  console.log("Current cart:", cart);
-  console.log("Current cartID:", cartID);
+  const calculateItemPrice = (item) => {
+    console.log('Calculating price for item:', item);
+
+    if (!item || typeof item !== 'object') {
+      console.error('Invalid item structure:', item);
+      return 0;
+    }
+    const basePrice = item.price || 0;
+    console.log('Base price:', basePrice);
+
+    const weightPrice = Array.isArray(item.selectedOptions?.weights)
+      ? item.selectedOptions.weights.reduce((total, weight) => {
+          console.log('Weight:', weight); 
+          const weightOption = item.characteristics
+            ?.find(char => char.type.toLowerCase() === 'weight')
+            ?.options.find(option => option.value === weight);
+          console.log('Weight option:', weightOption); 
+          return total + (weightOption ? weightOption.price : 0);
+        }, 0)
+      : 0;
+    return basePrice + weightPrice;
+  };
 
   return (
     <CartContext.Provider
@@ -103,6 +128,7 @@ const CartProvider = ({ children }) => {
         updateQuantity,
         submitCart,
         cartID,
+        calculateItemPrice,
       }}
     >
       {children}

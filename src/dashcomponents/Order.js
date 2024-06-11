@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faFileInvoice } from "@fortawesome/free-solid-svg-icons";
+import { useReactToPrint } from "react-to-print";
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     fetchOrders();
@@ -24,6 +27,7 @@ const Order = () => {
         },
       });
       setOrders(res.data.data);
+      console.log(res.data.data);
     } catch (error) {
       console.error("Error fetching orders:", error);
       toast.error("Error fetching orders. Please try again.");
@@ -33,7 +37,8 @@ const Order = () => {
   const handleApproveOrder = async (orderId) => {
     try {
       await updateOrderStatus(orderId, "Delivered");
-      toast.success(`Order status updated successfully!`);
+      toast.success("Order status updated successfully!");
+      fetchOrders();
     } catch (error) {
       console.error("Error updating order status:", error);
       toast.error("Error updating order status. Please try again.");
@@ -44,7 +49,7 @@ const Order = () => {
     try {
       await axios.delete(`${process.env.REACT_APP_URL}/order/delete/${orderId}`);
       toast.success("Order deleted successfully!");
-      const updatedOrders = orders.filter(order => order._id !== orderId);
+      const updatedOrders = orders.filter((order) => order._id !== orderId);
       setOrders(updatedOrders);
     } catch (error) {
       console.error("Error deleting order:", error);
@@ -58,7 +63,7 @@ const Order = () => {
       { status },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -76,6 +81,37 @@ const Order = () => {
     }
   };
 
+  const handleShowInvoice = (order) => {
+    setSelectedOrder(order);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedOrder(null);
+  };
+
+  const invoiceRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => invoiceRef.current,
+  });
+
+  const calculateTotal = (products) => {
+    return products.reduce((total, product) => {
+      const productPrice = product.productId?.price || 0;
+      const optionsTotal = product.characteristics?.reduce((optTotal, characteristic) => {
+        return (
+          optTotal +
+          characteristic.options.reduce((charTotal, option) => {
+            return charTotal + (option.price || 0);
+          }, 0)
+        );
+      }, 0) || 0;
+      return total + productPrice + optionsTotal;
+    }, 0);
+  };
+
   return (
     <div>
       <h1>Orders</h1>
@@ -87,50 +123,67 @@ const Order = () => {
             <th>User Name</th>
             <th>Products</th>
             <th>Order Date</th>
+            <th>Total</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((order, index) => (
-            <tr key={order._id}>
-              <td>{index + 1}</td>
-              <td>{order.user ? order.user.fullName : "N/A"}</td>
-              <td>
-                {order.products ? (
-                  <ul>
-                    {order.products.map((product, idx) => (
-                      <li key={idx}>
-                        <strong>Name:</strong> {product.productId.name || "N/A"} <br />
-                        <strong>Category:</strong> {product.productId.categoryName || "N/A"} <br />
-                        <strong>Color:</strong> {product.selectedOptions?.color || "Not specified"} <br />
-                        <strong>Weight:</strong> {product.selectedOptions?.weights?.length > 0 ? product.selectedOptions.weights.join(", ") : "Not specified"} <br />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  "N/A"
-                )}
-              </td>
-              <td>{order.orderDate ? new Date(order.orderDate).toLocaleDateString() : "N/A"}</td>
-              <td>{order.orderStatus}</td>
-              <td>
-                {order.orderStatus === "Pending" && (
-                  <>
-                    <Button
-                      variant="success"
-                      onClick={() => handleApproveOrder(order._id)}
-                    >
-                      Approve
-                    </Button>{" "}
-                  </>
-                )}
-                <Button variant="danger" onClick={() => handleDeleteOrder(order._id)}>
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {orders.map((order, index) => {
+            return (
+              <tr key={order._id}>
+                <td>{index + 1}</td>
+                <td>{order.user ? order.user.fullName : "N/A"}</td>
+                <td>
+                  {order.products ? (
+                    <ul>
+                      {order.products.map((product, idx) => (
+                        <li key={idx}>
+                          <strong>Name:</strong> {product.productId?.name || "N/A"} <br />
+                          <strong>Category:</strong> {product.productId?.categoryName || "N/A"} <br />
+                          {product.characteristics?.map((characteristic, charIdx) => (
+                          <div key={charIdx}>
+                            <strong>{characteristic.type}:</strong>{" "}
+                            {characteristic.options.map((option, optIdx) => (
+                              <span key={optIdx}>
+                                {option.value} (${option.price.toFixed(2)})
+                              </span>
+                            ))}
+                          </div>
+                        ))}
+                          {/* <strong>Price:</strong> {product.productId?.price ? `$${product.productId.price.toFixed(2)}` : "N/A"} <br /> */}
+                          <strong>Quantity:</strong> {product.quantity || 1} <br />
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    "N/A"
+                  )}
+                </td>
+                <td>{order.orderDate ? new Date(order.orderDate).toLocaleDateString() : "N/A"}</td>
+                <td>{`$${order.price}`}</td>
+                <td>{order.orderStatus}</td>
+                <td>
+                  {order.orderStatus === "Pending" && (
+                    <>
+                      <Button
+                        variant="success"
+                        onClick={() => handleApproveOrder(order._id)}
+                      >
+                        Approve
+                      </Button>{" "}
+                    </>
+                  )}
+                  <Button variant="danger" onClick={() => handleDeleteOrder(order._id)}>
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </Button>{" "}
+                  <Button variant="info" onClick={() => handleShowInvoice(order)}>
+                    <FontAwesomeIcon icon={faFileInvoice} />
+                  </Button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
       <div>
@@ -146,6 +199,50 @@ const Order = () => {
           Next
         </Button>
       </div>
+
+      {/* Invoice Modal */}
+      <Modal show={showModal} onHide={handleCloseModal} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Invoice</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedOrder && (
+            <div ref={invoiceRef}>
+              <h2>Invoice</h2>
+              <p><strong>Company Name:</strong> Star</p>
+              <p><strong>Customer Name:</strong> {selectedOrder.user ? selectedOrder.user.fullName : "N/A"}</p>
+              <p><strong>Email:</strong> {selectedOrder.user ? selectedOrder.user.email : "N/A"}</p>
+              <p><strong>Telephone:</strong> {selectedOrder.user ? selectedOrder.user.phoneNumber : "N/A"}</p>
+              <p><strong>Address:</strong> {selectedOrder.user ? selectedOrder.user.address : "N/A"}</p>
+              <p><strong>Order Date:</strong> {new Date(selectedOrder.orderDate).toLocaleDateString()}</p>
+              <h3>Products:</h3>
+              {selectedOrder.products.map((product, idx) => (
+                <div key={idx} style={{ marginBottom: '20px', paddingBottom: '10px', borderBottom: '1px solid #ccc' }}>
+                  <strong>Order {idx + 1}</strong>
+                  <ul>
+                    <li>
+                      <strong>Name:</strong> {product.productId?.name || "N/A"} <br />
+                      <strong>Category:</strong> {product.productId?.categoryName || "N/A"} <br />
+                      <strong>Weight:</strong> {product.selectedOptions?.weights?.length > 0 ? product.selectedOptions.weights.join(", ") : "Not specified"} <br />
+                      <strong>Quantity:</strong> {product.quantity || 1} <br />
+                    </li>
+                  </ul>
+                  <p><strong>Subtotal:</strong> {`$${calculateTotal([product]).toFixed(2)}`}</p>
+                </div>
+              ))}
+              <p><strong>Total:</strong> {`$${selectedOrder.price}`}</p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handlePrint}>
+            Print Invoice
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

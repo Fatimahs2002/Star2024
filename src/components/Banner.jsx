@@ -12,11 +12,12 @@ const Banner = () => {
             <div className="row">
               <div className="col-sm-12">
                 <h1 className="banner_taital text-white">
-                  Get Started <br />
-                  Your favorite shopping
+                  Discover Premium <br />
+                  Cosmetics & Beauty
                 </h1>
-                <div className="buynow_bt">
-                  <Link to="#">Buy Now</Link>
+              
+                <div className="buynow_bt p-2">
+                  <Link to="#" className="bg-white text-black">Shop Now</Link>
                 </div>
               </div>
             </div>
@@ -24,12 +25,13 @@ const Banner = () => {
           <Carousel.Item>
             <div className="row">
               <div className="col-sm-12">
-                <h1 className="banner_taital text-black">
-                  Get Start <br />
-                  Your favorite shopping
+                <h1 className="banner_taital text-white">
+                  Enhance Your <br />
+                  Cleaning Routine
                 </h1>
-                <div className="buynow_bt">
-                  <Link to="#">Buy Now</Link>
+                
+                <div className="buynow_bt p-2">
+                  <Link to="#" className="bg-white text-black">Shop Now</Link>
                 </div>
               </div>
             </div>
@@ -37,12 +39,13 @@ const Banner = () => {
           <Carousel.Item>
             <div className="row">
               <div className="col-sm-12">
-                <h1 className="banner_taital text-black">
-                  Get Start <br />
-                  Your favorite shopping
+                <h1 className="banner_taital text-white">
+                  Your Trusted <br />
+                  Beauty Source
                 </h1>
-                <div className="buynow_bt">
-                  <Link to="#">Buy Now</Link>
+                
+                <div className="buynow_bt p-2">
+                  <Link to="#" className="bg-white text-black">Shop Now</Link>
                 </div>
               </div>
             </div>
@@ -54,3 +57,4 @@ const Banner = () => {
 };
 
 export default Banner;
+

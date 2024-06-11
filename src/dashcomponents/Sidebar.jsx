@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Dropdown} from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -20,6 +20,7 @@ import Category from "./Category";
 import Report from "./Report";
 import Order from "./Order";
 import Users from "./Users";
+import SubCategory from "./SubCategory";
 
 const Sidebar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -39,8 +40,8 @@ const Sidebar = () => {
         return <Category />;
       case "user":
         return <Users />;
-      // case "reports":
-      //   return <Report />;
+      case "subCategory":
+        return <SubCategory />;
       default:
         return <Order />;
     }
@@ -52,7 +53,11 @@ const Sidebar = () => {
         isVisible ? "sidebar-expanded" : "sidebar-collapsed"
       }`}
     >
-      <div bg="" className="bg-light border-right sidebar" id="sidebar-wrapper">
+      <div
+        bg=""
+        className="bg-light border-right sidebar"
+        id="sidebar-wrapper"
+      >
         <div className="bg-light sidebar-header my-3">
           <div className="">
             {isVisible && <h6 className="fs-6">John D</h6>}
@@ -86,6 +91,15 @@ const Sidebar = () => {
               <FontAwesomeIcon icon={faThList} />
             </div>
             {isVisible && <span className="ml-1">Category</span>}
+          </div>
+          <div
+            className="bg-light nav-link"
+            onClick={() => setActiveComponent("subCategory")}
+          >
+            <div className="side_icon">
+              <FontAwesomeIcon icon={faThList} />
+            </div>
+            {isVisible && <span className="ml-1">Sub Category</span>}
           </div>
           <div
             className="bg-light nav-link"
@@ -125,7 +139,10 @@ const Sidebar = () => {
                 >
                   <div className="d-flex align-items-center">
                     <div className="side_icon">
-                      <FontAwesomeIcon icon={faUserCircle} className="mr-3" />
+                      <FontAwesomeIcon
+                        icon={faUserCircle}
+                        className="mr-3"
+                      />
                     </div>
                     <p className="mb-0">Account</p>
                   </div>
@@ -134,7 +151,10 @@ const Sidebar = () => {
                 <Dropdown.Menu>
                   <Dropdown.Item href="/profile">Profile</Dropdown.Item>
                   <Dropdown.Item as="div">
-                    <Link to="/login" className="d-flex align-items-center">
+                    <Link
+                      to="/login"
+                      className="d-flex align-items-center"
+                    >
                       <FontAwesomeIcon icon={faSignOutAlt} />
                       {isVisible && <span className="">Logout</span>}
                     </Link>

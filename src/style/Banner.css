@@ -1,7 +1,8 @@
 
 .banner_section {
   width: 100%;
-  height: calc(100vh - 60px); 
+  /* height: calc(200vh - 10px);  */
+height: 400px !important;
   /* background-image: url("/public/images/back_pic.png"); */
   background-color: #0D4C90; /* Background color */
   height: 100%; /* Full height */
@@ -13,6 +14,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 30px;
+
 }
 
 .banner_taital {

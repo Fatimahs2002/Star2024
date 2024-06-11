@@ -11,7 +11,7 @@ import Footer from "./Footer";
 import "../style/ProductDetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-
+import '../style/cart.css';
 const ProductDetails = () => {
   const { ID } = useParams();
   const [product, setProduct] = useState(null);
@@ -50,6 +50,11 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     if (!product || !product._id) {
       console.error("Product data is not available or _id is missing.");
+      return;
+    }
+
+    if (selectedWeights.length === 0) {
+      toast.error("Please select at least one price.");
       return;
     }
 
@@ -200,7 +205,7 @@ const ProductDetails = () => {
                   <option value="">Select Color</option>
                   {colorOptions.options.map((option, idx) => (
                     <option key={idx} value={option.value}>
-                      {option.value} ({option.price})
+                      {option.value}
                     </option>
                   ))}
                 </Form.Select>
@@ -249,7 +254,7 @@ const ProductDetails = () => {
               </button>
             </div>
             <h4>Price: ${calculatePrice()}</h4>
-            <Button onClick={handleAddToCart}>Add to Cart</Button>
+            <Button onClick={handleAddToCart} className="cart-add">Add to Cart</Button>
           </Col>
         </Row>
       </Container>

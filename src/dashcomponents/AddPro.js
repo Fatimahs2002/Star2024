@@ -130,6 +130,14 @@ const AddPro = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const requiredFields = ['name', 'images', 'description', 'categoryName'];
+    const isEmptyField = requiredFields.some(field => !product[field]);
+  
+    if (isEmptyField) {
+      toast.error("Please fill in all required fields!");
+      return;
+    }
     const productExists = existingProducts.some(
       (existingProduct) => existingProduct.name === product.name
     );

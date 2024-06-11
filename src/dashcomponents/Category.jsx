@@ -12,20 +12,36 @@ const Category = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [newCategory, setNewCategory] = useState({
+  const [newCategory, setNewCategory] = useState({ name: "" });
+
+  // for subcategory
+  const [subcategories, setSubcategories] = useState([]);
+  const [showAddSubModal, setShowAddSubModal] = useState(false);
+  const [newSubcategory, setNewSubcategory] = useState({
     name: "",
-  
+    categoryName: "",
+    categoryId: "",
   });
 
   useEffect(() => {
     fetchCategory();
   }, []);
 
+  // fetch category
   const fetchCategory = async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_URL}/category/get`);
-      // console.log(res.data);
       setCategories(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // fetch subcategory
+  const fetchSubcategories = async (categoryId) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_URL}/SubCategory/get/${categoryId}`);
+      setSubcategories(res.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -43,10 +59,7 @@ const Category = () => {
 
   const handleEdit = (category) => {
     setEditingCategory(category._id);
-    setNewCategory({
-      name: category.name,
-      category: category.category,
-    });
+    setNewCategory({ name: category.name });
     setShowEditModal(true);
   };
 
@@ -60,7 +73,7 @@ const Category = () => {
       );
       setEditingCategory(null);
       setShowEditModal(false);
-      setNewCategory({ name: "", category: "" });
+      setNewCategory({ name: "" });
       toast.success("Category updated successfully!");
     } catch (error) {
       console.error("There was an error updating the category!", error);
@@ -72,11 +85,37 @@ const Category = () => {
       const res = await axios.post(`${process.env.REACT_APP_URL}/category/add`, newCategory);
       setCategories([...categories, { _id: res.data._id, ...newCategory }]);
       setShowAddModal(false);
-      setNewCategory({ name: "", category: "" });
+      setNewCategory({ name: "" });
       toast.success("Category added successfully!");
     } catch (error) {
       console.error("There was an error adding the category!", error);
     }
+  };
+
+  const handleAddSubcategory = async () => {
+    const subcategoryExists = subcategories.some(
+      (subcategory) => subcategory.name === newSubcategory.name
+    );
+    
+    if (subcategoryExists) {
+      toast.error("Subcategory name already exists!");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_URL}/SubCategory/add`, newSubcategory);
+      setSubcategories([...subcategories, { _id: res.data._id, ...newSubcategory }]);
+      setShowAddSubModal(false);
+      setNewSubcategory({ name: "", categoryId: "", categoryName: "" });
+      toast.success("Subcategory added successfully!");
+    } catch (error) {
+      console.error("There was an error adding the subcategory!", error);
+    }
+  };
+
+  const openAddSubModal = (category) => {
+    setNewSubcategory({ ...newSubcategory, categoryId: category._id, categoryName: category.name });
+    setShowAddSubModal(true);
   };
 
   return (
@@ -95,7 +134,7 @@ const Category = () => {
         </div>
       </div>
 
-      <Table className="able text-start align-middle table-bordered table-hover mb-0">
+      <Table className="table text-start align-middle table-bordered table-hover mb-0">
         <thead>
           <tr className="text-dark">
             <th>Category</th>
@@ -115,6 +154,12 @@ const Category = () => {
                   onClick={() => handleDelete(category._id)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => openAddSubModal(category)}
+                >
+                  <FontAwesomeIcon icon={faPlus} /> Add Subcategory
                 </Button>
               </td>
             </tr>
@@ -141,7 +186,6 @@ const Category = () => {
                 className="input_group"
               />
             </Form.Group>
-        
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -172,7 +216,6 @@ const Category = () => {
                 className="input_group"
               />
             </Form.Group>
-       
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -181,6 +224,47 @@ const Category = () => {
           </Button>
           <Button variant="primary" onClick={() => handleSave(editingCategory)}>
             <FontAwesomeIcon icon={faSave} /> Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Add Subcategory Modal */}
+      <Modal show={showAddSubModal} onHide={() => setShowAddSubModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Subcategory</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formSubName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter name"
+                value={newSubcategory.name}
+                onChange={(e) =>
+                  setNewSubcategory({ ...newSubcategory, name: e.target.value })
+                }
+                className="input_group"
+              />
+            </Form.Group>
+            <Form.Group controlId="formCategoryName">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter category"
+                value={newSubcategory.categoryName}
+                disabled
+                className="input_group"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowAddSubModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleAddSubcategory}>
+            <FontAwesomeIcon icon={faPlus} /> Add
           </Button>
         </Modal.Footer>
       </Modal>

@@ -42,7 +42,7 @@ function App() {
               element={
                 <ProtectedRoute adminOnly={true}>
                   <Dashboard />
-                </ProtectedRoute>
+              </ProtectedRoute> 
               }
             />
             <Route path="/noAccess" element={<NoAccess />} />
