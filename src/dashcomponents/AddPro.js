@@ -291,7 +291,7 @@ const AddPro = () => {
                   className="form-control"
                   value={product.subCategoryName}
                   onChange={handleChange}
-                  required
+                  // required
                 >
                   <option value="">Select SubCategory</option>
                   {subCategories.map((subCategory) => (

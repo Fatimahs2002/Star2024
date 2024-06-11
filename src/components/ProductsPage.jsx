@@ -73,7 +73,7 @@ const ProductsPage = () => {
 
   const groupedProducts = products.reduce((acc, product) => {
     const categoryName = product.categoryName || "Uncategorized";
-    const subCategoryName = product.subCategoryName || "No Subcategory";
+    const subCategoryName = product.subCategoryName || "All";
     if (!acc[categoryName]) {
       acc[categoryName] = {};
     }
