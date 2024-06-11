@@ -11,7 +11,7 @@ const Banner = () => {
           <Carousel.Item>
             <div className="row">
               <div className="col-sm-12">
-                <h1 className="banner_taital text-black">
+                <h1 className="banner_taital text-white">
                   Get Started <br />
                   Your favorite shopping
                 </h1>

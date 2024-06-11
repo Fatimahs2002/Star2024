@@ -3,15 +3,6 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt, faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons";
-// import {
-//   faMapMarkerAlt,
-//   faPhone,
-// } from "@fortawesome/free-solid-svg-icons";
-// import {
-//   faFacebook,
-//   faInstagram,
-// } 
-// from "@fortawesome/free-brands-svg-icons";
 import "../style/Footer.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -50,11 +41,14 @@ const Footer = () => {
                   <Link to="/about" className="link_footer">About Us</Link>
                 </li>
               </ul>
+              <p className="about_us_text">Star is a leading manufacturer of high-quality cosmetics and detergents, committed to innovation, quality, and customer satisfaction.</p>
             </div>
             <div className="location_main">
-            <h4 className="footer_title">Contact Us</h4>
-              <FontAwesomeIcon icon={faMapMarkerAlt} />
-              <span> Beirut, Lebanon</span>
+              <h4 className="footer_title">Contact Us</h4>
+              <div>
+                <FontAwesomeIcon icon={faMapMarkerAlt} />
+                <span> Beirut, Lebanon</span>
+              </div>
               <div>
                 <FontAwesomeIcon icon={faEnvelope} />
                 <span> stardetergentlb@gmail.com</span>

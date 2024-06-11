@@ -1,6 +1,7 @@
 .footer_section {
   width: 100%;
   height: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added shadow */
 }
 
 .footer_logo {
@@ -20,6 +21,7 @@
   display: flex;
   background-color: #0d4c90;
   /* height: auto; */
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1); /* Added shadow */
 }
 
 .copyright_text {
@@ -31,7 +33,7 @@
 }
 
 .footer_text {
-  color: #0d4c90!important;
+  color: #0d4c90 !important;
   font-size: 18px;
   margin: 10px;
 }
@@ -39,20 +41,20 @@
 .footer_icon {
   color: #0d4c90 !important;
   font-size: 20px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, ;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px; /* Fixed box-shadow */
 }
 
-.footer_title{
+.footer_title {
   color: #0d4c90 !important;
   font-size: 18px;
 }
- .link_footer{
+
+.link_footer {
   color: #0d4c90 !important;
 }
 
-
 @media (max-width:768px) {
-  .footer_social_icons{
+  .footer_social_icons {
     display: flex;
     /* align-items: center;
     justify-content: center; */
