@@ -14,7 +14,7 @@ const Products = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const navigate = useNavigate();
 
@@ -126,6 +126,7 @@ const Products = () => {
               </th>
               <th>Description</th>
               <th>Category</th>
+              <th>Sub Category</th>
               <th>Characteristics</th>
               <th>Image</th>
               <th>Actions</th>
@@ -137,6 +138,7 @@ const Products = () => {
                 <td>{product.name}</td>
                 <td>{product.description}</td>
                 <td>{product.categoryName}</td>
+                <td>{product.subCategoryName}</td>
                 <td>
                   {product.characteristics.map((char, index) => (
                     <div key={index}>

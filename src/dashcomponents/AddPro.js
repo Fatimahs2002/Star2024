@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import '../style/AddProduct.css';
+import "../style/AddProduct.css";
 
 const AddPro = () => {
   const [product, setProduct] = useState({
@@ -23,9 +23,11 @@ const AddPro = () => {
       },
     ],
     categoryName: "",
+    subCategoryName: "",
   });
   const [existingProducts, setExistingProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,6 +41,19 @@ const AddPro = () => {
       });
   }, []);
 
+  const fetchSubCategories = (categoryName) => {
+    axios
+      .get(
+        `${process.env.REACT_APP_URL}/subcategory/get?category=${categoryName}`
+      )
+      .then((response) => {
+        setSubCategories(response.data.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the subcategories!", error);
+      });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct((prevProduct) => ({
@@ -48,10 +63,13 @@ const AddPro = () => {
   };
 
   const handleCategoryChange = (e) => {
+    const categoryName = e.target.value;
     setProduct((prevProduct) => ({
       ...prevProduct,
-      categoryName: e.target.value,
+      categoryName,
+      subCategoryName: "",
     }));
+    fetchSubCategories(categoryName);
   };
 
   const handleImageChange = (e) => {
@@ -131,13 +149,20 @@ const AddPro = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const requiredFields = ['name', 'images', 'description', 'categoryName'];
-    const isEmptyField = requiredFields.some(field => !product[field]);
-  
+    const requiredFields = [
+      "name",
+      "images",
+      "description",
+      "categoryName",
+      "subCategoryName",
+    ];
+    const isEmptyField = requiredFields.some((field) => !product[field]);
+
     if (isEmptyField) {
       toast.error("Please fill in all required fields!");
       return;
     }
+
     const productExists = existingProducts.some(
       (existingProduct) => existingProduct.name === product.name
     );
@@ -146,16 +171,23 @@ const AddPro = () => {
       toast.error("Product with the same name already exists!");
       return;
     }
+
     const formData = new FormData();
     formData.append("name", product.name);
-    product.images.forEach((image, index) => {
+    product.images.forEach((image) => {
       if (image) {
         formData.append(`images`, image);
       }
     });
     formData.append("description", product.description);
     formData.append("categoryName", product.categoryName);
+    formData.append("subCategoryName", product.subCategoryName);
     formData.append("characteristics", JSON.stringify(product.characteristics));
+
+    console.log("Form Data to be sent:");
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
     axios
       .post(`${process.env.REACT_APP_URL}/product/add`, formData, {
@@ -163,13 +195,14 @@ const AddPro = () => {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((response) => {
+      .then(() => {
         toast.success("Product added successfully!");
         setTimeout(() => {
           navigate("/admin");
         }, 2000);
       })
       .catch((error) => {
+        console.error("There was an error adding the product:", error.response);
         toast.error("There was an error adding the product!");
       });
   };
@@ -191,6 +224,7 @@ const AddPro = () => {
         },
       ],
       categoryName: "",
+      subCategoryName: "",
     });
     navigate("/admin");
   };
@@ -246,6 +280,28 @@ const AddPro = () => {
                 ))}
               </select>
             </div>
+            {product.categoryName && (
+              <div className="mb-3">
+                <label htmlFor="subCategoryName" className="form-label">
+                  SubCategory Name:
+                </label>
+                <select
+                  id="subCategoryName"
+                  name="subCategoryName"
+                  className="form-control"
+                  value={product.subCategoryName}
+                  onChange={handleChange}
+                  // required
+                >
+                  <option value="">Select SubCategory</option>
+                  {subCategories.map((subCategory) => (
+                    <option key={subCategory._id} value={subCategory.name}>
+                      {subCategory.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
           <div className="col-md-6">
             <div className="mb-3">
@@ -300,7 +356,9 @@ const AddPro = () => {
                         <button
                           type="button"
                           className="btn btn-danger"
-                          onClick={() => handleRemoveOption(charIndex, optIndex)}
+                          onClick={() =>
+                            handleRemoveOption(charIndex, optIndex)
+                          }
                         >
                           Remove
                         </button>

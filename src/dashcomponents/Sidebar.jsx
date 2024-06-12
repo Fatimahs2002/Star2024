@@ -6,7 +6,6 @@ import {
   faHome,
   faUser,
   faThList,
-  faChartLine,
   faSignOutAlt,
   faChevronLeft,
   faChevronRight,
@@ -17,7 +16,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Products from "./Products";
 import "../style/Sidebar.css";
 import Category from "./Category";
-import Report from "./Report";
 import Order from "./Order";
 import Users from "./Users";
 import SubCategory from "./SubCategory";
@@ -60,7 +58,6 @@ const Sidebar = () => {
       >
         <div className="bg-light sidebar-header my-3">
           <div className="">
-            {isVisible && <h6 className="fs-6">John D</h6>}
             {isVisible && <p className="admin_font">Admin</p>}
           </div>
         </div>
@@ -110,15 +107,7 @@ const Sidebar = () => {
             </div>
             {isVisible && <span className="ml-1">Products</span>}
           </div>
-          <div
-            className="bg-light nav-link"
-            onClick={() => setActiveComponent("reports")}
-          >
-            <div className="side_icon">
-              <FontAwesomeIcon icon={faChartLine} />
-            </div>
-            {isVisible && <span className="ml-1">Reports</span>}
-          </div>
+       
         </div>
       </div>
 

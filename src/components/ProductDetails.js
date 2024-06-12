@@ -104,7 +104,7 @@ const ProductDetails = () => {
     let basePrice = product?.price || 0;
 
     product?.characteristics?.forEach((char) => {
-      if (char.type.toLowerCase() === "weight" && selectedWeights.length > 0) {
+      if (char.type.toLowerCase() === "size" && selectedWeights.length > 0) {
         char.options.forEach((option) => {
           if (selectedWeights.includes(option.value)) {
             basePrice += option.price;
@@ -125,11 +125,11 @@ const ProductDetails = () => {
   }
 
   const weightOptions = product.characteristics?.find(
-    (char) => char.type.toLowerCase() === "weight"
+    (char) => char.type.toLowerCase() === "size"
   );
-  const colorOptions = product.characteristics?.find(
-    (char) => char.type.toLowerCase() === "color"
-  );
+  // const colorOptions = product.characteristics?.find(
+  //   (char) => char.type.toLowerCase() === "color"
+  // );
 
   return (
     <>
@@ -179,14 +179,14 @@ const ProductDetails = () => {
 
             {weightOptions && (
               <>
-                <h5>Weight</h5>
+                <h5>Size</h5>
                 <ListGroup>
                   <Row>
                     {weightOptions.options.map((option, idx) => (
                       <Col key={idx} xs={6} md={4}>
                         <Form.Check
                           type="checkbox"
-                          id={`weight-${option.value}`}
+                          id={`size-${option.value}`}
                           label={`${option.value} (+$${option.price})`}
                           value={option.value}
                           checked={selectedWeights.includes(option.value)}
@@ -198,7 +198,7 @@ const ProductDetails = () => {
                 </ListGroup>
               </>
             )}
-            {colorOptions && (
+            {/* {colorOptions && (
               <>
                 <h5>Color</h5>
                 <Form.Select value={selectedColor} onChange={handleColorChange}>
@@ -210,7 +210,7 @@ const ProductDetails = () => {
                   ))}
                 </Form.Select>
               </>
-            )}
+            )} */}
             <div className="quantity-selector d-flex align-items-center gap-3">
               <button onClick={handleDecrement} className="q_button">
                 <svg

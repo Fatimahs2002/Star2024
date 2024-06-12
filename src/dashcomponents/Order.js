@@ -120,7 +120,8 @@ const Order = () => {
         <thead>
           <tr>
             <th>#</th>
-            <th>User Name</th>
+            <th>Customer Name</th>
+            <th>Phone Number</th>
             <th>Products</th>
             <th>Order Date</th>
             <th>Total</th>
@@ -134,6 +135,7 @@ const Order = () => {
               <tr key={order._id}>
                 <td>{index + 1}</td>
                 <td>{order.user ? order.user.fullName : "N/A"}</td>
+                <td>{order.user ? order.user.phoneNumber : "N/A"}</td>
                 <td>
                   {order.products ? (
                     <ul>
@@ -227,7 +229,7 @@ const Order = () => {
                       <strong>Quantity:</strong> {product.quantity || 1} <br />
                     </li>
                   </ul>
-                  <p><strong>Subtotal:</strong> {`$${calculateTotal([product]).toFixed(2)}`}</p>
+                  {/* <p><strong>Subtotal:</strong> {`$${calculateTotal([product]).toFixed(2)}`}</p> */}
                 </div>
               ))}
               <p><strong>Total:</strong> {`$${selectedOrder.price}`}</p>

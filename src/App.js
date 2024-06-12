@@ -13,7 +13,6 @@ import Cart from "./pages/Cart";
 import UserProfile from "./pages/UserProfile";
 import CartProvider from "./Context/CartContext";
 import ProductDetails from "./components/ProductDetails";
-import Products from "./pages/Products";
 import EditProduct from "./dashcomponents/EditProduct";
 import AddPro from "./dashcomponents/AddPro";
 import { ToastContainer } from "react-toastify";
@@ -29,7 +28,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<Aboutus />} />
-            <Route path="/product" element={<Products />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<UserProfile />} />
@@ -40,9 +38,9 @@ function App() {
             <Route
               path="/admin"
               element={
-                <ProtectedRoute adminOnly={true}>
+               // <ProtectedRoute adminOnly={true}>
                   <Dashboard />
-              </ProtectedRoute> 
+              //</ProtectedRoute> 
               }
             />
             <Route path="/noAccess" element={<NoAccess />} />

@@ -1,35 +1,52 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Form, Button, Row, Col, Container } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Form, Button, Row, Col, Container } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const EditProduct = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     categoryName: "",
-    characteristics: [{ type: "", options: [{ value: "", price: 0 }] }],
+    subCategoryName: "",
+    characteristics: [],
     images: [],
     newImages: [],
-    removedImages: []
+    removedImages: [],
   });
 
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     fetchProductDetails();
     fetchCategories();
   }, [id]);
 
+  useEffect(() => {
+    if (selectedCategory) {
+      fetchSubCategories(selectedCategory);
+    } else {
+      setSubCategories([]);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        subCategoryName: "",
+      }));
+    }
+  }, [selectedCategory]);
+
   const fetchProductDetails = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_URL}/product/getById/${id}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_URL}/product/getById/${id}`
+      );
       const product = res.data.data;
 
       if (!product) {
@@ -40,13 +57,11 @@ const EditProduct = () => {
         name: product.name,
         description: product.description,
         categoryName: product.categoryName,
-        characteristics: product.characteristics.map(char => ({
-          type: char.type,
-          options: char.options
-        })),
+        subCategoryName: product.subCategoryName,
+        characteristics: product.characteristics,
         images: product.images,
         newImages: [],
-        removedImages: []
+        removedImages: [],
       });
     } catch (error) {
       console.error("There was an error fetching the product details!", error);
@@ -64,9 +79,24 @@ const EditProduct = () => {
     }
   };
 
+  const fetchSubCategories = async (categoryName) => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_URL}/subcategory/get?category=${categoryName}`
+      );
+      setSubCategories(res.data.data);
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+      toast.error("Error fetching subcategories. Please try again.");
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (name === "categoryName") {
+      setSelectedCategory(value);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -79,44 +109,48 @@ const EditProduct = () => {
     setFormData({
       ...formData,
       images: formData.images.filter((_, i) => i !== index),
-      removedImages: [...formData.removedImages, removedImage]
+      removedImages: [...formData.removedImages, removedImage],
     });
   };
 
-  const handleCharacteristicChange = (index, e) => {
-    const { name, value } = e.target;
-    const newCharacteristics = [...formData.characteristics];
-    if (name === "type") {
-      newCharacteristics[index].type = value;
-    } else if (name.startsWith("options")) {
-      const optionIndex = parseInt(name.split(".")[1], 10);
-      const optionName = name.split(".")[2];
-      newCharacteristics[index].options[optionIndex][optionName] = value;
+  const handleCharacteristicChange = (charIndex, field, value) => {
+    const updatedCharacteristics = [...formData.characteristics];
+    if (field.includes("options")) {
+      const [optIndex, optField] = field.split("-").slice(1);
+      updatedCharacteristics[charIndex].options[optIndex][optField] = value;
+    } else {
+      updatedCharacteristics[charIndex][field] = value;
     }
-    setFormData({ ...formData, characteristics: newCharacteristics });
-  };
-
-  const handleAddOption = (index) => {
-    const newCharacteristics = [...formData.characteristics];
-    newCharacteristics[index].options.push({ value: "", price: 0 });
-    setFormData({ ...formData, characteristics: newCharacteristics });
-  };
-
-  const handleRemoveOption = (charIndex, optIndex) => {
-    const newCharacteristics = [...formData.characteristics];
-    newCharacteristics[charIndex].options.splice(optIndex, 1);
-    setFormData({ ...formData, characteristics: newCharacteristics });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      characteristics: updatedCharacteristics,
+    }));
   };
 
   const handleAddCharacteristic = () => {
-    const newCharacteristics = [...formData.characteristics, { type: "", options: [{ value: "", price: 0 }] }];
-    setFormData({ ...formData, characteristics: newCharacteristics });
+    const updatedCharacteristics = [
+      ...formData.characteristics,
+      { type: "", options: [{ value: "", price: 0 }] },
+    ];
+    setFormData({ ...formData, characteristics: updatedCharacteristics });
   };
 
-  const handleRemoveCharacteristic = (index) => {
-    const newCharacteristics = [...formData.characteristics];
-    newCharacteristics.splice(index, 1);
-    setFormData({ ...formData, characteristics: newCharacteristics });
+  const handleRemoveCharacteristic = (charIndex) => {
+    const updatedCharacteristics = [...formData.characteristics];
+    updatedCharacteristics.splice(charIndex, 1);
+    setFormData({ ...formData, characteristics: updatedCharacteristics });
+  };
+
+  const handleAddOption = (charIndex) => {
+    const updatedCharacteristics = [...formData.characteristics];
+    updatedCharacteristics[charIndex].options.push({ value: "", price: 0 });
+    setFormData({ ...formData, characteristics: updatedCharacteristics });
+  };
+
+  const handleRemoveOption = (charIndex, optIndex) => {
+    const updatedCharacteristics = [...formData.characteristics];
+    updatedCharacteristics[charIndex].options.splice(optIndex, 1);
+    setFormData({ ...formData, characteristics: updatedCharacteristics });
   };
 
   const handleSubmit = async (e) => {
@@ -126,20 +160,25 @@ const EditProduct = () => {
     data.append("name", formData.name);
     data.append("description", formData.description);
     data.append("categoryName", formData.categoryName);
+    data.append("subCategoryName", formData.subCategoryName);
     data.append("characteristics", JSON.stringify(formData.characteristics));
     formData.newImages.forEach((image) => {
       data.append("newImages", image);
     });
     formData.removedImages.forEach((image) => {
-      data.append("removedImages", image);
+      data.append("imagesToRemove", image);
     });
 
     try {
-      await axios.put(`${process.env.REACT_APP_URL}/product/update/${id}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.put(
+        `${process.env.REACT_APP_URL}/product/update/${id}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       toast.success("Product updated successfully!");
       navigate("/admin");
     } catch (error) {
@@ -156,9 +195,9 @@ const EditProduct = () => {
     <Container className="mt-5">
       <h2>Edit Product</h2>
       <Form onSubmit={handleSubmit}>
-        <Row>
+        <Row className="mb-3">
           <Col xs={12} md={6}>
-            <Form.Group controlId="formProductName">
+            <Form.Group controlId="formProductName" className="mb-3">
               <Form.Label>Product Name</Form.Label>
               <Form.Control
                 type="text"
@@ -169,7 +208,7 @@ const EditProduct = () => {
             </Form.Group>
           </Col>
           <Col xs={12} md={6}>
-            <Form.Group controlId="formDescription">
+            <Form.Group controlId="formDescription" className="mb-3">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
@@ -180,15 +219,17 @@ const EditProduct = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Row>
+        <Row className="mb-3">
           <Col xs={12} md={6}>
-            <Form.Group controlId="formCategory">
+            <Form.Group controlId="formCategory" className="mb-3">
               <Form.Label>Category</Form.Label>
               <Form.Control
                 as="select"
                 name="categoryName"
                 value={formData.categoryName}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  handleInputChange(e);
+                }}
               >
                 <option value="">Select Category</option>
                 {categories.map((category) => (
@@ -199,59 +240,90 @@ const EditProduct = () => {
               </Form.Control>
             </Form.Group>
           </Col>
-        </Row>
-        <Row className='m'>
           <Col xs={12} md={6}>
+            <Form.Group controlId="formSubCategory" className="mb-3">
+              <Form.Label>Subcategory</Form.Label>
+              <Form.Control
+                as="select"
+                name="subCategoryName"
+                value={formData.subCategoryName}
+                onChange={handleInputChange}
+                disabled={!selectedCategory} // Disable if no category selected
+              >
+                <option value="">Select Subcategory</option>
+                {subCategories.map((subCategory) => (
+                  <option key={subCategory.id} value={subCategory.name}>
+                    {subCategory.name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col xs={12}>
             <Form.Group controlId="formCharacteristics">
               <Form.Label>Characteristics</Form.Label>
               {formData.characteristics.map((characteristic, charIndex) => (
-                <div key={charIndex}>
-                  <Row >
-                    <Col xs={12} md={6}>
+                <div key={charIndex} className="mb-3">
+                  <Row className="align-items-center">
+                    <Col xs={12} md={6} className="mb-3">
                       <Form.Control
                         type="text"
                         placeholder="Type"
-                        name="type"
+                        name={`characteristics.${charIndex}.type`}
                         value={characteristic.type}
-                        onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                        onChange={(e) =>
+                          handleCharacteristicChange(charIndex, "type", e.target.value)
+                        }
                       />
                     </Col>
                   </Row>
                   {characteristic.options.map((option, optIndex) => (
-                    <Row key={optIndex}>
-                      <Col xs={12} md={4}>
+                    <Row key={optIndex} className="align-items-center mb-2">
+                      <Col xs={12} md={4} className="mb-2 mb-md-0">
                         <Form.Control
                           type="text"
                           placeholder="Option"
-                          name={`options.${optIndex}.value`}
+                          name={`characteristics.${charIndex}.options.${optIndex}.value`}
                           value={option.value}
-                          onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                          onChange={(e) =>
+                            handleCharacteristicChange(charIndex, `options-${optIndex}-value`, e.target.value)
+                          }
                         />
                       </Col>
-                      <Col xs={12} md={4}>
+                      <Col xs={12} md={4} className="mb-2 mb-md-0">
                         <Form.Control
                           type="number"
                           placeholder="Price"
-                          name={`options.${optIndex}.price`}
+                          name={`characteristics.${charIndex}.options.${optIndex}.price`}
                           value={option.price}
-                          onChange={(e) => handleCharacteristicChange(charIndex, e)}
+                          onChange={(e) =>
+                            handleCharacteristicChange(charIndex, `options-${optIndex}-price`, e.target.value)
+                          }
                         />
                       </Col>
                       <Col xs={12} md={4}>
-                        <Button variant="danger" onClick={() => handleRemoveOption(charIndex, optIndex)}>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleRemoveOption(charIndex, optIndex)}
+                        >
                           <FontAwesomeIcon icon={faTrash} />
                         </Button>
                       </Col>
                     </Row>
                   ))}
-                  <Row>
+                  <Row className="mb-3">
                     <Col>
-                      <Button  variant="success" onClick={() => handleAddOption(charIndex)}>
+                      <Button variant="success" onClick={() => handleAddOption(charIndex)}>
                         <FontAwesomeIcon icon={faPlus} /> Add Option
                       </Button>
                     </Col>
                     <Col>
-                      <Button variant="danger" onClick={() => handleRemoveCharacteristic(charIndex)}>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleRemoveCharacteristic(charIndex)}
+                      >
                         <FontAwesomeIcon icon={faTrash} /> Remove Characteristic
                       </Button>
                     </Col>
@@ -264,15 +336,23 @@ const EditProduct = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Row>
-          <Col xs={12} md={6}>
+        <Row className="mb-3">
+          <Col xs={12}>
             <Form.Group controlId="formImages">
               <Form.Label>Images</Form.Label>
-              <div>
+              <div className="mb-3">
                 {formData.images.map((image, index) => (
-                  <div key={index}>
-                    <img src={image} alt={`Product Image ${index + 1}`} width="100" />
-                    <Button variant="danger" onClick={() => handleRemoveImage(index)}>
+                  <div key={index} className="d-flex align-items-center mb-2">
+                    <img
+                      src={image}
+                      alt={`Product Image ${index + 1}`}
+                      width="100"
+                      className="mr-2"
+                    />
+                    <Button
+                      variant="danger"
+                      onClick={() => handleRemoveImage(index)}
+                    >
                       <FontAwesomeIcon icon={faTrash} />
                     </Button>
                   </div>
@@ -282,12 +362,16 @@ const EditProduct = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Button variant="primary" type="submit">
-          Update Product
-        </Button>
-        <Button variant="danger" onClick={handleCancel} className="ml-2">
-          Cancel
-        </Button>
+        <Row className="mb-3">
+          <Col className="d-flex align-items-center justify-content-between w-100">
+            <Button variant="primary" type="submit">
+              Update Product
+            </Button>
+            <Button variant="danger" onClick={handleCancel} className="ml-2">
+              Cancel
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </Container>
   );
