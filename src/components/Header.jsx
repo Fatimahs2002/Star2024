@@ -76,6 +76,7 @@ const Header = () => {
             <Link to="/">Home</Link>
             {/* <Link to="/product">Products</Link> */}
             <Link to="/about">About Us</Link>
+            <Link to="/contact">Contact Us</Link>
           </div>
           <span className="toggle_icon" onClick={openNav}>
             <img src="/images/toggle-icon.png" alt="toggle icon" />
