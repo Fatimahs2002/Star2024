@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,12 +12,14 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../style/Header.css";
 import { CartContext } from "../Context/CartContext";
+import { SearchContext } from "../Context/SearchContext";
 import { getUserID } from "../util/userData";
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userID, setUserID] = useState(null);
   const { cart } = useContext(CartContext);
+  const { searchTerm, setSearchTerm } = useContext(SearchContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,6 +52,13 @@ const Header = () => {
     document.getElementById("mySidenav").style.width = "0";
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+    // console.log(newSearchTerm);
+  };
+
   return (
     <>
       <div className="banner_bg_main">
@@ -74,7 +83,6 @@ const Header = () => {
               &times;
             </Link>
             <Link to="/">Home</Link>
-            {/* <Link to="/product">Products</Link> */}
             <Link to="/about">About Us</Link>
           </div>
           <span className="toggle_icon" onClick={openNav}>
@@ -84,9 +92,11 @@ const Header = () => {
           <div className="main ">
             <div className="input-group d-flex gap-2">
               <input
-                type="text"
-                className="form-control"
-                placeholder="Search this blog"
+               type="text"
+               className="form-control"
+               placeholder="Search for products"
+               value={searchTerm}
+               onChange={handleSearch}
               />
               <div className="input-group-append ">
                 <button

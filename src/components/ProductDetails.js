@@ -11,13 +11,11 @@ import Footer from "./Footer";
 import "../style/ProductDetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import '../style/cart.css';
 const ProductDetails = () => {
   const { ID } = useParams();
   const [product, setProduct] = useState(null);
   const { addToCart } = useContext(CartContext);
-  const [selectedWeights, setSelectedWeights] = useState([]);
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState([]);
   const [selectedImage, setSelectedImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -53,14 +51,13 @@ const ProductDetails = () => {
       return;
     }
 
-    if (selectedWeights.length === 0) {
+    if (selectedSize.length === 0) {
       toast.error("Please select at least one price.");
       return;
     }
 
     const selectedOptions = {
-      weights: selectedWeights,
-      color: selectedColor,
+      size: selectedSize,
     };
 
     const productToAdd = { ...product, selectedOptions, quantity };
@@ -69,15 +66,11 @@ const ProductDetails = () => {
   };
 
   const handleWeightChange = (value) => {
-    setSelectedWeights((prevSelectedWeights) =>
-      prevSelectedWeights.includes(value)
-        ? prevSelectedWeights.filter((weight) => weight !== value)
-        : [...prevSelectedWeights, value]
+    setSelectedSize((prevSelectedSize) =>
+      prevSelectedSize.includes(value)
+        ? prevSelectedSize.filter((weight) => weight !== value)
+        : [...prevSelectedSize, value]
     );
-  };
-
-  const handleColorChange = (event) => {
-    setSelectedColor(event.target.value);
   };
 
   const handleImageClick = (img) => {
@@ -104,9 +97,9 @@ const ProductDetails = () => {
     let basePrice = product?.price || 0;
 
     product?.characteristics?.forEach((char) => {
-      if (char.type.toLowerCase() === "size" && selectedWeights.length > 0) {
+      if (char.type.toLowerCase() === "size" && selectedSize.length > 0) {
         char.options.forEach((option) => {
-          if (selectedWeights.includes(option.value)) {
+          if (selectedSize.includes(option.value)) {
             basePrice += option.price;
           }
         });
@@ -124,12 +117,10 @@ const ProductDetails = () => {
     return <p>Product not found</p>;
   }
 
-  const weightOptions = product.characteristics?.find(
+  const sizeOptions = product.characteristics?.find(
     (char) => char.type.toLowerCase() === "size"
   );
-  // const colorOptions = product.characteristics?.find(
-  //   (char) => char.type.toLowerCase() === "color"
-  // );
+ 
 
   return (
     <>
@@ -177,19 +168,19 @@ const ProductDetails = () => {
             <p>{product.description}</p>
             <p>Category: {product.categoryName}</p>
 
-            {weightOptions && (
+            {sizeOptions && (
               <>
                 <h5>Size</h5>
                 <ListGroup>
-                  <Row>
-                    {weightOptions.options.map((option, idx) => (
+                  <Row className="">
+                    {sizeOptions.options.map((option, idx) => (
                       <Col key={idx} xs={6} md={4}>
-                        <Form.Check
+                        <Form.Check 
                           type="checkbox"
                           id={`size-${option.value}`}
-                          label={`${option.value} (+$${option.price})`}
+                          label={`${option.value} $ ${option.price}` }
                           value={option.value}
-                          checked={selectedWeights.includes(option.value)}
+                          checked={selectedSize.includes(option.value)}
                           onChange={() => handleWeightChange(option.value)}
                         />
                       </Col>
@@ -198,19 +189,6 @@ const ProductDetails = () => {
                 </ListGroup>
               </>
             )}
-            {/* {colorOptions && (
-              <>
-                <h5>Color</h5>
-                <Form.Select value={selectedColor} onChange={handleColorChange}>
-                  <option value="">Select Color</option>
-                  {colorOptions.options.map((option, idx) => (
-                    <option key={idx} value={option.value}>
-                      {option.value}
-                    </option>
-                  ))}
-                </Form.Select>
-              </>
-            )} */}
             <div className="quantity-selector d-flex align-items-center gap-3">
               <button onClick={handleDecrement} className="q_button">
                 <svg
@@ -226,7 +204,7 @@ const ProductDetails = () => {
                     <path d="M7.5 10h5"></path>
                   </g>
                 </svg>
-                {/* <span className="label">Remove</span> */}
+               
               </button>
               <input
                 type="number"
@@ -250,7 +228,6 @@ const ProductDetails = () => {
                     <path d="M7.5 10h5"></path>
                   </g>
                 </svg>
-                {/* <span className="label">Add</span> */}
               </button>
             </div>
             <h4>Price: ${calculatePrice()}</h4>

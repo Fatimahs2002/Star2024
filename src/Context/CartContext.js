@@ -49,9 +49,9 @@ const CartProvider = ({ children }) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
         item.product._id === product._id &&
-        item.selectedOptions.color === selectedOptions.color &&
-        JSON.stringify(item.selectedOptions.weights) ===
-          JSON.stringify(selectedOptions.weights)
+        (item.selectedOptions.color ===
+          JSON.stringify(item.selectedOptions.size)) ===
+          JSON.stringify(selectedOptions.size)
           ? { ...item, quantity: newQuantity }
           : item
       )
@@ -99,24 +99,24 @@ const CartProvider = ({ children }) => {
   const calculateItemPrice = (item) => {
     // console.log('Calculating price for item:', item);
 
-    if (!item || typeof item !== 'object') {
-      console.error('Invalid item structure:', item);
+    if (!item || typeof item !== "object") {
+      console.error("Invalid item structure:", item);
       return 0;
     }
     const basePrice = item.price || 0;
     // console.log('Base price:', basePrice);
 
-    const weightPrice = Array.isArray(item.selectedOptions?.weights)
-      ? item.selectedOptions.weights.reduce((total, weight) => {
-          // console.log('Weight:', weight); 
-          const weightOption = item.characteristics
-            ?.find(char => char.type.toLowerCase() === 'size')
-            ?.options.find(option => option.value === weight);
-          console.log('Size option:', weightOption); 
-          return total + (weightOption ? weightOption.price : 0);
+    const sizePrice = Array.isArray(item.selectedOptions?.size)
+      ? item.selectedOptions.size.reduce((total, size) => {
+          // console.log('Weight:', weight);
+          const sizeOption = item.characteristics
+            ?.find((char) => char.type.toLowerCase() === "size")
+            ?.options.find((option) => option.value === size);
+          console.log("Size option:", sizeOption);
+          return total + (sizeOption ? sizeOption.price : 0);
         }, 0)
       : 0;
-    return basePrice + weightPrice;
+    return basePrice + sizePrice;
   };
 
   return (

@@ -26,13 +26,7 @@
 .svg-icon {
   color: #fff !important;
 }
-/* .lable {
-  line-height: 22px;
-  font-size: 17px;
-  color: #f0eeeb;
-  font-family: sans-serif;
-  letter-spacing: 1px;
-} */
+
 
 .q_button:hover {
   background: #1b1b1cea;
@@ -63,4 +57,14 @@
   100% {
     transform: rotate(0deg);
   }
+}
+
+.product-name{
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.product-price{
+  font-size: 15px;
+  font-weight: bold;
 }

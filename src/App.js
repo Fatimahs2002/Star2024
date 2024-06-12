@@ -12,6 +12,7 @@ import ProtectedRoute from "./util/ProtectedRoute";
 import Cart from "./pages/Cart";
 import UserProfile from "./pages/UserProfile";
 import CartProvider from "./Context/CartContext";
+import { SearchProvider } from "./Context/SearchContext";
 import ProductDetails from "./components/ProductDetails";
 import EditProduct from "./dashcomponents/EditProduct";
 import AddPro from "./dashcomponents/AddPro";
@@ -24,29 +25,31 @@ function App() {
     <div>
       <ToastContainer />
       <CartProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<Aboutus />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/products/:ID" element={<ProductDetails />} />
-            <Route path="/add" element={<AddPro />} />
-            <Route path="/edit/:id" element={<EditProduct />} />
-            <Route
-              path="/admin"
-              element={
-               // <ProtectedRoute adminOnly={true}>
+        <SearchProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<Aboutus />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/products/:ID" element={<ProductDetails />} />
+              <Route path="/add" element={<AddPro />} />
+              <Route path="/edit/:id" element={<EditProduct />} />
+              <Route
+                path="/admin"
+                element={
+                  // <ProtectedRoute adminOnly={true}>
                   <Dashboard />
-              //</ProtectedRoute> 
-              }
-            />
-            <Route path="/noAccess" element={<NoAccess />} />
-            <Route path="*" element={<NoPageFound />} />
-          </Routes>
-        </Router>
+                  //</ProtectedRoute>
+                }
+              />
+              <Route path="/noAccess" element={<NoAccess />} />
+              <Route path="*" element={<NoPageFound />} />
+            </Routes>
+          </Router>
+        </SearchProvider>
       </CartProvider>
     </div>
   );
