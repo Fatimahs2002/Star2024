@@ -61,13 +61,12 @@ const Login = () => {
   return (
     <div className="mt-5">
       <ToastContainer />
-      <div className="container d-flex align-items-center justify-content-center gap-2">
-        <div className="log_image">
+      <div className="container d-flex align-items-center justify-content-center gap-2 login_cont">
+          <div className="log_image">
           <img src="/images/login.svg" alt="login" />
         </div>
-        <div>
-          <h1 className="text-center fs-5">Welcome back you've been missed!</h1>
           <form className="form" onSubmit={handleLogin}>
+          <h1 className="text-center fs-5">Welcome back you've been missed!</h1>
             <p className="title">Sign In</p>
             <label>
               <input
@@ -89,7 +88,7 @@ const Login = () => {
               />
               <span>Password</span>
             </label>
-            <Button type="submit" className="submit" disabled={!email || !password || loading}>
+            <Button type="submit" className="login" disabled={!email || !password || loading}>
               {loading ? "Logging in..." : "Login"}
             </Button>
             <p className="signin">
@@ -97,7 +96,6 @@ const Login = () => {
             </p>
           </form>
         </div>
-      </div>
     </div>
   );
 };

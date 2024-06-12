@@ -7,6 +7,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import Login from "./pages/Login";
 import NoPageFound from "./pages/NoPageFound";
 import Aboutus from "./pages/Aboutus";
+import ContactUs from './pages/ContactUs';
 import Register from "./pages/Register";
 import ProtectedRoute from "./util/ProtectedRoute";
 import Cart from "./pages/Cart";
@@ -33,6 +34,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<UserProfile />} />
+              <Route path="/contact" element={<ContactUs/>}/>
               <Route path="/cart" element={<Cart />} />
               <Route path="/products/:ID" element={<ProductDetails />} />
               <Route path="/add" element={<AddPro />} />
