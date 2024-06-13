@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Carousel, Container, Row, Col, Button, Dropdown, DropdownButton } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Carousel, Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
+import { Link, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { CartContext } from "../Context/CartContext";
+import { SearchContext } from "../Context/SearchContext"; // Import SearchContext
 import "../style/ProductsPage.css";
 
 const ProductsPage = () => {
@@ -13,6 +14,7 @@ const ProductsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSubCategory, setSelectedSubCategory] = useState("All");
   const { addToCart } = useContext(CartContext);
+  const { searchTerm } = useContext(SearchContext);
 
   useEffect(() => {
     fetchCategories();
@@ -28,6 +30,13 @@ const ProductsPage = () => {
     }
   }, [selectedCategory]);
 
+  useEffect(() => {
+    if (searchTerm) {
+      fetchProducts(searchTerm);
+    } else {
+      setProducts([]); 
+    }
+  }, [searchTerm]);
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_URL}/category/get`);
@@ -46,18 +55,19 @@ const ProductsPage = () => {
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (search = "") => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_URL}/product/getProducts`);
-      const productsWithId = res.data.data.map((product, index) => ({
-        ...product,
-        id: product._id || index,
-      }));
-      setProducts(productsWithId);
+      const res = await axios.get(`${process.env.REACT_APP_URL}/product/getProducts`, {
+        params: { search },
+      });
+      // console.log(search ,"search")
+      setProducts(res.data.data || []); 
     } catch (error) {
       console.error("Error fetching products:", error);
+      setProducts([]); 
     }
   };
+  
 
   const handleImageError = (event) => {
     event.target.src = "path/to/fallback/image.jpg";
@@ -103,7 +113,7 @@ const ProductsPage = () => {
                     {productChunk.map((product, idx) => (
                       <Col key={idx} lg={4} sm={6}>
                         <div className="box_main">
-                          <h4 className="prod_text">{product.name}</h4>
+                          <h4 className="prod_text">{product.name}</h4> {/* Ensure product name is rendered */}
                           <p className="price_text">
                             Price{" "}
                             <span style={{ color: "#262626" }}>
@@ -131,17 +141,16 @@ const ProductsPage = () => {
                             </Link>
                             <span
                               className=""
-                              disabled
-                              // onClick={() =>
-                              //   addToCart({
-                              //     ...product,
-                              //     id: product.id,
-                              //     selectedOptions: {
-                              //       weights: [],
-                              //       color: ""
-                              //     }
-                              //   })
-                              // }
+                              onClick={() =>
+                                addToCart({
+                                  ...product,
+                                  id: product.id,
+                                  selectedOptions: {
+                                    weights: [],
+                                    color: "",
+                                  },
+                                })
+                              }
                             >
                               Add to Cart
                             </span>
@@ -175,7 +184,6 @@ const ProductsPage = () => {
       </div>
     );
   };
-  
 
   return (
     <div className="prod_section">

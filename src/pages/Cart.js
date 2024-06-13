@@ -10,6 +10,7 @@ import Header from '../components/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import '../style/cart.css';
+
 const Cart = () => {
   const {
     cart,
@@ -43,7 +44,7 @@ const Cart = () => {
         const totalAmount = cart.reduce((total, item) => {
           return total + calculateItemPrice(item) * item.quantity;
         }, 0);
-        
+
         await submitCart(userID, totalAmount); 
         toast.success('Checkout Successful!');
       } catch (error) {
@@ -82,8 +83,9 @@ const Cart = () => {
                       />
                       <div className="cart-item-options">
                         <ListGroup>
-                          <ListGroup.Item><strong>Weights:</strong> {item.selectedOptions.weights.join(', ')}</ListGroup.Item>
-                          <ListGroup.Item><strong>Color:</strong> {item.selectedOptions.color}</ListGroup.Item>
+                          <ListGroup.Item>
+                            <strong>Size:</strong> {item.selectedOptions?.size?.join(', ') || 'N/A'}
+                          </ListGroup.Item>
                         </ListGroup>
                       </div>
                       <FontAwesomeIcon

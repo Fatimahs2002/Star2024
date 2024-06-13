@@ -32,9 +32,9 @@
    }
    
    /* Container */
-   .container {
+   /* .container {
      padding: 4rem 1rem;
-   }
+   } */
    
    .section-title {
      text-align: center;
@@ -198,7 +198,7 @@
      }
    
      .contact_info div {
-       margin-bottom: 1.5rem; /* Increase space between info items */
+       margin-bottom: 1.5rem;
      }
    }
    

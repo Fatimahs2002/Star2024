@@ -61,14 +61,12 @@ const Login = () => {
   return (
     <div className="mt-5">
       <ToastContainer />
-      <div className="container d-flex align-items-center justify-content-center gap-2">
-     
-        <div>
-          <h1 className="text-center fs-5">Welcome back you've been missed!</h1>
+      <div className="container d-flex align-items-center justify-content-center gap-2 login_cont">
           <div className="log_image">
           <img src="/images/login.svg" alt="login" />
         </div>
           <form className="form" onSubmit={handleLogin}>
+          <h1 className="text-center fs-5">Welcome back you've been missed!</h1>
             <p className="title">Sign In</p>
             <label>
               <input
@@ -98,7 +96,6 @@ const Login = () => {
             </p>
           </form>
         </div>
-      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import  { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Table, Button, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
@@ -144,16 +144,15 @@ const Order = () => {
                           <strong>Name:</strong> {product.productId?.name || "N/A"} <br />
                           <strong>Category:</strong> {product.productId?.categoryName || "N/A"} <br />
                           {product.characteristics?.map((characteristic, charIdx) => (
-                          <div key={charIdx}>
-                            <strong>{characteristic.type}:</strong>{" "}
-                            {characteristic.options.map((option, optIdx) => (
-                              <span key={optIdx}>
-                                {option.value} (${option.price.toFixed(2)})
-                              </span>
-                            ))}
-                          </div>
-                        ))}
-                          {/* <strong>Price:</strong> {product.productId?.price ? `$${product.productId.price.toFixed(2)}` : "N/A"} <br /> */}
+                            <div key={charIdx}>
+                              <strong>{characteristic.type}:</strong>{" "}
+                              {characteristic.options.map((option, optIdx) => (
+                                <span key={optIdx}>
+                                  {option.value} (${option.price.toFixed(2)})
+                                </span>
+                              ))}
+                            </div>
+                          ))}
                           <strong>Quantity:</strong> {product.quantity || 1} <br />
                         </li>
                       ))}
@@ -225,11 +224,10 @@ const Order = () => {
                     <li>
                       <strong>Name:</strong> {product.productId?.name || "N/A"} <br />
                       <strong>Category:</strong> {product.productId?.categoryName || "N/A"} <br />
-                      <strong>Weight:</strong> {product.selectedOptions?.weights?.length > 0 ? product.selectedOptions.weights.join(", ") : "Not specified"} <br />
+                      <strong>Size:</strong> {product.selectedOptions?.sizes?.length > 0 ? product.selectedOptions.sizes.join(", ") : "Not specified"} <br />
                       <strong>Quantity:</strong> {product.quantity || 1} <br />
                     </li>
                   </ul>
-                  {/* <p><strong>Subtotal:</strong> {`$${calculateTotal([product]).toFixed(2)}`}</p> */}
                 </div>
               ))}
               <p><strong>Total:</strong> {`$${selectedOrder.price}`}</p>
