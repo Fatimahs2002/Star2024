@@ -9,16 +9,26 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
- 
+  const [currentUser, setCurrentUser] = useState(null); // To store the current logged-in user info
+
   useEffect(() => {
     fetchUsers();
+    fetchCurrentUser(); // Fetch the current logged-in user's information
   }, []);
 
   const fetchUsers = async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_URL}/user/getAll`);
-      // console.log(res.data);
       setUsers(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_URL}/user/current`);
+      setCurrentUser(res.data.data); // Assuming the current user's info is in res.data.data
     } catch (error) {
       console.log(error);
     }
@@ -26,8 +36,7 @@ const Users = () => {
 
   const handleSwitchToAdmin = async (id) => {
     try {
-      await axios.get(`${process.env.REACT_APP_URL}/user/switchAdmin/${id}`);
-      await axios.put(`http://localhost:8080/user/switchAdmin/${id}`);
+      await axios.put(`${process.env.REACT_APP_URL}/user/switchAdmin/${id}`);
       setUsers(users.map(user =>
         user._id === id ? { ...user, isAdmin: !user.isAdmin } : user
       ));
@@ -72,14 +81,16 @@ const Users = () => {
               <td>{user.address}</td>
               <td>{user.role}</td>
               <td>
-                <Button
-                  variant="warning"
-                  onClick={() => handleSwitchToAdmin(user._id)}
-                  className="mr-2"
-                >
-                  <FontAwesomeIcon icon={faUserShield} />{' '}
-                  {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
-                </Button>
+                {!user.isAdmin && (
+                  <Button
+                    variant="warning"
+                    onClick={() => handleSwitchToAdmin(user._id)}
+                    className="mr-2"
+                  >
+                    <FontAwesomeIcon icon={faUserShield} />{' '}
+                    Make Admin
+                  </Button>
+                )}
                 <Button variant="danger" onClick={() => handleDelete(user._id)}>
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
@@ -93,6 +104,7 @@ const Users = () => {
 };
 
 export default Users;
+
 
 
 

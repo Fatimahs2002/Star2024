@@ -211,7 +211,7 @@ const Order = () => {
           {selectedOrder && (
             <div ref={invoiceRef}>
               <h2>Invoice</h2>
-              <p><strong>Company Name:</strong> Star</p>
+              <p><strong>Company Name:</strong> Star Detergents & Cosmetics</p>
               <p><strong>Customer Name:</strong> {selectedOrder.user ? selectedOrder.user.fullName : "N/A"}</p>
               <p><strong>Email:</strong> {selectedOrder.user ? selectedOrder.user.email : "N/A"}</p>
               <p><strong>Telephone:</strong> {selectedOrder.user ? selectedOrder.user.phoneNumber : "N/A"}</p>
