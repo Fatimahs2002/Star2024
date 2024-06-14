@@ -44,6 +44,22 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
+        <div className="team-section mb-5">
+          <h2 className="text-center mb-4">Our Team</h2>
+          <div className="row">
+            <div className="col-md-6">
+              <img src="/images/istockphoto-1432577235-612x612.jpg" alt="Our Team" className="img-fluid rounded shadow " />
+            </div>
+            <div className="col-md-6 mt-5">
+              <p>
+                Our team at <strong>Star Detergents & Cosmetics</strong> is a group of dedicated professionals with diverse expertise and a shared passion for excellence. From research and development to production and customer service, every team member plays a vital role in our success.
+              </p>
+              <p>
+                We believe in fostering a collaborative and innovative work environment where every voice is heard, and every contribution is valued. Our team's collective efforts ensure that we deliver the highest quality products and services to our customers.
+              </p>
+            </div>
+          </div>
+        </div>
 
         <div className="history-section mb-5">
           <h2 className="text-center mb-4">Our History</h2>
