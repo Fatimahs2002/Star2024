@@ -71,7 +71,7 @@ const SubCategory = () => {
         <td>{index}</td>
         <td>{subcategory.name}</td>
         {/* <td>{subcategory.categoryName}</td> */}
-        <td>
+        <td className='d-flex align-items-center gap-3'>
           <Button variant="primary" onClick={() => handleEdit(subcategory)}>
             <FontAwesomeIcon icon={faEdit} />
           </Button>

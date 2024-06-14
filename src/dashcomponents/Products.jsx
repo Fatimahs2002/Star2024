@@ -153,12 +153,12 @@ const Products = () => {
                     </div>
                   ))}
                 </td>
-                <td>
+                <td >
                   {product.images.length > 0 && (
                     <img src={product.images[0]} alt="Product" width="100" />
                   )}
                 </td>
-                <td>
+                <td className="">
                   <Button
                     variant="warning"
                     onClick={() => handleEdit(product._id)}
@@ -178,7 +178,7 @@ const Products = () => {
           </tbody>
         </Table>
       </div>
-      <div className="pagination-buttons">
+      {/* <div className="pagination-buttons">
         <Button
           variant="secondary"
           disabled={currentPage === 1}
@@ -190,7 +190,7 @@ const Products = () => {
         <Button variant="secondary" onClick={nextPage}>
           Next
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

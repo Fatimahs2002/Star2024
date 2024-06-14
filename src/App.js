@@ -34,50 +34,28 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<UserProfile />} />
-              <Route path="/contact" element={<ContactUs/>}/>
+              <Route path="/contact" element={<ContactUs />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/products/:ID" element={<ProductDetails />} />
               <Route path="/add" element={<AddPro />} />
               <Route path="/edit/:id" element={<EditProduct />} />
-              <Route
-                path="/admin"
+              <Route 
+                path="/admin" 
                 element={
-                  // <ProtectedRoute adminOnly={true}>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<Aboutus />} />
-            <Route path="contact" element={<ContactUs />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/products/:ID" element={<ProductDetails />} />
-            <Route path="/add" element={<AddPro />} />
-            <Route path="/edit/:id" element={<EditProduct />} />
-            <Route
-              path="/admin"
-              element={
-               <ProtectedRoute adminOnly={true}>
-                  <Dashboard />
-                  //</ProtectedRoute>
-                }
+                  <ProtectedRoute adminOnly={true}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
               />
               <Route path="/noAccess" element={<NoAccess />} />
               <Route path="*" element={<NoPageFound />} />
             </Routes>
           </Router>
         </SearchProvider>
-              </ProtectedRoute> 
-              }
-            />
-            <Route path="/noAccess" element={<NoAccess />} />
-            <Route path="*" element={<NoPageFound />} />
-          </Routes>
-        </Router>
       </CartProvider>
     </div>
   );
 }
 
 export default App;
+

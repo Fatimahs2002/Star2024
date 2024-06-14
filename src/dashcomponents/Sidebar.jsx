@@ -22,7 +22,7 @@ import SubCategory from "./SubCategory";
 
 const Sidebar = () => {
   const [isVisible, setIsVisible] = useState(true);
-  const [activeComponent, setActiveComponent] = useState("");
+  const [activeComponent, setActiveComponent] = useState("order");
 
   const toggleSidebar = () => {
     setIsVisible(!isVisible);
@@ -45,6 +45,10 @@ const Sidebar = () => {
     }
   };
 
+  const navLinkClass = (component) => {
+    return `bg-light nav-link ${activeComponent === component ? "active" : ""}`;
+  };
+
   return (
     <div
       className={`d-flex ${
@@ -52,7 +56,6 @@ const Sidebar = () => {
       }`}
     >
       <div
-        bg=""
         className="bg-light border-right sidebar"
         id="sidebar-wrapper"
       >
@@ -61,9 +64,9 @@ const Sidebar = () => {
             {isVisible && <p className="admin_font">Admin</p>}
           </div>
         </div>
-        <div className=" list-group list-group-flush flex-grow-1">
+        <div className="list-group list-group-flush flex-grow-1">
           <div
-            className="bg-light nav-link active"
+            className={navLinkClass("order")}
             onClick={() => setActiveComponent("order")}
           >
             <div className="side_icon">
@@ -72,7 +75,7 @@ const Sidebar = () => {
             {isVisible && <span className="ml-1">Order</span>}
           </div>
           <div
-            className="bg-light nav-link"
+            className={navLinkClass("user")}
             onClick={() => setActiveComponent("user")}
           >
             <div className="side_icon">
@@ -81,7 +84,7 @@ const Sidebar = () => {
             {isVisible && <span className="ml-1">Users</span>}
           </div>
           <div
-            className="bg-light nav-link"
+            className={navLinkClass("category")}
             onClick={() => setActiveComponent("category")}
           >
             <div className="side_icon">
@@ -90,7 +93,7 @@ const Sidebar = () => {
             {isVisible && <span className="ml-1">Category</span>}
           </div>
           <div
-            className="bg-light nav-link"
+            className={navLinkClass("subCategory")}
             onClick={() => setActiveComponent("subCategory")}
           >
             <div className="side_icon">
@@ -99,7 +102,7 @@ const Sidebar = () => {
             {isVisible && <span className="ml-1">Sub Category</span>}
           </div>
           <div
-            className="bg-light nav-link"
+            className={navLinkClass("product")}
             onClick={() => setActiveComponent("product")}
           >
             <div className="side_icon">
@@ -107,7 +110,6 @@ const Sidebar = () => {
             </div>
             {isVisible && <span className="ml-1">Products</span>}
           </div>
-       
         </div>
       </div>
 

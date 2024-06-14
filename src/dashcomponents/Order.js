@@ -187,7 +187,7 @@ const Order = () => {
           })}
         </tbody>
       </Table>
-      <div>
+      {/* <div>
         <Button
           variant="secondary"
           disabled={currentPage === 1}
@@ -199,7 +199,7 @@ const Order = () => {
         <Button variant="secondary" onClick={nextPage}>
           Next
         </Button>
-      </div>
+      </div> */}
 
       {/* Invoice Modal */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">

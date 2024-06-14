@@ -80,7 +80,7 @@ const Users = () => {
               <td>{user.phoneNumber}</td>
               <td>{user.address}</td>
               <td>{user.role}</td>
-              <td>
+              <td className='d-flex align-items-center gap-3'>
                 {!user.isAdmin && (
                   <Button
                     variant="warning"
@@ -104,7 +104,4 @@ const Users = () => {
 };
 
 export default Users;
-
-
-
 

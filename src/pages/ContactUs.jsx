@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEnvelope, faPencil, faComment, faMapMarkerAlt, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faInstagram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { ToastContainer, toast } from "react-toastify";
-// import { hourglass } from 'ldrs';
 import "../style/contact.css";
 
 const ContactUs = () => {
@@ -52,18 +51,18 @@ const ContactUs = () => {
   };
 
   return (
-    <div>
+    <div >
       <Header />
-      <div id="contact">
+      <div id="contact" >
         <section className="hero-section">
           <div className="hero-content">
             <img src="/images/images.jpeg" alt="Contact Us" className="hero-image" />
           </div>
-        </section>
+        </section><br></br><br></br>
         <div className="container">
           <div className="section-title">
             <h5>
-              If you have any questions or need further information, please do not hesitate to reach out to us
+              If you have any questions or need further information, please do not hesitate to reach out to us.
             </h5>
           </div>
           <div className="row">
@@ -104,8 +103,9 @@ const ContactUs = () => {
                   </div>
                 </form>
               </div>
+          
             </div>
-            <div className="col-md-5" style={{ marginTop: '100px' }}>
+            <div className="col-md-5 contact " style={{ marginTop: '200px' }}>
               <div className="info-box">
                 <div className="contact_info">
                   <div>
