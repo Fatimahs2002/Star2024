@@ -31,15 +31,43 @@ const SubCategory = () => {
     setEditName(subcategory.name);
   };
 
+  // const handleSaveEdit = async () => {
+  //   try {
+  //     await axios.put(`${process.env.REACT_APP_URL}/SubCategory/update/${editingSubcategory._id}`, { name: editName });
+  //     fetchSubcategories();
+  //     setEditingSubcategory(null);
+  //     setEditName('');
+  //     toast.success('Subcategory updated successfully!');
+  //   } catch (error) {
+  //     console.error('Error updating subcategory:', error);
+  //   }
+  // };
   const handleSaveEdit = async () => {
+    if (!editingSubcategory || !editName) {
+      toast.error('Please provide all required fields');
+      return;
+    }
+  
+    console.log('Editing Subcategory:', editingSubcategory);
+    console.log('Edit Name:', editName);
+  
     try {
-      await axios.put(`${process.env.REACT_APP_URL}/SubCategory/update/${editingSubcategory._id}`, { name: editName });
-      fetchSubcategories();
-      setEditingSubcategory(null);
-      setEditName('');
-      toast.success('Subcategory updated successfully!');
+      const response = await axios.put(
+        `${process.env.REACT_APP_URL}/SubCategory/update/${editingSubcategory._id}`,
+        { name: editName }
+      );
+  
+      if (response.status === 200) {
+        fetchSubcategories();
+        setEditingSubcategory(null);
+        setEditName('');
+        toast.success('Subcategory updated successfully!');
+      } else {
+        throw new Error('Failed to update subcategory');
+      }
     } catch (error) {
       console.error('Error updating subcategory:', error);
+      toast.error('Error updating subcategory');
     }
   };
 
@@ -72,7 +100,7 @@ const SubCategory = () => {
         <td>{subcategory.name}</td>
         {/* <td>{subcategory.categoryName}</td> */}
         <td className='d-flex align-items-center gap-3'>
-          <Button variant="primary" onClick={() => handleEdit(subcategory)}>
+          <Button variant="warning" onClick={() => handleEdit(subcategory)}>
             <FontAwesomeIcon icon={faEdit} />
           </Button>
           <Button variant="danger" onClick={() => handleDelete(subcategory._id)}>
@@ -117,3 +145,5 @@ const SubCategory = () => {
 };
 
 export default SubCategory;
+
+

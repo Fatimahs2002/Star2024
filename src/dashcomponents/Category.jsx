@@ -120,16 +120,28 @@ const Category = () => {
 
   return (
     <>
-      <h1>Category</h1>
+     
       <ToastContainer />
-      <div className="d-flex align-items-center justify-content-between mb-3 w-100">
-        <div className="d-flex align-items-center">
+      <div 
+      // className="d-flex align-items-center justify-content-between mb-3 w-100"
+      >
+        <div className="" 
+           style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '20px'
+          }}
+        >
+        <h1>Category</h1>
           <Button
             variant="primary"
             onClick={() => setShowAddModal(true)}
-            className="ms-2 w-100"
+            className="ms-2 btn btn-primary w-auto"
+          
           >
             <FontAwesomeIcon icon={faPlus} />
+            Add Category
           </Button>
         </div>
       </div>

@@ -340,24 +340,26 @@ const EditProduct = () => {
           <Col xs={12}>
             <Form.Group controlId="formImages">
               <Form.Label>Images</Form.Label>
-              <div className="mb-3">
-                {formData.images.map((image, index) => (
-                  <div key={index} className="d-flex align-items-center mb-2">
-                    <img
-                      src={image}
-                      alt={`Product Image ${index + 1}`}
-                      width="100"
-                      className="mr-2"
-                    />
-                    <Button
-                      variant="danger"
-                      onClick={() => handleRemoveImage(index)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </div>
-                ))}
-              </div>
+              <div className="mb-3 d-flex flex-wrap align-items-center">
+  {formData.images.map((image, index) => (
+    <div key={index} className="d-flex flex-column align-items-center me-3 mb-3">
+      <img
+        src={image}
+        alt={`Product Image ${index + 1}`}
+        width="100"
+        className="mb-2"
+      />
+      <Button 
+        variant="danger" 
+        onClick={() => handleRemoveImage(index)}
+      >
+        <FontAwesomeIcon icon={faTrash} />
+      </Button>
+    </div>
+  ))}
+</div>
+
+
               <Form.Control type="file" multiple onChange={handleImageChange} />
             </Form.Group>
           </Col>

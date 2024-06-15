@@ -21,7 +21,7 @@ const Products = () => {
   useEffect(() => {
     fetchProducts();
     fetchCategories();
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, searchTerm]);
 
   const fetchProducts = async () => {
     try {
@@ -88,14 +88,7 @@ const Products = () => {
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const prevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
-
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
+  
   return (
     <div className="product-dashboard">
       <ToastContainer />
@@ -105,7 +98,7 @@ const Products = () => {
           <FontAwesomeIcon icon={faPlus} /> Add Product
         </Button>
       </div>
-      <Form.Group controlId="formSearch">
+      <Form.Group controlId="formSearch" className="search-container">
         <Form.Control
           type="text"
           placeholder="Search Products"
@@ -114,7 +107,7 @@ const Products = () => {
         />
       </Form.Group>
       <div className="table-responsive">
-        <Table striped bordered hover>
+        <Table striped bordered hover className="">
           <thead>
             <tr>
               <th>
@@ -158,7 +151,7 @@ const Products = () => {
                     <img src={product.images[0]} alt="Product" width="100" />
                   )}
                 </td>
-                <td className="">
+                <td className="action-buttons">
                   <Button
                     variant="warning"
                     onClick={() => handleEdit(product._id)}
@@ -178,22 +171,9 @@ const Products = () => {
           </tbody>
         </Table>
       </div>
-      {/* <div className="pagination-buttons">
-        <Button
-          variant="secondary"
-          disabled={currentPage === 1}
-          onClick={prevPage}
-        >
-          Previous
-        </Button>
-        <span style={{ margin: "0 10px" }}>Page {currentPage}</span>
-        <Button variant="secondary" onClick={nextPage}>
-          Next
-        </Button>
-      </div> */}
+ 
     </div>
   );
 };
 
 export default Products;
-

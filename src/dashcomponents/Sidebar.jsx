@@ -64,7 +64,7 @@ const Sidebar = () => {
             {isVisible && <p className="admin_font">Admin</p>}
           </div>
         </div>
-        <div className="list-group list-group-flush flex-grow-1">
+        <div className="list-group list-group-flush flex-grow-1 h-auto">
           <div
             className={navLinkClass("order")}
             onClick={() => setActiveComponent("order")}

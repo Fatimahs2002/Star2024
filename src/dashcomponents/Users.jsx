@@ -21,7 +21,7 @@ const Users = () => {
       const res = await axios.get(`${process.env.REACT_APP_URL}/user/getAll`);
       setUsers(res.data.data);
     } catch (error) {
-      console.log(error);
+      console.error("There was an error fetching users!", error);
     }
   };
 
@@ -30,20 +30,30 @@ const Users = () => {
       const res = await axios.get(`${process.env.REACT_APP_URL}/user/current`);
       setCurrentUser(res.data.data); // Assuming the current user's info is in res.data.data
     } catch (error) {
-      console.log(error);
+      console.error("There was an error fetching the current user!", error);
     }
   };
 
   const handleSwitchToAdmin = async (id) => {
     try {
-      await axios.put(`${process.env.REACT_APP_URL}/user/switchAdmin/${id}`);
+      const user = users.find(user => user._id === id);
+      const newRole = user.role === 'customer' ? 'admin' : 'customer';
+      await axios.put(
+        `${process.env.REACT_APP_URL}/user/switchAdmin/${id}`,
+        { role: newRole },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setUsers(users.map(user =>
-        user._id === id ? { ...user, isAdmin: !user.isAdmin } : user
+        user._id === id ? { ...user, role: newRole } : user
       ));
-      toast.success("User switched to admin successfully");
+      toast.success(`User role switched to ${newRole} successfully!`);
     } catch (error) {
-      console.error("There was an error switching to admin!", error);
-      toast.error("Failed to switch user to admin");
+      console.error("There was an error switching the user's role!", error);
+      toast.error("Failed to switch user role.");
     }
   };
 
@@ -54,6 +64,7 @@ const Users = () => {
       toast.success("User deleted successfully!");
     } catch (error) {
       console.error("There was an error deleting the user!", error);
+      toast.error("Failed to delete user.");
     }
   };
 
@@ -81,7 +92,7 @@ const Users = () => {
               <td>{user.address}</td>
               <td>{user.role}</td>
               <td className='d-flex align-items-center gap-3'>
-                {!user.isAdmin && (
+                {user.role === "customer" && (
                   <Button
                     variant="warning"
                     onClick={() => handleSwitchToAdmin(user._id)}
@@ -104,4 +115,5 @@ const Users = () => {
 };
 
 export default Users;
+
 

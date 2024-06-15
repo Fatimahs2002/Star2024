@@ -69,17 +69,17 @@ const Order = () => {
     );
   };
 
-  const nextPage = () => {
-    if (orders.length === itemsPerPage) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  // const nextPage = () => {
+  //   if (orders.length === itemsPerPage) {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  // const prevPage = () => {
+  //   if (currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   }
+  // };
 
   const handleShowInvoice = (order) => {
     setSelectedOrder(order);
