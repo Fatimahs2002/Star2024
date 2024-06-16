@@ -160,11 +160,12 @@ const Products = () => {
                     <FontAwesomeIcon icon={faEdit} />
                   </Button>
                   <Button
-                    variant="danger"
-                    onClick={() => handleDelete(product._id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
+  variant="danger"
+  style={{ backgroundColor: 'red', borderColor: 'red' }}
+  onClick={() => handleDelete(product._id)}
+>
+  <FontAwesomeIcon icon={faTrash} />
+</Button>
                 </td>
               </tr>
             ))}
@@ -177,3 +178,4 @@ const Products = () => {
 };
 
 export default Products;
+

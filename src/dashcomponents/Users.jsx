@@ -96,13 +96,13 @@ const Users = () => {
                   <Button
                     variant="warning"
                     onClick={() => handleSwitchToAdmin(user._id)}
-                    className="mr-2"
+                    className="mr-2" 
                   >
                     <FontAwesomeIcon icon={faUserShield} />{' '}
                     Make Admin
                   </Button>
                 )}
-                <Button variant="danger" onClick={() => handleDelete(user._id)}>
+                <Button variant="danger" onClick={() => handleDelete(user._id)}  style={{ backgroundColor: 'red', borderColor: 'red' }}>
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
               </td>

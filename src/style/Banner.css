@@ -1,23 +1,23 @@
 
-.banner_section {
-  width: 100%;
+/*.banner_section {
+  /*width: 100%;
   /* height: calc(200vh - 10px);  */
-height: 400px !important;
+/*height: 400px !important;
   /* background-image: url("/public/images/back_pic.png"); */
-  background-color: #0D4C90; /* Background color */
-  height: 100%; /* Full height */
-  color: white;
+  /*background-color: #0D4C90; /* Background color */
+  /*height: 100%;  Full height */
+  /* color: white;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 30px; 
 
 }
-
-.banner_taital {
+*/
+/* .banner_taital {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,9 +66,9 @@ height: 400px !important;
 #my_slider .carousel-control-next,
 #my_slider .carousel-control-prev {
   width: 45px;
-  height: 45px;
+  height: 45px; */
   /* background: rgba(235, 199, 110, 0.8); */
-  opacity: 1;
+  /* opacity: 1;
   font-size: 20px;
   color: white;
   border-radius: 100px;
@@ -79,10 +79,69 @@ height: 400px !important;
 #my_slider .carousel-control-prev:focus,
 #my_slider .carousel-control-prev:hover {
   color: #fff;
-}
-
+} */
+/* 
 @media (max-width:768px) {
   .banner_taital{
     font-size: 24px;
 }
+} */
+
+/* Banner.css */
+
+.banner_section {
+  position: relative;
+  overflow: hidden;
 }
+
+.banner_image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.carousel-caption {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+}
+
+.buynow_bt {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .carousel-caption {
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+  }
+
+  .banner_taital {
+    font-size: 1.5rem;
+  }
+
+  .buynow_bt {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-caption {
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+  }
+
+  .banner_taital {
+    font-size: 1.2rem;
+  }
+
+  .buynow_bt {
+    font-size: 0.9rem;
+  }
+}
+

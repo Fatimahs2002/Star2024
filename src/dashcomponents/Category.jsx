@@ -162,7 +162,7 @@ const Category = () => {
                   <FontAwesomeIcon icon={faEdit} />
                 </Button>
                 <Button
-                  variant="danger"
+                  variant="danger"  style={{ backgroundColor: 'red', borderColor: 'red' }}
                   onClick={() => handleDelete(category._id)}
                 >
                   <FontAwesomeIcon icon={faTrash} />

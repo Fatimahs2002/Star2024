@@ -50,19 +50,25 @@ const Register = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate("/");
+  };
+
   return (
-    <div className="container mt-5">
+    <div className="container w-75">
       <ToastContainer />
-      <div className="row">
-        <div className="col-md-6">
-          <img src="/images/regi.svg" alt="Register" className="img-fluid" />
+      <div className="d-flex flex-column align-items-center">
+        <div className="w-100 text-center mb-3">
+          <img
+            src="/images/istockphoto-1219531337-612x612-1.jpg"
+            alt="Register"
+            className="img-fluid w-75"
+          />
         </div>
-        <div className="col-md-6">
+        <div className="w-75">
           <form onSubmit={handleSubmit} className="form">
-            <p className="title">Register</p>
-            <p className="message">
-              Signup now and get full access to our shop.
-            </p>
+            <p className="text-center fs-5">Signup now and get full access to our shop.</p>
+            <h1 className="title">Register</h1>
 
             <label>
               <input
@@ -115,9 +121,14 @@ const Register = () => {
               />
               <span>Address</span>
             </label>
-            <Button type="submit" className="submit" disabled={loading}>
-              {loading ? "Registering..." : "Submit"}
-            </Button>
+            <div className="d-flex justify-content-between">
+              <Button type="submit" className="submit-btn" disabled={loading}>
+                {loading ? "Registering..." : "Submit"}
+              </Button>
+              <Button type="button" className="cancel-btn" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </div>
             <p className="signin">
               Already have an account? <Link to="/login">Signin</Link>
             </p>

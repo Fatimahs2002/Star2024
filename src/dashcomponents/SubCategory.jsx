@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
@@ -17,46 +18,31 @@ const SubCategory = () => {
 
   const fetchSubcategories = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_URL}/SubCategory/get`);
+      const response = await axios.get(`${process.env.REACT_APP_URL}/subcategory/get`);
       const subcategoriesData = response.data.data;
-      setSubcategories(subcategoriesData );
+      setSubcategories(subcategoriesData);
     } catch (error) {
       console.error('Error fetching subcategories:', error);
     }
   };
-  
 
   const handleEdit = (subcategory) => {
     setEditingSubcategory(subcategory);
-    setEditName(subcategory.name);
+    setEditName(subcategory.subCategoryName);
   };
 
-  // const handleSaveEdit = async () => {
-  //   try {
-  //     await axios.put(`${process.env.REACT_APP_URL}/SubCategory/update/${editingSubcategory._id}`, { name: editName });
-  //     fetchSubcategories();
-  //     setEditingSubcategory(null);
-  //     setEditName('');
-  //     toast.success('Subcategory updated successfully!');
-  //   } catch (error) {
-  //     console.error('Error updating subcategory:', error);
-  //   }
-  // };
   const handleSaveEdit = async () => {
     if (!editingSubcategory || !editName) {
       toast.error('Please provide all required fields');
       return;
     }
-  
-    console.log('Editing Subcategory:', editingSubcategory);
-    console.log('Edit Name:', editName);
-  
+
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_URL}/SubCategory/update/${editingSubcategory._id}`,
+        `${process.env.REACT_APP_URL}/subcategory/update/${editingSubcategory._id}`,
         { name: editName }
       );
-  
+
       if (response.status === 200) {
         fetchSubcategories();
         setEditingSubcategory(null);
@@ -73,7 +59,7 @@ const SubCategory = () => {
 
   const handleDelete = async (subcategoryId) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_URL}/SubCategory/delete/${subcategoryId}`);
+      await axios.delete(`${process.env.REACT_APP_URL}/subcategory/delete/${subcategoryId}`);
       fetchSubcategories();
       toast.success('Subcategory deleted successfully!');
     } catch (error) {
@@ -85,33 +71,30 @@ const SubCategory = () => {
     <div>
       <h1>Subcategories</h1>
       <Table striped bordered hover>
-  <thead>
-    <tr>
-    <th>Number</th>
-      <th>Sub Category</th>
-      {/* <th>Name</th> */}
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {subcategories.map((subcategory, index) => (
-      <tr key={subcategory._id}>
-        <td>{index}</td>
-        <td>{subcategory.name}</td>
-        {/* <td>{subcategory.categoryName}</td> */}
-        <td className='d-flex align-items-center gap-3'>
-          <Button variant="warning" onClick={() => handleEdit(subcategory)}>
-            <FontAwesomeIcon icon={faEdit} />
-          </Button>
-          <Button variant="danger" onClick={() => handleDelete(subcategory._id)}>
-            <FontAwesomeIcon icon={faTrash} />
-          </Button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</Table>
-
+        <thead>
+          <tr>
+            <th>SubCategory Name</th>
+            <th>Category Names</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {subcategories.map((subcategory) => (
+            <tr key={subcategory._id}>
+              <td>{subcategory.subCategoryName}</td>
+              <td>{subcategory.categories.map(category => category.name).join(', ')}</td>
+              <td className="d-flex align-items-center gap-3">
+                <Button variant="warning" onClick={() => handleEdit(subcategory)}>
+                  <FontAwesomeIcon icon={faEdit} />
+                </Button>
+                <Button variant="danger"  style={{ backgroundColor: 'red', borderColor: 'red' }} onClick={() => handleDelete(subcategory._id)}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
 
       <Modal show={!!editingSubcategory} onHide={() => setEditingSubcategory(null)}>
         <Modal.Header closeButton>

@@ -175,7 +175,7 @@ const Order = () => {
                       </Button>{" "}
                     </>
                   )}
-                  <Button variant="danger" onClick={() => handleDeleteOrder(order._id)}>
+                  <Button variant="danger" onClick={() => handleDeleteOrder(order._id)} style={{ backgroundColor: 'red', borderColor: 'red' }}>
                     <FontAwesomeIcon icon={faTrashAlt} />
                   </Button>{" "}
                   <Button variant="info" onClick={() => handleShowInvoice(order)}>

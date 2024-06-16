@@ -1,4 +1,4 @@
-.prod_section {
+/* .prod_section {
   width: 100%;
 }
 
@@ -108,10 +108,6 @@
   overflow: hidden;
 }
 
-/* .animated-image img{
-width: 20rem;
-} */
-
 
 .animated-image {
   transition: transform 0.3s ease;
@@ -123,4 +119,138 @@ width: 20rem;
 
 #dropdown-basic-button{
   background-color: #0d4c90 !important;
+} */
+
+/* ProductsPage.css */
+
+.prod_section {
+  width: 100%;
+}
+
+.prod_taital {
+  width: 100%;
+  font-size: 40px;
+  color: #30302e;
+  text-align: center;
+  font-weight: bold;
+}
+
+.prod_section_2 {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.box_main {
+  width: 100%;
+  background-color: #ffffff;
+  height: auto;
+  padding: 20px;
+  box-shadow: 0px 0 30px 10px #f0f0f0;
+  margin-bottom: 20px;
+}
+
+.prod_text {
+  width: 100%;
+  font-size: 20px;
+  color: #30302e;
+  text-align: center;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.price_text {
+  width: 100%;
+  font-size: 16px;
+  color: #0d4c90;
+  text-align: center;
+  margin: 0px;
+}
+
+.image-container {
+  width: 100%;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.animated-image {
+  transition: transform 0.3s ease;
+}
+
+.animated-image:hover {
+  transform: scale(1.1);
+}
+
+.btn_main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 10px;
+}
+
+.seemore {
+  background-color: #0d4c90;
+  color: #f0f0f0;
+  font-size: 16px;
+  border: none; 
+  border-radius: 10px; 
+  padding: 10px 15px;
+}
+
+.addtocart {
+  background-color: #0d4c90;
+  color: #f0f0f0;
+  font-size: 16px;
+  border: none; 
+  border-radius: 10px; 
+  padding: 10px 15px;
+}
+
+.addtocart:hover {
+  cursor: pointer;
+}
+
+#main_slider .carousel-control-next,
+#main_slider .carousel-control-prev {
+  width: 55px;
+  height: 55px;
+  background-color: #30302e;
+  opacity: 1;
+  font-size: 30px;
+  color: #ffffff;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+  background-color: #262626 !important;
+}
+
+#dropdown-basic-button {
+  background-color: #0d4c90 !important;
+  color: #ffffff;
+}
+
+@media (max-width: 992px) {
+  .box_main {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .btn_main {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .seemore,
+  .addtocart {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .prod_section_2 .row .col-lg-4,
+  .prod_section_2 .row .col-sm-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
